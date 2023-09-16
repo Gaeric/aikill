@@ -1,0 +1,132 @@
+@value gridLine from '../../../../ui/metrics/metrics.css';
+@value halfGridLine from '../../../../ui/metrics/metrics.css';
+@value XinWeiFont from '../../../../ui/metrics/metrics.css';
+
+@value textWhite from '../../../../ui/metrics/metrics.css';
+
+.handBoard {
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+    position: relative;
+}
+
+.judges {
+    position: absolute;
+    justify-self: start;
+    align-self: start;
+    padding-left: gridLine;
+    display: flex;
+}
+
+.judgeNames {
+    margin-right: calc(halfGridLine * 3);
+}
+
+.userActionsButtons {
+    display: flex;
+    justify-content: flex-end;
+    align-self: center;
+    height: calc(gridLine * 7);
+    margin-top: 14px;
+}
+.userActionsButtons button {
+    margin: 0 halfGridLine;
+    background: textWhite;
+}
+
+.handCards {
+    justify-content: flex-start;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.53) 41%, rgba(0, 0, 0, 1) 100%);
+    display: flex;
+    align-items: center;
+    padding: halfGridLine;
+    flex: auto;
+    padding-right: 64px;
+    position: relative;
+}
+
+.playBar {
+    max-width: calc(gridLine * 30);
+    width: 100%;
+    position: absolute;
+    align-self: center;
+}
+
+.handCard {
+    position: absolute;
+}
+
+.dashboard {
+    display: flex;
+    align-items: stretch;
+    min-width: 880px;
+    justify-content: center;
+    position: relative;
+}
+
+.playerPhaseStage {
+    position: absolute;
+    z-index: -1;
+    padding: 0;
+    opacity: 0.9;
+    left: 220px;
+    height: calc(gridLine * 3.5);
+    top: 16px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.actionButtons {
+    position: absolute;
+    left: calc(gridLine * 3);
+    max-width: calc(gridLine * 25);
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 2;
+}
+
+.equipSection {
+    width: 180px;
+    height: 166px;
+    position: relative;
+    align-self: flex-end;
+}
+
+.equipSlots {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.53) 41%, rgba(0, 0, 0, 1) 100%);
+    position: absolute;
+    top: 20%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.equipSlots > img {
+    height: 25%;
+}
+
+.actionButton {
+    margin: halfGridLine;
+}
+
+.trustedCover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    font-size: 34px;
+    font-family: XinWeiFont;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: textWhite;
+    z-index: 2;
+}
+.trustedCover.hide {
+    display: none;
+}

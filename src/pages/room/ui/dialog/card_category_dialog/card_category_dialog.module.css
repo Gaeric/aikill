@@ -1,0 +1,27 @@
+@value SanguoshaFont from '../../../../../ui/metrics/metrics.css';
+@value gridLine from '../../../../../ui/metrics/metrics.css';
+
+.cardCategoryDialog {
+    max-width: 600px;
+}
+
+.cardListName {
+    margin-top: 0;
+    width: 100%;
+    font-family: SanguoshaFont;
+}
+
+.cardList {
+    display: flex;
+    flex-direction: column;
+}
+
+.demoCardList {
+    margin: gridLine 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.flatCard {
+    margin: 2px;
+}

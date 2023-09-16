@@ -1,0 +1,75 @@
+@value gridLine from '../../../ui/metrics/metrics.css';
+@value XinWeiFont from '../../../ui/metrics/metrics.css';
+
+@value textGrey from '../../../ui/metrics/metrics.css';
+@value textWhite from '../../../ui/metrics/metrics.css';
+@value textLightBlack from '../../../ui/metrics/metrics.css';
+@value textUltraLightBlack from '../../../ui/metrics/metrics.css';
+
+.settings {
+    padding: calc(gridLine * 4);
+    font-family: XinWeiFont;
+    min-width: calc(gridLine * 60);
+    min-height: calc(gridLine * 30);
+    color: textWhite;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    font-size: 14px;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+}
+
+.manuallyInput {
+    display: flex;
+    justify-content: space-between;
+}
+.mainVolume,
+.gameVolume {
+    margin-bottom: calc(gridLine * 2);
+}
+
+.usernameForm {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    margin-bottom: calc(gridLine * 2);
+}
+
+.inputField {
+    margin-bottom: gridLine;
+    padding: gridLine 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.inputLabelText {
+    margin-bottom: gridLine;
+}
+
+.input {
+    border: 0;
+    border-bottom: 1px solid textGrey;
+    height: calc(gridLine * 3);
+    background: textUltraLightBlack;
+    color: textWhite;
+    box-shadow: inset 2px 2px 2px 0px textLightBlack;
+    border-radius: 4px;
+    outline: none;
+}
+
+.submitSection {
+    margin-top: calc(gridLine * 2);
+    display: flex;
+    justify-content: center;
+}
+.confirm {
+    align-self: flex-end;
+}

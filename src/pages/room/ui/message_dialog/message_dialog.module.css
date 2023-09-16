@@ -1,0 +1,103 @@
+@value gridLine from '../../../../ui/metrics/metrics.css';
+@value halfGridLine from '../../../../ui/metrics/metrics.css';
+@value textLightBlack from '../../../../ui/metrics/metrics.css';
+@value textWhite from '../../../../ui/metrics/metrics.css';
+@value textGrey from '../../../../ui/metrics/metrics.css';
+@value textWarning from '../../../../ui/metrics/metrics.css';
+@value textHighlight from '../../../../ui/metrics/metrics.css';
+
+.chat {
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+}
+.inputLabel {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.chatInput {
+    flex: auto;
+    background: transparent;
+    border: 1px solid textGrey;
+    margin-right: halfGridLine;
+}
+
+.quickChat {
+    position: absolute;
+    height: calc(gridLine * 19);
+    width: 100%;
+    top: calc(gridLine * -20);
+    overflow: auto;
+    background-color: textLightBlack;
+}
+.quickChatItems {
+    max-width: 100%;
+    word-wrap: break-word;
+    display: inline-block;
+    color: textWhite;
+    padding: calc(gridLine / 2) calc(gridLine / 2);
+    margin: 0;
+    cursor: pointer;
+}
+.quickChatItems:hover {
+    background: linear-gradient(
+        90deg,
+        #211616 0%,
+        rgba(177, 117, 40, 0.6) 40%,
+        rgba(177, 117, 40, 0.7) 50%,
+        rgba(177, 117, 40, 0.6) 60%,
+        #211616 100%
+    );
+    color: #d79529;
+}
+.sendButton {
+    height: 100%;
+}
+
+.messageDialog {
+    display: flex;
+    flex-direction: column;
+    padding: halfGridLine 0;
+    overflow: auto;
+    word-wrap: break-word;
+    user-select: text;
+}
+.messageLine {
+    margin: 0;
+    margin-bottom: halfGridLine;
+    color: textHighlight;
+    line-height: calc(gridLine * 2);
+}
+.tabs {
+    display: flex;
+    height: calc(gridLine * 3);
+}
+.tab {
+    line-height: calc(gridLine * 3);
+    width: calc(gridLine * 5);
+    text-align: center;
+    color: textHighlight;
+    border-radius: gridLine gridLine 0 0;
+    border: 1px solid textGrey;
+    font-size: 14px;
+    position: relative;
+}
+.tab.new::before {
+    content: '';
+    height: gridLine;
+    width: gridLine;
+    background: textWarning;
+    position: absolute;
+    border-radius: 50%;
+    right: 0;
+}
+.tab.selected {
+    font-weight: 700;
+    border-bottom: 0;
+}
+.spacer {
+    flex: auto;
+    border-bottom: 1px solid textGrey;
+}

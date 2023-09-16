@@ -1,0 +1,28 @@
+@value gridLine from '../../../../ui/metrics/metrics.css';
+
+.createRoomButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: 0;
+}
+
+.buttonImage {
+    width: calc(gridLine * 4);
+}
+
+.createRoomButton:disabled {
+    cursor: not-allowed;
+}
+
+.createRoomButton:disabled .buttonImage {
+    filter: grayscale(1);
+}
+
+.createRoomButton:enabled:hover .buttonImage {
+    filter: brightness(1.3);
+}
+
+.createRoomButton:enabled:active .buttonImage {
+    filter: brightness(0.7);
+}

@@ -1,0 +1,170 @@
+@value SanguoshaFont from '../metrics/metrics.css';
+@value gridLine from '../metrics/metrics.css';
+@value halfGridLine from '../metrics/metrics.css';
+@value textWhite from '../metrics/metrics.css';
+@value textBlack from '../metrics/metrics.css';
+@value textGreen from '../metrics/metrics.css';
+@value shuColor from '../metrics/metrics.css';
+
+.characterCard {
+    min-width: calc(gridLine * 20);
+    height: calc(gridLine * 25);
+    font-family: SanguoshaFont;
+    font-size: calc(gridLine * 3);
+    position: relative;
+}
+.characterCard.clickable {
+    cursor: pointer;
+}
+.characterCard.small {
+    min-width: calc(gridLine * 15);
+    height: calc(gridLine * 18.75);
+}
+.characterCard.tiny {
+    min-width: calc(gridLine * 12);
+    height: calc(gridLine * 15);
+}
+
+.selected {
+    filter: brightness(0.5);
+}
+
+.hpContainer {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.characterArmor {
+    margin-right: halfGridLine;
+}
+
+.characterArmorImage {
+    max-height: calc(gridLine * 3);
+}
+
+.small .characterArmor,
+.tiny .characterArmor {
+    max-height: calc(gridLine * 2.5);
+}
+
+.characterImage {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    z-index: -2;
+}
+
+.characterImage.tiny {
+    width: calc(gridLine * 12);
+    height: inherit;
+}
+
+.characterImage.left {
+    left: calc(gridLine * -12.5);
+    transform: scale(0.9);
+}
+.characterImage.right {
+    left: calc(gridLine * 12.5);
+    transform: scale(0.9);
+}
+
+.characterHp {
+    color: textWhite;
+    font-size: calc(gridLine * 2);
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.characterHp.small,
+.characterHp.tiny {
+    max-width: calc(gridLine * 10);
+    flex-wrap: wrap;
+}
+
+.characterHp > * {
+    margin-left: -2px;
+}
+
+.characterTag {
+    position: absolute;
+}
+.characterTag,
+.characterHp {
+    z-index: 2;
+}
+.characterCard.characterSkinArea {
+    width: calc(gridLine * 45);
+}
+
+.characterSpec {
+    display: flex;
+    flex-direction: column;
+    margin-top: calc(gridLine * 3);
+}
+
+.skill {
+    margin-bottom: calc(gridLine * 2);
+    display: flex;
+    font-family: FZLiBianFont;
+}
+
+.skillName {
+    position: relative;
+    bottom: calc(gridLine / 2);
+    align-self: flex-start;
+    flex-shrink: 0;
+}
+
+.deathButton,
+.skillName {
+    font-weight: 600;
+    color: shuColor;
+    font-size: 16px;
+    margin-right: calc(gridLine * 2);
+    padding: calc(gridLine / 2);
+    border-radius: calc(gridLine / 2);
+    border: 1px solid shuColor;
+    cursor: pointer;
+}
+
+.deathButton {
+    align-self: center;
+    margin-bottom: gridLine;
+    font-family: FZLiBianFont;
+}
+
+.deathButton:hover,
+.skillName:hover {
+    background-color: shuColor;
+    color: textBlack;
+}
+
+.skillDescription {
+    font-size: calc(gridLine * 2);
+    line-height: calc(gridLine * 3);
+}
+
+.relatedSkillTiltle {
+    color: textGreen;
+    font-size: calc(gridLine * 2.2);
+    margin-bottom: calc(gridLine * 1.5);
+    font-family: SanguoshaFont;
+    padding-top: calc(gridLine * 0.5);
+}
+
+.relatedSkill {
+    color: textGreen;
+    border-color: textGreen;
+}
+
+.relatedSkill:hover {
+    background-color: textGreen;
+    color: black;
+}

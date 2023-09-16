@@ -1,0 +1,51 @@
+@value wuColor from '../metrics/metrics.css';
+@value weiColor from '../metrics/metrics.css';
+@value shuColor from '../metrics/metrics.css';
+@value qunColor from '../metrics/metrics.css';
+@value godColor from '../metrics/metrics.css';
+
+@value dyingColor: #ff5613;
+@value dangerColor: #e48205;
+@value healthyColor: #1f9824;
+
+.textHpLabel {
+    display: flex;
+    flex-direction: column;
+}
+
+.textHp {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    text-shadow: 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 3px white, 0 0 4px white, 0 0 4px white,
+        0 0 3px white;
+}
+
+.wei {
+    color: weiColor;
+}
+.shu {
+    color: shuColor;
+}
+.wu {
+    color: wuColor;
+}
+.qun {
+    color: qunColor;
+}
+.god {
+    color: godColor;
+}
+.lord {
+    color: godColor;
+}
+
+.dying {
+    color: dyingColor;
+}
+.danger {
+    color: dangerColor;
+}
+.healthy {
+    color: healthyColor;
+}

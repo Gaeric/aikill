@@ -1,0 +1,70 @@
+@value gridLine from '../../../../ui/metrics/metrics.css';
+@value halfGridLine from '../../../../ui/metrics/metrics.css';
+@value textGrey from '../../../../ui/metrics/metrics.css';
+@value textHighlight from '../../../../ui/metrics/metrics.css';
+
+.gameDialog {
+    border: 1px solid textGrey;
+    border-radius: halfGridLine;
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    padding: gridLine;
+    height: calc(100vh - 345px);
+}
+
+.dialogs {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+}
+
+.gameLogDialog {
+    overflow: auto;
+    padding: halfGridLine 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.gameDialog::-webkit-scrollbar,
+.messageDialog::-webkit-scrollbar,
+.gameLogDialog::-webkit-scrollbar {
+    display: none;
+}
+.messageDialog {
+    display: flex;
+    flex-direction: column;
+    padding: halfGridLine 0;
+    overflow: auto;
+}
+.messageLine {
+    margin: 0;
+    margin-bottom: halfGridLine;
+    color: textHighlight;
+    line-height: calc(gridLine * 2);
+}
+.dragBorder {
+    height: 1px;
+    border-top: 1px dashed textGrey;
+    cursor: row-resize;
+    width: calc(100% - calc(gridLine * 2));
+    margin-left: gridLine;
+    padding-top: halfGridLine;
+    padding-bottom: halfGridLine;
+}
+.dragBorder::before {
+    position: absolute;
+    content: '';
+    height: gridLine;
+    width: 100%;
+    top: -9px;
+}
+.dragBorder::after {
+    position: absolute;
+    content: '';
+    height: gridLine;
+    width: 100%;
+    bottom: -9px;
+}

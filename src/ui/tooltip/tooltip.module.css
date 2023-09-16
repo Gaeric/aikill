@@ -1,0 +1,75 @@
+@value gridLine from '../metrics/metrics.css';
+@value textLightGrey from '../metrics/metrics.css';
+
+.tooltip {
+    position: absolute;
+    padding: calc(gridLine * 2);
+    z-index: 99;
+    min-width: calc(gridLine * 40);
+    max-width: calc(gridLine * 80);
+    background: rgba(0, 0, 0, 0.7);
+    color: textLightGrey;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.7);
+    border-radius: 4px;
+    font-size: 14px;
+    animation: popUp 0.2s;
+}
+
+.tooltip.shining {
+    animation: shining 2.5s infinite;
+}
+
+.top {
+    bottom: 100%;
+}
+
+.bottom {
+    top: 100%;
+}
+
+.left {
+    right: 100%;
+}
+
+.right {
+    left: 100%;
+}
+.slightBottom {
+    top: 75%;
+}
+.slightTop {
+    bottom: 75%;
+}
+.center {
+}
+
+@keyframes popUp {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes shining {
+    0% {
+        transform: scale(1);
+    }
+    6% {
+        transform: scale(1.1);
+    }
+    12% {
+        transform: scale(1);
+    }
+
+    18% {
+        transform: scale(1);
+    }
+    24% {
+        transform: scale(1.1);
+    }
+    30% {
+        transform: scale(1);
+    }
+}

@@ -1,0 +1,38 @@
+@value SanguoshaFont from '../../../../../ui/metrics/metrics.css';
+@value gridLine from '../../../../../ui/metrics/metrics.css';
+
+.cardLine {
+    margin: calc(gridLine * 2) gridLine;
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.selectorCard {
+    margin: gridLine;
+}
+
+.selectorCard.selected {
+    filter: brightness(0.5);
+}
+
+.selecterCardsItem {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    max-width: calc(gridLine * 100);
+    flex-wrap: wrap;
+}
+
+.listName {
+    margin-right: calc(gridLine * 2);
+    text-orientation: upright;
+    width: calc(gridLine * 2);
+    display: flex;
+    align-items: center;
+}
+.cardList {
+    display: flex;
+    flex-wrap: wrap;
+}

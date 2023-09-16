@@ -1,0 +1,132 @@
+@value FZLiBianFont from '../metrics/metrics.css';
+@value gridLine from '../metrics/metrics.css';
+@value halfGridLine from '../metrics/metrics.css';
+@value textBlack from '../metrics/metrics.css';
+@value textUltraLightBlack from '../metrics/metrics.css';
+@value textWhite from '../metrics/metrics.css';
+@value textGrey from '../metrics/metrics.css';
+
+.buttonOuter {
+    border-radius: halfGridLine;
+}
+
+.button {
+    text-shadow: 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black;
+    border: 0;
+    border-radius: halfGridLine;
+    padding: halfGridLine gridLine;
+    cursor: pointer;
+    box-shadow: inset 0px 0px 10px 0px rgba(23, 23, 23, 0.75);
+    outline: none;
+    color: textWhite;
+    position: relative;
+    font-family: FZLiBianFont;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+}
+.button.imageButton {
+    background: transparent;
+    padding: gridLine calc(gridLine * 3) 10px calc(gridLine * 3);
+    display: flex;
+    align-items: center;
+}
+.button.autoButton {
+    background: transparent;
+    display: flex;
+    width: calc(gridLine * 15);
+    height: calc(gridLine * 4.5);
+}
+.button:not(.disabled):hover {
+    color: textWhite;
+}
+.button.disabled {
+    cursor: not-allowed;
+}
+.button:not(.imageButton).disabled {
+    background: radial-gradient(circle, rgb(97, 97, 97) 0%, rgb(82, 82, 82) 30%, rgb(49, 49, 49) 100%);
+}
+
+.optionButtonOuter {
+    padding: 1px;
+    background: linear-gradient(176deg, rgb(234, 234, 234) 0%, rgb(255, 255, 255) 33%, rgb(51, 46, 46) 50%);
+}
+
+.optionButton {
+    border: 1px solid textUltraLightBlack;
+    background: radial-gradient(circle, rgb(156, 47, 18) 0%, rgb(165, 19, 19) 30%, rgb(105, 13, 13) 100%);
+}
+
+.optionButton:not(.disabled):hover {
+    background: radial-gradient(circle, rgb(218, 44, 0) 0%, rgb(226, 0, 0) 30%, rgb(196, 0, 0) 100%);
+}
+
+.optionButton:not(.disabled):active {
+    background: radial-gradient(circle, rgb(175, 41, 0) 0%, rgb(143, 0, 0) 30%, rgb(97, 0, 0) 100%);
+}
+
+.primaryButtonOuter {
+    padding: 1px;
+    background: linear-gradient(176deg, rgb(255, 255, 255) 0%, rgb(162, 162, 162) 33%, rgb(51, 46, 46) 50%);
+}
+
+.primaryButton {
+    border: 1px solid textUltraLightBlack;
+    background: linear-gradient(180deg, rgb(187, 126, 51) 0%, rgba(145, 62, 37, 1) 33%, rgb(97, 36, 0) 66%);
+}
+
+.primaryButton:not(.disabled):hover {
+    background: linear-gradient(180deg, rgb(255, 124, 72) 0%, rgb(197, 84, 49) 33%, rgb(156, 65, 32) 66%);
+}
+
+.primaryButton:not(.disabled):active {
+    background: linear-gradient(180deg, rgb(168, 80, 45) 0%, rgb(124, 46, 22) 33%, rgb(83, 24, 3) 66%);
+}
+
+.buttonImage {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    top: 0;
+    left: 0;
+}
+
+.skillButton {
+    height: calc(gridLine * 3 + 2);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: calc(gridLine * 3);
+    padding-bottom: halfGridLine;
+}
+
+.linkButton {
+    border: none;
+    background: none;
+    padding: halfGridLine gridLine;
+    cursor: pointer;
+    outline: none;
+    color: textWhite;
+    position: relative;
+    font-family: FZLiBianFont;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    height: 100%;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.linkButton:disabled {
+    color: textGrey;
+    cursor: not-allowed;
+}
+
+.linkButton:enabled:hover {
+    color: rgb(156, 65, 32);
+}

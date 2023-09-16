@@ -1,0 +1,76 @@
+@value XinWeiFont from '../../../../../ui/metrics/metrics.css';
+@value gridLine from '../../../../../ui/metrics/metrics.css';
+@value textWhite from '../../../../../ui/metrics/metrics.css';
+
+.gameOverBoard {
+    position: absolute;
+    align-self: center;
+    background: rgba(0, 0, 0, 0.7);
+    color: textWhite;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.7);
+    padding: calc(gridLine * 2);
+    z-index: 999;
+    font-family: XinWeiFont;
+}
+
+.winners,
+.losers {
+    margin: calc(gridLine * 3) 0;
+    font-size: 16px;
+}
+
+.title {
+    margin-bottom: calc(gridLine * 2);
+    display: flex;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.player span,
+.title span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.username {
+    width: 35%;
+}
+.characterName {
+    width: 20%;
+}
+.role {
+    width: 15%;
+}
+.status {
+    width: 15%;
+}
+.handcards {
+    width: 15%;
+}
+
+.actionButtons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.players {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: calc(gridLine * 60);
+}
+
+.player {
+    flex: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-bottom: gridLine;
+}
+
+.tooltip {
+    display: flex;
+    width: 352px;
+    flex-wrap: wrap;
+}

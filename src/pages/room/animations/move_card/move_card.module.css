@@ -1,0 +1,23 @@
+.displayedCards {
+    display: flex;
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    justify-content: center;
+    align-items: center;
+    height: 160px;
+}
+
+.displayedCard {
+    margin: 2px;
+    position: absolute;
+    z-index: 1;
+    opacity: 1;
+    transition: transform 0.5s, opacity 0.3s, width 0.3s;
+}
+.displayedCard.focused {
+    z-index: 3;
+}
+.displayedCard.darken {
+    filter: brightness(0.4);
+}

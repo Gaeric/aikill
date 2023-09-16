@@ -1,0 +1,25 @@
+@value SanguoshaFont from '../../../../ui/metrics/metrics.css';
+@value textLightGrey from '../../../../ui/metrics/metrics.css';
+
+.conversation {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.conversationText {
+    text-align: center;
+    font-family: SanguoshaFont;
+    text-shadow: 0px 0px 4px rgb(0, 0, 0), 0px 0px 4px rgb(0, 0, 0), 0px 0px 4px rgb(0, 0, 0);
+    color: textLightGrey;
+    font-weight: 550;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-around;
+}
+
+.actionButton {
+    background-color: transparent;
+}

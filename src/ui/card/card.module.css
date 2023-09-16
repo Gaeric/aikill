@@ -1,0 +1,158 @@
+@value gridLine from '../metrics/metrics.css';
+@value halfGridLine from '../metrics/metrics.css';
+@value textWhite from '../metrics/metrics.css';
+@value textWarning from '../metrics/metrics.css';
+@value textBlack from '../metrics/metrics.css';
+@value textGrey from '../metrics/metrics.css';
+@value XinWeiFont from '../metrics/metrics.css';
+
+.clientCard {
+    position: relative;
+    transition: all 0.15s;
+    background: textWhite;
+    z-index: 2;
+}
+
+.innerCard {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardImage {
+    height: 100%;
+    width: 100%;
+}
+
+.cardSuit {
+    font-size: 28px;
+    line-height: 20px;
+    text-shadow: 0px 0px 2px textWhite, 0px 0px 2px textWhite, 0px 0px 4px textWhite, 0px 0px 4px textWhite;
+}
+.cardDescription {
+    bottom: 100%;
+}
+
+.flatCard .cardSuit {
+    font-size: 18px;
+    text-shadow: 0px 0px 2px textWhite, 0px 0px 2px textWhite, 0px 0px 4px textWhite, 0px 0px 4px textWhite;
+}
+
+.cardNumber {
+    font-size: 16px;
+    font-family: XinWeiFont;
+    font-weight: 700;
+    text-shadow: 0px 0px 2px textWhite, 0px 0px 2px textWhite, 0px 0px 4px textWhite, 0px 0px 4px textWhite;
+    color: textBlack;
+}
+.redCardNumber,
+.redCard {
+    color: textWarning;
+}
+.blackCard {
+    color: textBlack;
+}
+
+.cornerTag {
+    top: halfGridLine;
+    left: halfGridLine;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    flex-direction: column;
+}
+
+.cardTag {
+    position: absolute;
+    justify-content: center;
+    bottom: halfGridLine;
+    font-size: 12px;
+    font-family: XinWeiFont;
+    text-shadow: 0px 0px 2px textWhite, 0px 0px 2px textWhite, 0px 0px 4px textWhite, 0px 0px 4px textWhite;
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.53) 41%, rgba(0, 0, 0, 1) 100%);
+    font-weight: 600;
+}
+
+.disabled {
+    filter: brightness(0.5);
+}
+
+.clientCard.selected {
+    margin-top: calc(gridLine * -2);
+    box-shadow: 0px 0px 5px 2px textWhite;
+}
+
+.flatCard {
+    display: flex;
+    justify-content: flex-end;
+}
+.equipName {
+    justify-self: flex-start;
+    flex: auto;
+    font-size: 14px;
+}
+.flatDemoCard {
+    display: flex;
+    justify-content: center;
+    min-width: calc(gridLine * 15);
+    align-items: center;
+    border: 1px solid textGrey;
+    background: textWhite;
+    position: relative;
+    cursor: pointer;
+}
+.flatDemoCard:hover {
+    filter: brightness(1.3);
+}
+.flatCardName {
+    font-size: 14px;
+}
+.flatCardImage {
+    height: calc(gridLine * 4);
+}
+.innterFlatCardImage {
+    position: absolute;
+    width: 100%;
+}
+.flatCardNumber {
+    position: absolute;
+    width: 100%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    padding: 0 halfGridLine;
+}
+.emptyCard {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardSlot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid textGrey;
+    margin: 2px;
+    font-size: 14px;
+}
+.equipImage {
+    z-index: -1;
+    width: 100%;
+}
+.cardSpecification {
+    position: absolute;
+    right: halfGridLine;
+}
+.flatEquipNumber {
+    font-size: 14px;
+}
