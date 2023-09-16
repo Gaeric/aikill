@@ -1,7 +1,7 @@
-import { GameCardExtensions } from 'core/game/game_props';
-import { SkillLoader } from 'core/game/package_loader/loader.skills';
-import { ZhangBaSheMaoSkill } from 'core/skills';
-import { Skill } from 'core/skills/skill';
+import { GameCardExtensions } from '/src/core/game/game_props';
+import { SkillLoader } from '/src/core/game/package_loader/loader.skills';
+import { ZhangBaSheMaoSkill } from '/src/core/skills';
+import { Skill } from '/src/core/skills/skill';
 import { WeaponCard } from '../equip_card';
 import { CardSuit } from '../libs/card_props';
 

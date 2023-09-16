@@ -1,11 +1,11 @@
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { INFINITE_DISTANCE, INFINITE_TRIGGERING_TIMES } from 'core/game/game_props';
-import { AllStage, PhaseStageChangeStage, PlayerPhaseStages } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { RulesBreakerSkill, TriggerSkill } from 'core/skills/skill';
-import { CompulsorySkill, ShadowSkill } from 'core/skills/skill_wrappers';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { INFINITE_DISTANCE, INFINITE_TRIGGERING_TIMES } from '/src/core/game/game_props';
+import { AllStage, PhaseStageChangeStage, PlayerPhaseStages } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { RulesBreakerSkill, TriggerSkill } from '/src/core/skills/skill';
+import { CompulsorySkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CompulsorySkill({ name: 'decade_kuangcai', description: 'decade_kuangcai_description' })
 export class DecadeKuangCai extends TriggerSkill {

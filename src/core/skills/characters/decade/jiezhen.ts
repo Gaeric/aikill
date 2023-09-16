@@ -1,13 +1,13 @@
-import { CardChoosingOptions, CardId } from 'core/cards/libs/card_props';
-import { BaGuaZhen } from 'core/cards/standard/baguazhen';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { AllStage, JudgeEffectStage, PhaseChangeStage, PlayerPhase } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea, PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { ActiveSkill, OnDefineReleaseTiming, SkillType, TriggerSkill } from 'core/skills/skill';
-import { CommonSkill, PersistentSkill, ShadowSkill } from 'core/skills/skill_wrappers';
+import { CardChoosingOptions, CardId } from '/src/core/cards/libs/card_props';
+import { BaGuaZhen } from '/src/core/cards/standard/baguazhen';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { AllStage, JudgeEffectStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { ActiveSkill, OnDefineReleaseTiming, SkillType, TriggerSkill } from '/src/core/skills/skill';
+import { CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
 import { BaZhen } from '../fire/bazhen';
 
 type JieZhenMapper = { [playerId: string]: string[] };

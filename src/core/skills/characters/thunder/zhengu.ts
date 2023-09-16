@@ -1,17 +1,17 @@
-import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
+import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
 import {
   AllStage,
   PhaseChangeStage,
   PhaseStageChangeStage,
   PlayerPhase,
   PlayerPhaseStages,
-} from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea, PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { CommonSkill, PersistentSkill, ShadowSkill, TriggerSkill } from 'core/skills/skill';
-import { OnDefineReleaseTiming } from 'core/skills/skill_hooks';
-import { PatchedTranslationObject, TranslationPack } from 'core/translations/translation_json_tool';
+} from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { CommonSkill, PersistentSkill, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
+import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
+import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'zhengu', description: 'zhengu_description' })
 export class ZhenGu extends TriggerSkill implements OnDefineReleaseTiming {

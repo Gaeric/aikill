@@ -1,5 +1,5 @@
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { Room } from 'core/room/room';
+import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { Room } from '/src/core/room/room';
 
 export abstract class PlayerAI {
   protected static instance: PlayerAI;

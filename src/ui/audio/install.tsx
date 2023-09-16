@@ -1,8 +1,8 @@
 import { AudioLoader } from 'audio_loader/audio_loader';
-import { CharacterGender } from 'core/characters/character';
-import { Sanguosha } from 'core/game/engine';
-import { ElectronData } from 'electron_loader/electron_data';
-import { ElectronLoader } from 'electron_loader/electron_loader';
+import { CharacterGender } from '/src/core/characters/character';
+import { Sanguosha } from '/src/core/game/engine';
+import { ElectronData } from '/src/electron_loader/electron_data';
+import { ElectronLoader } from '/src/electron_loader/electron_loader';
 import { CharacterSkinInfo } from 'skins/skins';
 
 export interface AudioService {

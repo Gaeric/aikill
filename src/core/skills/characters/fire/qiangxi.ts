@@ -1,12 +1,12 @@
-import { CardType } from 'core/cards/card';
-import { CardId } from 'core/cards/libs/card_props';
-import { CardMoveReason, ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { Sanguosha } from 'core/game/engine';
-import { DamageType } from 'core/game/game_props';
-import { Player } from 'core/player/player';
-import { PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { ActiveSkill, CommonSkill } from 'core/skills/skill';
+import { CardType } from '/src/core/cards/card';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { CardMoveReason, ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { Sanguosha } from '/src/core/game/engine';
+import { DamageType } from '/src/core/game/game_props';
+import { Player } from '/src/core/player/player';
+import { PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { ActiveSkill, CommonSkill } from '/src/core/skills/skill';
 
 @CommonSkill({ name: 'qiangxi', description: 'qiangxi_description' })
 export class QiangXi extends ActiveSkill {

@@ -1,11 +1,11 @@
-import { VirtualCard } from 'core/cards/card';
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { CardId } from 'core/cards/libs/card_props';
-import { WuXieKeJi } from 'core/cards/standard/wuxiekeji';
-import { Sanguosha } from 'core/game/engine';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { CommonSkill, ViewAsSkill } from 'core/skills/skill';
+import { VirtualCard } from '/src/core/cards/card';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { WuXieKeJi } from '/src/core/cards/standard/wuxiekeji';
+import { Sanguosha } from '/src/core/game/engine';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { CommonSkill, ViewAsSkill } from '/src/core/skills/skill';
 
 @CommonSkill({ name: 'kanpo', description: 'kanpo_description' })
 export class KanPo extends ViewAsSkill {

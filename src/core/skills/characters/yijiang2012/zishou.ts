@@ -1,8 +1,8 @@
-import { CardId } from 'core/cards/libs/card_props';
-import { CharacterNationality } from 'core/characters/character';
-import { CardDrawReason, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { CharacterNationality } from '/src/core/characters/character';
+import { CardDrawReason, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
 import {
   AllStage,
   DamageEffectStage,
@@ -11,15 +11,15 @@ import {
   PhaseStageChangeStage,
   PlayerPhase,
   PlayerPhaseStages,
-} from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea, PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { Precondition } from 'core/shares/libs/precondition/precondition';
-import { TargetGroupUtil } from 'core/shares/libs/utils/target_group';
-import { CommonSkill, ShadowSkill, TriggerSkill } from 'core/skills/skill';
-import { OnDefineReleaseTiming } from 'core/skills/skill_hooks';
-import { PatchedTranslationObject, TranslationPack } from 'core/translations/translation_json_tool';
+} from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { Precondition } from '/src/core/shares/libs/precondition/precondition';
+import { TargetGroupUtil } from '/src/core/shares/libs/utils/target_group';
+import { CommonSkill, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
+import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
+import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'zishou', description: 'zishou_description' })
 export class ZiShou extends TriggerSkill {

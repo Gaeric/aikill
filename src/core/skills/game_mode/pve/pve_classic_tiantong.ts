@@ -1,9 +1,9 @@
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { AllStage, PhaseStageChangeStage, PlayerPhaseStages } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { TriggerSkill } from 'core/skills/skill';
-import { LimitSkill } from 'core/skills/skill_wrappers';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { AllStage, PhaseStageChangeStage, PlayerPhaseStages } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { TriggerSkill } from '/src/core/skills/skill';
+import { LimitSkill } from '/src/core/skills/skill_wrappers';
 
 @LimitSkill({ name: 'pve_classic_tiantong', description: 'pve_classic_tiantong_description' })
 export class PveClassicTianTong extends TriggerSkill {

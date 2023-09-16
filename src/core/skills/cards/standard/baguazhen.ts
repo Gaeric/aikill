@@ -1,15 +1,15 @@
-import { BaGuaZhenSkillTrigger } from 'core/ai/skills/cards/baguazhen';
-import { VirtualCard } from 'core/cards/card';
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { BaGuaZhen } from 'core/cards/standard/baguazhen';
-import { Jink } from 'core/cards/standard/jink';
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { JudgeMatcher, JudgeMatcherEnum } from 'core/shares/libs/judge_matchers';
-import { AI, CommonSkill, FilterSkill, TriggerSkill } from 'core/skills/skill';
+import { BaGuaZhenSkillTrigger } from '/src/core/ai/skills/cards/baguazhen';
+import { VirtualCard } from '/src/core/cards/card';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { BaGuaZhen } from '/src/core/cards/standard/baguazhen';
+import { Jink } from '/src/core/cards/standard/jink';
+import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { JudgeMatcher, JudgeMatcherEnum } from '/src/core/shares/libs/judge_matchers';
+import { AI, CommonSkill, FilterSkill, TriggerSkill } from '/src/core/skills/skill';
 
 @AI(BaGuaZhenSkillTrigger)
 @CommonSkill({ name: 'baguazhen', description: 'baguazhen_description' })

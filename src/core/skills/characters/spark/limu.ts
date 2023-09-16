@@ -1,14 +1,14 @@
-import { VirtualCard } from 'core/cards/card';
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { CardId, CardSuit } from 'core/cards/libs/card_props';
-import { LeBuSiShu } from 'core/cards/standard/lebusishu';
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { Sanguosha } from 'core/game/engine';
-import { INFINITE_DISTANCE, INFINITE_TRIGGERING_TIMES } from 'core/game/game_props';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea, PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { ActiveSkill, CommonSkill, RulesBreakerSkill, ShadowSkill } from 'core/skills/skill';
+import { VirtualCard } from '/src/core/cards/card';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { CardId, CardSuit } from '/src/core/cards/libs/card_props';
+import { LeBuSiShu } from '/src/core/cards/standard/lebusishu';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { Sanguosha } from '/src/core/game/engine';
+import { INFINITE_DISTANCE, INFINITE_TRIGGERING_TIMES } from '/src/core/game/game_props';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { ActiveSkill, CommonSkill, RulesBreakerSkill, ShadowSkill } from '/src/core/skills/skill';
 
 @CommonSkill({ name: 'limu', description: 'limu_description' })
 export class LiMu extends ActiveSkill {

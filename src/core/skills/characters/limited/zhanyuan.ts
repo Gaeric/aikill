@@ -1,14 +1,14 @@
-import { CharacterGender } from 'core/characters/character';
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { AllStage, CardMoveStage, PhaseStageChangeStage, PlayerPhaseStages } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { TriggerSkill } from 'core/skills/skill';
-import { OnDefineReleaseTiming } from 'core/skills/skill_hooks';
-import { AwakeningSkill, CommonSkill, PersistentSkill, ShadowSkill } from 'core/skills/skill_wrappers';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+import { CharacterGender } from '/src/core/characters/character';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { AllStage, CardMoveStage, PhaseStageChangeStage, PlayerPhaseStages } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { TriggerSkill } from '/src/core/skills/skill';
+import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
+import { AwakeningSkill, CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 import { ManSi } from './mansi';
 import { XiLi } from './xili';
 

@@ -1,14 +1,14 @@
-import { Card, CardType, VirtualCard } from 'core/cards/card';
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { CardId, CardSuit } from 'core/cards/libs/card_props';
-import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, CardResponseStage, CardUseStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { Precondition } from 'core/shares/libs/precondition/precondition';
-import { TriggerSkill, ViewAsSkill } from 'core/skills/skill';
-import { CircleSkill, CommonSkill, PersistentSkill, ShadowSkill } from 'core/skills/skill_wrappers';
+import { Card, CardType, VirtualCard } from '/src/core/cards/card';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { CardId, CardSuit } from '/src/core/cards/libs/card_props';
+import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, CardResponseStage, CardUseStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { Precondition } from '/src/core/shares/libs/precondition/precondition';
+import { TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
+import { CircleSkill, CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
 
 @CircleSkill
 @CommonSkill({ name: 'jinzhi', description: 'jinzhi_description' })

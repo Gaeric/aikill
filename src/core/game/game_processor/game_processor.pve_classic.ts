@@ -1,6 +1,6 @@
-import { VirtualCard } from 'core/cards/card';
-import { CardId } from 'core/cards/libs/card_props';
-import { Character, CharacterGender } from 'core/characters/character';
+import { VirtualCard } from '/src/core/cards/card';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { Character, CharacterGender } from '/src/core/characters/character';
 import {
   CardDrawReason,
   CardMoveArea,
@@ -8,17 +8,17 @@ import {
   ClientEventFinder,
   GameEventIdentifiers,
   ServerEventFinder,
-} from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea, PlayerId, PlayerInfo, PlayerRole } from 'core/player/player_props';
-import { Algorithm } from 'core/shares/libs/algorithm';
-import { Functional } from 'core/shares/libs/functional';
-import { MarkEnum } from 'core/shares/types/mark_list';
-import { GameMode } from 'core/shares/types/room_props';
-import { PveClassicGuYong } from 'core/skills';
-import { PveClassicAi } from 'core/skills/game_mode/pve/pve_classic_ai';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+} from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea, PlayerId, PlayerInfo, PlayerRole } from '/src/core/player/player_props';
+import { Algorithm } from '/src/core/shares/libs/algorithm';
+import { Functional } from '/src/core/shares/libs/functional';
+import { MarkEnum } from '/src/core/shares/types/mark_list';
+import { GameMode } from '/src/core/shares/types/room_props';
+import { PveClassicGuYong } from '/src/core/skills';
+import { PveClassicAi } from '/src/core/skills/game_mode/pve/pve_classic_ai';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 import { StandardGameProcessor } from './game_processor.standard';
 import { Sanguosha } from '../engine';
 import { GameCharacterExtensions } from '../game_props';

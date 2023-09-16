@@ -1,8 +1,8 @@
-import { Sanguosha } from 'core/game/engine';
-import { GameCardExtensions } from 'core/game/game_props';
-import { Algorithm } from 'core/shares/libs/algorithm';
-import { Precondition } from 'core/shares/libs/precondition/precondition';
-import { Skill, ViewAsSkill } from 'core/skills/skill';
+import { Sanguosha } from '/src/core/game/engine';
+import { GameCardExtensions } from '/src/core/game/game_props';
+import { Algorithm } from '/src/core/shares/libs/algorithm';
+import { Precondition } from '/src/core/shares/libs/precondition/precondition';
+import { Skill, ViewAsSkill } from '/src/core/skills/skill';
 import {
   CardColor,
   CardId,

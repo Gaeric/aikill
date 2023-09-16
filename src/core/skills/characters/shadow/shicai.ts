@@ -1,8 +1,8 @@
-import { CardType, VirtualCard } from 'core/cards/card';
-import { CardId } from 'core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
+import { CardType, VirtualCard } from '/src/core/cards/card';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
 import {
   AimStage,
   AllStage,
@@ -10,12 +10,12 @@ import {
   PhaseChangeStage,
   PlayerPhase,
   StagePriority,
-} from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { CommonSkill, OnDefineReleaseTiming, PersistentSkill, ShadowSkill, TriggerSkill } from 'core/skills/skill';
-import { PatchedTranslationObject, TranslationPack } from 'core/translations/translation_json_tool';
+} from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { CommonSkill, OnDefineReleaseTiming, PersistentSkill, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
+import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'shicai', description: 'shicai_description' })
 export class ShiCai extends TriggerSkill implements OnDefineReleaseTiming {

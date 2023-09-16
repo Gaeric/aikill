@@ -1,10 +1,10 @@
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { AllStage, PlayerDiedStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { TriggerSkill } from 'core/skills/skill';
-import { CommonSkill } from 'core/skills/skill_wrappers';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { AllStage, PlayerDiedStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { TriggerSkill } from '/src/core/skills/skill';
+import { CommonSkill } from '/src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'xingshang', description: 'xingshang_description' })
 export class XingShang extends TriggerSkill {

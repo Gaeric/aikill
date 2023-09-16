@@ -1,8 +1,8 @@
-import { Card, CardType, VirtualCard } from 'core/cards/card';
-import { EquipCard } from 'core/cards/equip_card';
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { CardChoosingOptions, CardId } from 'core/cards/libs/card_props';
-import { Character, CharacterEquipSections, CharacterId } from 'core/characters/character';
+import { Card, CardType, VirtualCard } from '/src/core/cards/card';
+import { EquipCard } from '/src/core/cards/equip_card';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { CardChoosingOptions, CardId } from '/src/core/cards/libs/card_props';
+import { Character, CharacterEquipSections, CharacterId } from '/src/core/characters/character';
 import {
   CardDrawReason,
   CardMoveArea,
@@ -11,16 +11,16 @@ import {
   GameEventIdentifiers,
   ServerEventFinder,
   WorkPlace,
-} from 'core/event/event';
-import { MoveCardEventInfos, PinDianProcedure, PinDianReport } from 'core/event/event.server';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { GameProcessor } from 'core/game/game_processor/game_processor';
-import { GameInfo, TemporaryRoomCreationInfo, UPPER_LIMIT_OF_ARMOR } from 'core/game/game_props';
-import { GameCommonRules } from 'core/game/game_rules';
-import { CardLoader } from 'core/game/package_loader/loader.cards';
-import { CharacterLoader } from 'core/game/package_loader/loader.characters';
-import { RecordAnalytics } from 'core/game/record_analytics';
+} from '/src/core/event/event';
+import { MoveCardEventInfos, PinDianProcedure, PinDianReport } from '/src/core/event/event.server';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { GameProcessor } from '/src/core/game/game_processor/game_processor';
+import { GameInfo, TemporaryRoomCreationInfo, UPPER_LIMIT_OF_ARMOR } from '/src/core/game/game_props';
+import { GameCommonRules } from '/src/core/game/game_rules';
+import { CardLoader } from '/src/core/game/package_loader/loader.cards';
+import { CharacterLoader } from '/src/core/game/package_loader/loader.characters';
+import { RecordAnalytics } from '/src/core/game/record_analytics';
 import {
   AimStage,
   AllStage,
@@ -33,22 +33,22 @@ import {
   PinDianStage,
   PlayerDiedStage,
   PlayerPhase,
-} from 'core/game/stage_processor';
-import { ServerSocket } from 'core/network/socket.server';
-import { Player } from 'core/player/player';
-import { ServerPlayer, SmartPlayer } from 'core/player/player.server';
-import { PlayerCardsArea, PlayerId, PlayerInfo } from 'core/player/player_props';
-import { Algorithm } from 'core/shares/libs/algorithm';
-import { Functional } from 'core/shares/libs/functional';
-import { JudgeMatcherEnum } from 'core/shares/libs/judge_matchers';
-import { Logger } from 'core/shares/libs/logger/logger';
-import { Precondition } from 'core/shares/libs/precondition/precondition';
-import { System } from 'core/shares/libs/system';
-import { AimGroupUtil, AimStatus } from 'core/shares/libs/utils/aim_group';
-import { TargetGroupUtil } from 'core/shares/libs/utils/target_group';
-import { FlagEnum } from 'core/shares/types/flag_list';
-import { Flavor } from 'core/shares/types/host_config';
-import { GameMode } from 'core/shares/types/room_props';
+} from '/src/core/game/stage_processor';
+import { ServerSocket } from '/src/core/network/socket.server';
+import { Player } from '/src/core/player/player';
+import { ServerPlayer, SmartPlayer } from '/src/core/player/player.server';
+import { PlayerCardsArea, PlayerId, PlayerInfo } from '/src/core/player/player_props';
+import { Algorithm } from '/src/core/shares/libs/algorithm';
+import { Functional } from '/src/core/shares/libs/functional';
+import { JudgeMatcherEnum } from '/src/core/shares/libs/judge_matchers';
+import { Logger } from '/src/core/shares/libs/logger/logger';
+import { Precondition } from '/src/core/shares/libs/precondition/precondition';
+import { System } from '/src/core/shares/libs/system';
+import { AimGroupUtil, AimStatus } from '/src/core/shares/libs/utils/aim_group';
+import { TargetGroupUtil } from '/src/core/shares/libs/utils/target_group';
+import { FlagEnum } from '/src/core/shares/types/flag_list';
+import { Flavor } from '/src/core/shares/types/host_config';
+import { GameMode } from '/src/core/shares/types/room_props';
 import {
   OnDefineReleaseTiming,
   ResponsiveSkill,
@@ -58,9 +58,9 @@ import {
   SkillType,
   TriggerSkill,
   ViewAsSkill,
-} from 'core/skills/skill';
-import { UniqueSkillRule } from 'core/skills/skill_rule';
-import { PatchedTranslationObject, TranslationPack } from 'core/translations/translation_json_tool';
+} from '/src/core/skills/skill';
+import { UniqueSkillRule } from '/src/core/skills/skill_rule';
+import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
 import { Room, RoomId, TimeLimitVariant } from './room';
 import { RoomEventStacker } from './utils/room_event_stack';
 

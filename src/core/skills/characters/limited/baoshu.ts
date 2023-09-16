@@ -1,12 +1,12 @@
-import { CardDrawReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { AllStage, DrawCardStage, PhaseStageChangeStage, PlayerPhaseStages } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { MarkEnum } from 'core/shares/types/mark_list';
-import { OnDefineReleaseTiming, TriggerSkill } from 'core/skills/skill';
-import { CommonSkill, PersistentSkill, ShadowSkill } from 'core/skills/skill_wrappers';
-import { PatchedTranslationObject, TranslationPack } from 'core/translations/translation_json_tool';
+import { CardDrawReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { AllStage, DrawCardStage, PhaseStageChangeStage, PlayerPhaseStages } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { MarkEnum } from '/src/core/shares/types/mark_list';
+import { OnDefineReleaseTiming, TriggerSkill } from '/src/core/skills/skill';
+import { CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'baoshu', description: 'baoshu_description' })
 export class BaoShu extends TriggerSkill {

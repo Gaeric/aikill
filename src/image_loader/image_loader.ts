@@ -1,10 +1,10 @@
-import { CharacterEquipSections } from 'core/characters/character';
-import { PlayerRole } from 'core/player/player_props';
-import { PlayerId } from 'core/player/player_props';
-import { GameMode } from 'core/shares/types/room_props';
-import { SkillType } from 'core/skills/skill';
-import { LobbyButton } from 'props/game_props';
-import { ImageProps } from 'props/image_props';
+import { CharacterEquipSections } from '/src/core/characters/character';
+import { PlayerRole } from '/src/core/player/player_props';
+import { PlayerId } from '/src/core/player/player_props';
+import { GameMode } from '/src/core/shares/types/room_props';
+import { SkillType } from '/src/core/skills/skill';
+import { LobbyButton } from '/src/props/game_props';
+import { ImageProps } from '/src/props/image_props';
 import { CharacterSkinInfo } from 'skins/skins';
 
 export type SkillButtonImageSize = {

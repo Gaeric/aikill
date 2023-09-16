@@ -1,14 +1,14 @@
-import { Card, VirtualCard } from 'core/cards/card';
-import { CardId } from 'core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, DamageEffectStage, HpChangeStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { TransformSkill, TriggerSkill } from 'core/skills/skill';
-import { OnDefineReleaseTiming } from 'core/skills/skill_hooks';
-import { CompulsorySkill, PersistentSkill, ShadowSkill } from 'core/skills/skill_wrappers';
+import { Card, VirtualCard } from '/src/core/cards/card';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, DamageEffectStage, HpChangeStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { TransformSkill, TriggerSkill } from '/src/core/skills/skill';
+import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
+import { CompulsorySkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'shizhi', description: 'shizhi_description' })
 export class ShiZhi extends TriggerSkill {

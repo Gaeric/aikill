@@ -1,15 +1,15 @@
-import { VirtualCard } from 'core/cards/card';
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { CardId } from 'core/cards/libs/card_props';
-import { Jink } from 'core/cards/standard/jink';
-import { Slash } from 'core/cards/standard/slash';
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { CommonSkill, ViewAsSkill } from 'core/skills/skill';
+import { VirtualCard } from '/src/core/cards/card';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { Jink } from '/src/core/cards/standard/jink';
+import { Slash } from '/src/core/cards/standard/slash';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { CommonSkill, ViewAsSkill } from '/src/core/skills/skill';
 
 @CommonSkill({ name: 'std_longdan', description: 'std_longdan_description' })
 export class StdLongDan extends ViewAsSkill {

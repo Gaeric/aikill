@@ -1,15 +1,15 @@
-import { CardSuit } from 'core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { Sanguosha } from 'core/game/engine';
-import { DamageType } from 'core/game/game_props';
-import { AllStage, CardResponseStage, CardUseStage, JudgeEffectStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-// import { PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { CommonSkill, TriggerSkill } from 'core/skills/skill';
-import { ShadowSkill } from 'core/skills/skill_wrappers';
-import { TranslationPack } from 'core/translations/translation_json_tool';
-// import { Precondition } from 'core/shares/libs/precondition/precondition';
+import { CardSuit } from '/src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { Sanguosha } from '/src/core/game/engine';
+import { DamageType } from '/src/core/game/game_props';
+import { AllStage, CardResponseStage, CardUseStage, JudgeEffectStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+// import { PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { CommonSkill, TriggerSkill } from '/src/core/skills/skill';
+import { ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
+// import { Precondition } from '/src/core/shares/libs/precondition/precondition';
 
 @CommonSkill({ name: 'leiji', description: 'leiji_description' })
 export class LeiJi extends TriggerSkill {

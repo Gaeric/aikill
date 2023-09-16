@@ -1,17 +1,17 @@
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { CardId } from 'core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { INFINITE_DISTANCE } from 'core/game/game_props';
-import { AimStage, AllStage, PhaseChangeStage, PlayerPhase } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { JudgeMatcher, JudgeMatcherEnum } from 'core/shares/libs/judge_matchers';
-import { TagEnum } from 'core/shares/types/tag_list';
-import { OnDefineReleaseTiming, RulesBreakerSkill, TriggerSkill } from 'core/skills/skill';
-import { CompulsorySkill, PersistentSkill, ShadowSkill } from 'core/skills/skill_wrappers';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { INFINITE_DISTANCE } from '/src/core/game/game_props';
+import { AimStage, AllStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { JudgeMatcher, JudgeMatcherEnum } from '/src/core/shares/libs/judge_matchers';
+import { TagEnum } from '/src/core/shares/types/tag_list';
+import { OnDefineReleaseTiming, RulesBreakerSkill, TriggerSkill } from '/src/core/skills/skill';
+import { CompulsorySkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'zhuilie', description: 'zhuilie_description' })
 export class ZhuiLie extends TriggerSkill {

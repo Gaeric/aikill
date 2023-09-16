@@ -1,14 +1,14 @@
-import { CardId } from 'core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { Sanguosha } from 'core/game/engine';
-import { DamageType } from 'core/game/game_props';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea, PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { Functional } from 'core/shares/libs/functional';
-import { ActiveSkill } from 'core/skills/skill';
-import { CommonSkill } from 'core/skills/skill_wrappers';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { Sanguosha } from '/src/core/game/engine';
+import { DamageType } from '/src/core/game/game_props';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { Functional } from '/src/core/shares/libs/functional';
+import { ActiveSkill } from '/src/core/skills/skill';
+import { CommonSkill } from '/src/core/skills/skill_wrappers';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'lveming', description: 'lveming_description' })
 export class LveMing extends ActiveSkill {

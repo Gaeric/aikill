@@ -1,12 +1,12 @@
-import { CardId } from 'core/cards/libs/card_props';
-import { Sanguosha } from 'core/game/engine';
-import { Player } from 'core/player/player';
-import { TranslationPack } from 'core/translations/translation_json_tool';
-import { ClientTranslationModule } from 'core/translations/translation_module.client';
-import { ImageLoader } from 'image_loader/image_loader';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { Sanguosha } from '/src/core/game/engine';
+import { Player } from '/src/core/player/player';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
+import { ImageLoader } from '/src/image_loader/image_loader';
 import * as React from 'react';
-import { Button } from 'ui/button/button';
-import { ClientCard } from 'ui/card/card';
+import { Button } from '/src/ui/button/button';
+import { ClientCard } from '/src/ui/card/card';
 import styles from './card_display_dialog.module.css';
 import { BaseDialog } from '../base_dialog';
 

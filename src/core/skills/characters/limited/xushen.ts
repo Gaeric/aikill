@@ -1,14 +1,14 @@
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, PlayerDyingStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerId, PlayerRole } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { GameMode } from 'core/shares/types/room_props';
-import { OnDefineReleaseTiming, TriggerSkill } from 'core/skills/skill';
-import { CommonSkill, LimitSkill, PersistentSkill, ShadowSkill } from 'core/skills/skill_wrappers';
-import { PatchedTranslationObject, TranslationPack } from 'core/translations/translation_json_tool';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, PlayerDyingStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerId, PlayerRole } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { GameMode } from '/src/core/shares/types/room_props';
+import { OnDefineReleaseTiming, TriggerSkill } from '/src/core/skills/skill';
+import { CommonSkill, LimitSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @LimitSkill({ name: 'xushen', description: 'xushen_description' })
 export class XuShen extends TriggerSkill {

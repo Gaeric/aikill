@@ -1,14 +1,14 @@
-import { CardType, VirtualCard } from 'core/cards/card';
-import { Slash } from 'core/cards/standard/slash';
-import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, CardMoveStage, CardUseStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea, PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { CommonSkill, PersistentSkill, ShadowSkill, TriggerSkill } from 'core/skills/skill';
-import { PatchedTranslationObject, TranslationPack } from 'core/translations/translation_json_tool';
+import { CardType, VirtualCard } from '/src/core/cards/card';
+import { Slash } from '/src/core/cards/standard/slash';
+import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, CardMoveStage, CardUseStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { CommonSkill, PersistentSkill, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
+import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'qinguo', description: 'qinguo_description' })
 export class QinGuo extends TriggerSkill {

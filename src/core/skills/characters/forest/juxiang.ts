@@ -1,12 +1,12 @@
-import { CardId } from 'core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, CardEffectStage, CardUseStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { CompulsorySkill, TriggerSkill } from 'core/skills/skill';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, CardEffectStage, CardUseStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { CompulsorySkill, TriggerSkill } from '/src/core/skills/skill';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CompulsorySkill({ name: 'juxiang', description: 'juxiang_description' })
 export class JuXiang extends TriggerSkill {

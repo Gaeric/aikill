@@ -1,8 +1,8 @@
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { CardId } from 'core/cards/libs/card_props';
-import { CardDrawReason, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { CardDrawReason, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
 import {
   AllStage,
   DrawCardStage,
@@ -10,14 +10,14 @@ import {
   PhaseStageChangeStage,
   PlayerPhase,
   PlayerPhaseStages,
-} from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea, PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { MarkEnum } from 'core/shares/types/mark_list';
-import { RulesBreakerSkill, TriggerSkill } from 'core/skills/skill';
-import { OnDefineReleaseTiming } from 'core/skills/skill_hooks';
-import { CommonSkill, ShadowSkill } from 'core/skills/skill_wrappers';
+} from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { MarkEnum } from '/src/core/shares/types/mark_list';
+import { RulesBreakerSkill, TriggerSkill } from '/src/core/skills/skill';
+import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
+import { CommonSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'jieying', description: 'jieying_description' })
 export class JieYing extends TriggerSkill implements OnDefineReleaseTiming {

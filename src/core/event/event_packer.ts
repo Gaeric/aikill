@@ -1,4 +1,4 @@
-import { GameRunningInfo } from 'core/game/game_props';
+import { GameRunningInfo } from '/src/core/game/game_props';
 import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from './event';
 
 const enum PrivateTagEnum {

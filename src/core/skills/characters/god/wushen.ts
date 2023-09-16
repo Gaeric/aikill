@@ -1,14 +1,14 @@
-import { Card, VirtualCard } from 'core/cards/card';
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { CardId, CardSuit } from 'core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { INFINITE_TRIGGERING_TIMES } from 'core/game/game_props';
-import { AimStage, AllStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea } from 'core/player/player_props';
-import { Room } from 'core/room/room';
+import { Card, VirtualCard } from '/src/core/cards/card';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { CardId, CardSuit } from '/src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { INFINITE_TRIGGERING_TIMES } from '/src/core/game/game_props';
+import { AimStage, AllStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
 import {
   CompulsorySkill,
   OnDefineReleaseTiming,
@@ -16,7 +16,7 @@ import {
   ShadowSkill,
   TransformSkill,
   TriggerSkill,
-} from 'core/skills/skill';
+} from '/src/core/skills/skill';
 
 @CompulsorySkill({ name: 'wushen', description: 'wushen_description' })
 export class WuShen extends TransformSkill implements OnDefineReleaseTiming {

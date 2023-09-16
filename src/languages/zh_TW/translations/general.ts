@@ -687,7 +687,7 @@ export const UiDictionary: Word[] = [
   { source: 'Refresh room list', target: '重新整理房間' },
   { source: 'please input your username here', target: '在此設定玩家名稱後可開始遊戲' },
   { source: 'Change username', target: '更改玩家名' },
-  { source: 'core version: {0}', target: '核心版本 {0}' },
+  { source: '/src/core version: {0}', target: '核心版本 {0}' },
   { source: 'Join', target: '加入' },
   { source: 'lobby', target: '大廳' },
   { source: 'room', target: '房間' },

@@ -1,8 +1,8 @@
-import { CardMatcherSocketPassenger } from 'core/cards/libs/card_matcher';
-import { CharacterId } from 'core/characters/character';
-import { PlayerId, PlayerRole } from 'core/player/player_props';
-import { Flavor } from 'core/shares/types/host_config';
-import { GameMode } from 'core/shares/types/room_props';
+import { CardMatcherSocketPassenger } from '/src/core/cards/libs/card_matcher';
+import { CharacterId } from '/src/core/characters/character';
+import { PlayerId, PlayerRole } from '/src/core/player/player_props';
+import { Flavor } from '/src/core/shares/types/host_config';
+import { GameMode } from '/src/core/shares/types/room_props';
 
 export const INFINITE_TRIGGERING_TIMES = 1000;
 export const NONE_TRIGGERING_TIMES = -9999;
@@ -121,5 +121,5 @@ export type GameCommonRuleObject = {
 
 export type WaitingRoomGameSettings = Pick<
   TemporaryRoomCreationInfo,
-  Exclude<keyof TemporaryRoomCreationInfo, 'roomName' | 'campaignMode' | 'coreVersion' | 'hostPlayerId'>
+  Exclude<keyof TemporaryRoomCreationInfo, 'roomName' | 'campaignMode' | '/src/coreVersion' | 'hostPlayerId'>
 > & { pveNumberOfPlayers: number };

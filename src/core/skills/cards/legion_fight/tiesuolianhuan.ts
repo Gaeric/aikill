@@ -1,9 +1,9 @@
-import { TieSuoLianHuanSkillTrigger } from 'core/ai/skills/cards/tiesuolianhuan';
-import { CardId } from 'core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { ActiveSkill, AI, CommonSkill } from 'core/skills/skill';
+import { TieSuoLianHuanSkillTrigger } from '/src/core/ai/skills/cards/tiesuolianhuan';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { ActiveSkill, AI, CommonSkill } from '/src/core/skills/skill';
 import { ExtralCardSkillProperty } from '../interface/extral_property';
 
 @AI(TieSuoLianHuanSkillTrigger)

@@ -1,6 +1,6 @@
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { CompulsorySkill, RulesBreakerSkill } from 'core/skills/skill';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { CompulsorySkill, RulesBreakerSkill } from '/src/core/skills/skill';
 
 @CompulsorySkill({ name: 'yicong', description: 'yicong_description' })
 export class YiCong extends RulesBreakerSkill {

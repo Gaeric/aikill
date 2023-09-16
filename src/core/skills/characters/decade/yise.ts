@@ -1,12 +1,12 @@
-import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, CardMoveStage, DamageEffectStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { OnDefineReleaseTiming, TriggerSkill } from 'core/skills/skill';
-import { CommonSkill, PersistentSkill, ShadowSkill } from 'core/skills/skill_wrappers';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, CardMoveStage, DamageEffectStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { OnDefineReleaseTiming, TriggerSkill } from '/src/core/skills/skill';
+import { CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'yise', description: 'yise_description' })
 export class YiSe extends TriggerSkill {

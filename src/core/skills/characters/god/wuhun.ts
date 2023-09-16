@@ -1,14 +1,14 @@
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, DamageEffectStage, PlayerDiedStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { JudgeMatcher, JudgeMatcherEnum } from 'core/shares/libs/judge_matchers';
-import { MarkEnum } from 'core/shares/types/mark_list';
-import { TriggerSkill } from 'core/skills/skill';
-import { CompulsorySkill, ShadowSkill } from 'core/skills/skill_wrappers';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, DamageEffectStage, PlayerDiedStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { JudgeMatcher, JudgeMatcherEnum } from '/src/core/shares/libs/judge_matchers';
+import { MarkEnum } from '/src/core/shares/types/mark_list';
+import { TriggerSkill } from '/src/core/skills/skill';
+import { CompulsorySkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CompulsorySkill({ name: 'wuhun', description: 'wuhun_description' })
 export class WuHun extends TriggerSkill {

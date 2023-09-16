@@ -4,13 +4,13 @@ import {
   serverActiveListenerEvents,
   ServerEventFinder,
   serverResponsiveListenerEvents,
-} from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { ServerPlayer } from 'core/player/player.server';
-import { PlayerId } from 'core/player/player_props';
-import { ServerRoom } from 'core/room/room.server';
-import { Logger } from 'core/shares/libs/logger/logger';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+} from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { ServerPlayer } from '/src/core/player/player.server';
+import { PlayerId } from '/src/core/player/player_props';
+import { ServerRoom } from '/src/core/room/room.server';
+import { Logger } from '/src/core/shares/libs/logger/logger';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 import { LocalServerEmitterInterface } from './event_emitter_props';
 import { EventEmitterProps } from './event_emitter_props';
 

@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import { CharacterNationality } from 'core/characters/character';
-import { PlayerPhase } from 'core/game/stage_processor';
-import { Functional } from 'core/shares/libs/functional';
-import { ClientTranslationModule } from 'core/translations/translation_module.client';
+import { CharacterNationality } from '/src/core/characters/character';
+import { PlayerPhase } from '/src/core/game/stage_processor';
+import { Functional } from '/src/core/shares/libs/functional';
+import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
 import * as React from 'react';
 import styles from './badge.module.css';
 import drawPhaseBadge from './images/draw_phase.png';

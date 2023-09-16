@@ -1,9 +1,9 @@
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { PlayerPhase } from 'core/game/stage_processor';
-import { Room } from 'core/room/room';
-import { DangXian } from 'core/skills';
-import { CompulsorySkill } from 'core/skills/skill_wrappers';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { PlayerPhase } from '/src/core/game/stage_processor';
+import { Room } from '/src/core/room/room';
+import { DangXian } from '/src/core/skills';
+import { CompulsorySkill } from '/src/core/skills/skill_wrappers';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CompulsorySkill({ name: 'decade_dangxian', description: 'decade_dangxian_description' })
 export class DecadeDangXian extends DangXian {

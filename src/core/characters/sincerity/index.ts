@@ -1,4 +1,4 @@
-import { Character } from 'core/characters/character';
+import { Character } from '/src/core/characters/character';
 import { KongRong } from './kongrong';
 import { MiFuRen } from './mifuren';
 import { WangFuZhaoLei } from './wangfuzhaolei';

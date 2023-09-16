@@ -1,12 +1,12 @@
-import { VirtualCard } from 'core/cards/card';
-import { CardSuit } from 'core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, CardUseStage, PlayerPhase } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { TriggerSkill } from 'core/skills/skill';
-import { CompulsorySkill } from 'core/skills/skill_wrappers';
+import { VirtualCard } from '/src/core/cards/card';
+import { CardSuit } from '/src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, CardUseStage, PlayerPhase } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { TriggerSkill } from '/src/core/skills/skill';
+import { CompulsorySkill } from '/src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'liubing', description: 'liubing_description' })
 export class LiuBing extends TriggerSkill {

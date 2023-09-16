@@ -1,11 +1,11 @@
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { AllStage, PhaseStageChangeStage, PlayerPhaseStages, StagePriority } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { TriggerSkill } from 'core/skills/skill';
-import { CommonSkill, PersistentSkill } from 'core/skills/skill_wrappers';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { AllStage, PhaseStageChangeStage, PlayerPhaseStages, StagePriority } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { TriggerSkill } from '/src/core/skills/skill';
+import { CommonSkill, PersistentSkill } from '/src/core/skills/skill_wrappers';
 
 @PersistentSkill({ stubbornSkill: true })
 @CommonSkill({ name: 'feiyang', description: 'feiyang_description' })

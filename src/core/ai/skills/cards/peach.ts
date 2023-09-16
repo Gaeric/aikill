@@ -1,9 +1,9 @@
-import { ActiveSkillTriggerClass } from 'core/ai/skills/base/active_skill_trigger';
-import type { CardId } from 'core/cards/libs/card_props';
-import type { ClientEventFinder, GameEventIdentifiers } from 'core/event/event';
-import type { Player } from 'core/player/player';
-import type { Room } from 'core/room/room';
-import type { PeachSkill } from 'core/skills';
+import { ActiveSkillTriggerClass } from '/src/core/ai/skills/base/active_skill_trigger';
+import type { CardId } from '/src/core/cards/libs/card_props';
+import type { ClientEventFinder, GameEventIdentifiers } from '/src/core/event/event';
+import type { Player } from '/src/core/player/player';
+import type { Room } from '/src/core/room/room';
+import type { PeachSkill } from '/src/core/skills';
 
 export class PeachSkillTrigger extends ActiveSkillTriggerClass<PeachSkill> {
   skillTrigger = (

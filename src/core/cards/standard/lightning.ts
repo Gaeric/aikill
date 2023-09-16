@@ -1,9 +1,9 @@
-import { CardSuit } from 'core/cards/libs/card_props';
-import type { RealCardId } from 'core/cards/libs/card_props';
-import { DelayedTrick, TrickCard } from 'core/cards/trick_card';
-import { GameCardExtensions } from 'core/game/game_props';
-import { SkillLoader } from 'core/game/package_loader/loader.skills';
-import { LightningSkill } from 'core/skills/cards/standard/lightning';
+import { CardSuit } from '/src/core/cards/libs/card_props';
+import type { RealCardId } from '/src/core/cards/libs/card_props';
+import { DelayedTrick, TrickCard } from '/src/core/cards/trick_card';
+import { GameCardExtensions } from '/src/core/game/game_props';
+import { SkillLoader } from '/src/core/game/package_loader/loader.skills';
+import { LightningSkill } from '/src/core/skills/cards/standard/lightning';
 
 @DelayedTrick
 export class Lightning extends TrickCard {

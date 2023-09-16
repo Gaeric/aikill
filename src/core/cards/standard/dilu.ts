@@ -1,6 +1,6 @@
-import { GameCardExtensions } from 'core/game/game_props';
-import { SkillLoader } from 'core/game/package_loader/loader.skills';
-import { RulesBreakerSkill } from 'core/skills/skill';
+import { GameCardExtensions } from '/src/core/game/game_props';
+import { SkillLoader } from '/src/core/game/package_loader/loader.skills';
+import { RulesBreakerSkill } from '/src/core/skills/skill';
 import { DefenseRideCard } from '../equip_card';
 import { CardSuit } from '../libs/card_props';
 

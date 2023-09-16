@@ -1,17 +1,17 @@
-import { Card, CardType, VirtualCard } from 'core/cards/card';
-import { CardId } from 'core/cards/libs/card_props';
-import { GameEventIdentifiers } from 'core/event/event';
-import { Sanguosha } from 'core/game/engine';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea } from 'core/player/player_props';
-import { Room } from 'core/room/room';
+import { Card, CardType, VirtualCard } from '/src/core/cards/card';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { GameEventIdentifiers } from '/src/core/event/event';
+import { Sanguosha } from '/src/core/game/engine';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
 import {
   CompulsorySkill,
   GlobalRulesBreakerSkill,
   OnDefineReleaseTiming,
   ShadowSkill,
   TransformSkill,
-} from 'core/skills/skill';
+} from '/src/core/skills/skill';
 
 @CompulsorySkill({ name: 'xianghai', description: 'xianghai_description' })
 export class XiangHai extends TransformSkill implements OnDefineReleaseTiming {

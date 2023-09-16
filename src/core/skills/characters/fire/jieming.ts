@@ -1,9 +1,9 @@
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { AllStage, DamageEffectStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea, PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { CommonSkill, TriggerSkill } from 'core/skills/skill';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { AllStage, DamageEffectStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { CommonSkill, TriggerSkill } from '/src/core/skills/skill';
 
 @CommonSkill({ name: 'jieming', description: 'jieming_description' })
 export class JieMing extends TriggerSkill {

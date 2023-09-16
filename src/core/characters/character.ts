@@ -1,5 +1,5 @@
-import { GameCharacterExtensions, UPPER_LIMIT_OF_ARMOR } from 'core/game/game_props';
-import { Skill } from 'core/skills/skill';
+import { GameCharacterExtensions, UPPER_LIMIT_OF_ARMOR } from '/src/core/game/game_props';
+import { Skill } from '/src/core/skills/skill';
 
 export type CharacterId = number;
 export const enum CharacterGender {

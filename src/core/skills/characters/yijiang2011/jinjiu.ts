@@ -1,12 +1,12 @@
-import { Card, VirtualCard } from 'core/cards/card';
-import { CardId } from 'core/cards/libs/card_props';
-import { Sanguosha } from 'core/game/engine';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { AlcoholSkill } from 'core/skills/cards/legion_fight/alcohol';
-import { OnDefineReleaseTiming, TransformSkill } from 'core/skills/skill';
-import { CompulsorySkill } from 'core/skills/skill_wrappers';
+import { Card, VirtualCard } from '/src/core/cards/card';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { Sanguosha } from '/src/core/game/engine';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { AlcoholSkill } from '/src/core/skills/cards/legion_fight/alcohol';
+import { OnDefineReleaseTiming, TransformSkill } from '/src/core/skills/skill';
+import { CompulsorySkill } from '/src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'jinjiu', description: 'jinjiu_description' })
 export class JinJiu extends TransformSkill implements OnDefineReleaseTiming {

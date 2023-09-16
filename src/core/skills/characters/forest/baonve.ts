@@ -1,13 +1,13 @@
-import { CharacterNationality } from 'core/characters/character';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, DamageEffectStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { JudgeMatcher, JudgeMatcherEnum } from 'core/shares/libs/judge_matchers';
-import { TriggerSkill } from 'core/skills/skill';
-import { CommonSkill, LordSkill } from 'core/skills/skill_wrappers';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+import { CharacterNationality } from '/src/core/characters/character';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, DamageEffectStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { JudgeMatcher, JudgeMatcherEnum } from '/src/core/shares/libs/judge_matchers';
+import { TriggerSkill } from '/src/core/skills/skill';
+import { CommonSkill, LordSkill } from '/src/core/skills/skill_wrappers';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @LordSkill
 @CommonSkill({ name: 'baonve', description: 'baonve_description' })

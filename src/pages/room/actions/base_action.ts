@@ -1,12 +1,12 @@
-import { Card, CardType, VirtualCard } from 'core/cards/card';
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { CardId } from 'core/cards/libs/card_props';
-import { Sanguosha } from 'core/game/engine';
-import { Player } from 'core/player/player';
-import { ClientPlayer } from 'core/player/player.client';
-import { PlayerCardsArea, PlayerId } from 'core/player/player_props';
-import { ActiveSkill, GlobalFilterSkill, ResponsiveSkill, Skill, TriggerSkill, ViewAsSkill } from 'core/skills/skill';
-import { ClientTranslationModule } from 'core/translations/translation_module.client';
+import { Card, CardType, VirtualCard } from '/src/core/cards/card';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { Sanguosha } from '/src/core/game/engine';
+import { Player } from '/src/core/player/player';
+import { ClientPlayer } from '/src/core/player/player.client';
+import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
+import { ActiveSkill, GlobalFilterSkill, ResponsiveSkill, Skill, TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
+import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
 import { RoomPresenter } from '../room.presenter';
 import { RoomStore } from '../room.store';
 

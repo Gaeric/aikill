@@ -1,10 +1,10 @@
-import { CharacterEquipSections } from 'core/characters/character';
-import { PlayerId, PlayerRole } from 'core/player/player_props';
-import { Functional } from 'core/shares/libs/functional';
-import { Precondition } from 'core/shares/libs/precondition/precondition';
-import { GameMode } from 'core/shares/types/room_props';
-import { SkillType } from 'core/skills/skill';
-import { LobbyButton } from 'props/game_props';
+import { CharacterEquipSections } from '/src/core/characters/character';
+import { PlayerId, PlayerRole } from '/src/core/player/player_props';
+import { Functional } from '/src/core/shares/libs/functional';
+import { Precondition } from '/src/core/shares/libs/precondition/precondition';
+import { GameMode } from '/src/core/shares/types/room_props';
+import { SkillType } from '/src/core/skills/skill';
+import { LobbyButton } from '/src/props/game_props';
 import { CharacterSkinInfo } from 'skins/skins';
 import { ImageLoader } from './image_loader';
 

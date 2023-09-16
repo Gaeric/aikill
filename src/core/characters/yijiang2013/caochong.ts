@@ -1,7 +1,7 @@
-import { GameCharacterExtensions } from 'core/game/game_props';
-import { SkillLoader } from 'core/game/package_loader/loader.skills';
-import { ChengXiang } from 'core/skills/characters/yijiang2013/chengxiang';
-import { RenXin } from 'core/skills/characters/yijiang2013/renxin';
+import { GameCharacterExtensions } from '/src/core/game/game_props';
+import { SkillLoader } from '/src/core/game/package_loader/loader.skills';
+import { ChengXiang } from '/src/core/skills/characters/yijiang2013/chengxiang';
+import { RenXin } from '/src/core/skills/characters/yijiang2013/renxin';
 import { Character, CharacterGender, CharacterNationality } from '../character';
 
 const skillLoaderInstance = SkillLoader.getInstance();

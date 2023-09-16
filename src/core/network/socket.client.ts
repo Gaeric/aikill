@@ -1,5 +1,5 @@
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder, WorkPlace } from 'core/event/event';
-import { Socket } from 'core/network/socket';
+import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder, WorkPlace } from '/src/core/event/event';
+import { Socket } from '/src/core/network/socket';
 import IOSocketClient, { Manager } from 'socket.io-client';
 
 export class ClientSocket extends Socket<WorkPlace.Client> {

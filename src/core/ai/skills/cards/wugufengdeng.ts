@@ -1,10 +1,10 @@
-import { AiLibrary } from 'core/ai/ai_lib';
-import { ActiveSkillTriggerClass } from 'core/ai/skills/base/active_skill_trigger';
-import type { CardId } from 'core/cards/libs/card_props';
-import type { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import type { Player } from 'core/player/player';
-import type { Room } from 'core/room/room';
-import type { WuGuFengDengSkill } from 'core/skills';
+import { AiLibrary } from '/src/core/ai/ai_lib';
+import { ActiveSkillTriggerClass } from '/src/core/ai/skills/base/active_skill_trigger';
+import type { CardId } from '/src/core/cards/libs/card_props';
+import type { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import type { Player } from '/src/core/player/player';
+import type { Room } from '/src/core/room/room';
+import type { WuGuFengDengSkill } from '/src/core/skills';
 
 export class WuGuFengDengSkillTrigger extends ActiveSkillTriggerClass<WuGuFengDengSkill> {
   skillTrigger = (

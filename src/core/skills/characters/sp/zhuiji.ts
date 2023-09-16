@@ -1,7 +1,7 @@
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { RulesBreakerSkill } from 'core/skills/skill';
-import { CompulsorySkill } from 'core/skills/skill_wrappers';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { RulesBreakerSkill } from '/src/core/skills/skill';
+import { CompulsorySkill } from '/src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'zhuiji', description: 'zhuiji_description' })
 export class ZhuiJi extends RulesBreakerSkill {

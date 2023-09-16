@@ -1,12 +1,12 @@
-import { CardType } from 'core/cards/card';
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, DamageEffectStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { CompulsorySkill, TriggerSkill } from 'core/skills/skill';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+import { CardType } from '/src/core/cards/card';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, DamageEffectStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { CompulsorySkill, TriggerSkill } from '/src/core/skills/skill';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CompulsorySkill({ name: 'wuyan', description: 'wuyan_description' })
 export class WuYan extends TriggerSkill {

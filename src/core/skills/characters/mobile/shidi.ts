@@ -1,12 +1,12 @@
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, CardUseStage, PhaseStageChangeStage, PlayerPhaseStages } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { TargetGroupUtil } from 'core/shares/libs/utils/target_group';
-import { RulesBreakerSkill, SwitchSkillState, TriggerSkill } from 'core/skills/skill';
-import { CompulsorySkill, ShadowSkill, SwitchSkill } from 'core/skills/skill_wrappers';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, CardUseStage, PhaseStageChangeStage, PlayerPhaseStages } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { TargetGroupUtil } from '/src/core/shares/libs/utils/target_group';
+import { RulesBreakerSkill, SwitchSkillState, TriggerSkill } from '/src/core/skills/skill';
+import { CompulsorySkill, ShadowSkill, SwitchSkill } from '/src/core/skills/skill_wrappers';
 
 @SwitchSkill()
 @CompulsorySkill({ name: 'shidi', description: 'shidi_description' })

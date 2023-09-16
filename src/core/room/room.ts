@@ -1,8 +1,8 @@
-import { Card, CardType, VirtualCard } from 'core/cards/card';
-import { EquipCard } from 'core/cards/equip_card';
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { CardId } from 'core/cards/libs/card_props';
-import { CharacterEquipSections, CharacterId } from 'core/characters/character';
+import { Card, CardType, VirtualCard } from '/src/core/cards/card';
+import { EquipCard } from '/src/core/cards/equip_card';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { CharacterEquipSections, CharacterId } from '/src/core/characters/character';
 import {
   CardMoveArea,
   CardMoveReason,
@@ -11,25 +11,25 @@ import {
   GameEventIdentifiers,
   ServerEventFinder,
   WorkPlace,
-} from 'core/event/event';
-import { MoveCardEventInfos, PinDianReport } from 'core/event/event.server';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { GameInfo } from 'core/game/game_props';
-import { GameCommonRules } from 'core/game/game_rules';
-import { RecordAnalytics } from 'core/game/record_analytics';
-import { AllStage, GameEventStage, PlayerPhase, PlayerPhaseStages } from 'core/game/stage_processor';
-import { Socket } from 'core/network/socket';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea, PlayerId, PlayerRole, PlayerStatus } from 'core/player/player_props';
-import { JudgeMatcherEnum } from 'core/shares/libs/judge_matchers';
-import { Precondition } from 'core/shares/libs/precondition/precondition';
-import { System } from 'core/shares/libs/system';
-import { FlagEnum } from 'core/shares/types/flag_list';
-import { GameMode } from 'core/shares/types/room_props';
-import { RoomInfo, RoomShortcutInfo } from 'core/shares/types/server_types';
-import { FilterSkill, GlobalRulesBreakerSkill, RulesBreakerSkill, TransformSkill } from 'core/skills/skill';
-import { PatchedTranslationObject } from 'core/translations/translation_json_tool';
+} from '/src/core/event/event';
+import { MoveCardEventInfos, PinDianReport } from '/src/core/event/event.server';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { GameInfo } from '/src/core/game/game_props';
+import { GameCommonRules } from '/src/core/game/game_rules';
+import { RecordAnalytics } from '/src/core/game/record_analytics';
+import { AllStage, GameEventStage, PlayerPhase, PlayerPhaseStages } from '/src/core/game/stage_processor';
+import { Socket } from '/src/core/network/socket';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea, PlayerId, PlayerRole, PlayerStatus } from '/src/core/player/player_props';
+import { JudgeMatcherEnum } from '/src/core/shares/libs/judge_matchers';
+import { Precondition } from '/src/core/shares/libs/precondition/precondition';
+import { System } from '/src/core/shares/libs/system';
+import { FlagEnum } from '/src/core/shares/types/flag_list';
+import { GameMode } from '/src/core/shares/types/room_props';
+import { RoomInfo, RoomShortcutInfo } from '/src/core/shares/types/server_types';
+import { FilterSkill, GlobalRulesBreakerSkill, RulesBreakerSkill, TransformSkill } from '/src/core/skills/skill';
+import { PatchedTranslationObject } from '/src/core/translations/translation_json_tool';
 import { RoomEventStacker } from './utils/room_event_stack';
 
 export type RoomId = number;

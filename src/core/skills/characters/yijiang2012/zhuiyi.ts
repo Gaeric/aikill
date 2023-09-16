@@ -1,10 +1,10 @@
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { AllStage, PlayerDiedStage, PlayerPhase } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { CommonSkill, TriggerSkill } from 'core/skills/skill';
-import { OnDefineReleaseTiming } from 'core/skills/skill_hooks';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { AllStage, PlayerDiedStage, PlayerPhase } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { CommonSkill, TriggerSkill } from '/src/core/skills/skill';
+import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'zhuiyi', description: 'zhuiyi_description' })
 export class ZhuiYi extends TriggerSkill implements OnDefineReleaseTiming {

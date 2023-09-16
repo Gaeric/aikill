@@ -1,5 +1,5 @@
-import { CharacterGender } from 'core/characters/character';
-import { Sanguosha } from 'core/game/engine';
+import { CharacterGender } from '/src/core/characters/character';
+import { Sanguosha } from '/src/core/game/engine';
 import { CharacterSkinInfo } from 'skins/skins';
 import { AudioLoader } from './audio_loader';
 

@@ -1,15 +1,15 @@
-import { CardId, DamageCardEnum } from 'core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { MovingCardProps } from 'core/event/event.server';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, DamageEffectStage, PlayerPhase } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { Algorithm } from 'core/shares/libs/algorithm';
-import { TriggerSkill } from 'core/skills/skill';
-import { CommonSkill } from 'core/skills/skill_wrappers';
-import { PatchedTranslationObject, TranslationPack } from 'core/translations/translation_json_tool';
+import { CardId, DamageCardEnum } from '/src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { MovingCardProps } from '/src/core/event/event.server';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, DamageEffectStage, PlayerPhase } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { Algorithm } from '/src/core/shares/libs/algorithm';
+import { TriggerSkill } from '/src/core/skills/skill';
+import { CommonSkill } from '/src/core/skills/skill_wrappers';
+import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'koulve', description: 'koulve_description' })
 export class KouLve extends TriggerSkill {

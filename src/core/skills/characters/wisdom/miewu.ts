@@ -1,12 +1,12 @@
-import { CardType, VirtualCard } from 'core/cards/card';
-import { CardId } from 'core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, CardResponseStage, CardUseStage, PhaseChangeStage, PlayerPhase } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea, PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { Precondition } from 'core/shares/libs/precondition/precondition';
+import { CardType, VirtualCard } from '/src/core/cards/card';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, CardResponseStage, CardUseStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { Precondition } from '/src/core/shares/libs/precondition/precondition';
 import {
   CommonSkill,
   OnDefineReleaseTiming,
@@ -14,8 +14,8 @@ import {
   ShadowSkill,
   TriggerSkill,
   ViewAsSkill,
-} from 'core/skills/skill';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+} from '/src/core/skills/skill';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 import { WuKu } from './wuku';
 
 @CommonSkill({ name: 'miewu', description: 'miewu_description' })

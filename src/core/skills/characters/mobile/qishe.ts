@@ -1,13 +1,13 @@
-import { CardType, VirtualCard } from 'core/cards/card';
-import { Alcohol } from 'core/cards/legion_fight/alcohol';
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { CardId } from 'core/cards/libs/card_props';
-import { Sanguosha } from 'core/game/engine';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { RulesBreakerSkill, ViewAsSkill } from 'core/skills/skill';
-import { CommonSkill, ShadowSkill } from 'core/skills/skill_wrappers';
+import { CardType, VirtualCard } from '/src/core/cards/card';
+import { Alcohol } from '/src/core/cards/legion_fight/alcohol';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { Sanguosha } from '/src/core/game/engine';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { RulesBreakerSkill, ViewAsSkill } from '/src/core/skills/skill';
+import { CommonSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'qishe', description: 'qishe_description' })
 export class QiShe extends ViewAsSkill {

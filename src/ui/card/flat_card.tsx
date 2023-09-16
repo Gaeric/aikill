@@ -1,12 +1,12 @@
 import classNames from 'classnames';
-import { Card } from 'core/cards/card';
-import { ClientTranslationModule } from 'core/translations/translation_module.client';
-import { ImageLoader } from 'image_loader/image_loader';
+import { Card } from '/src/core/cards/card';
+import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
+import { ImageLoader } from '/src/image_loader/image_loader';
 import * as mobx from 'mobx';
 import * as mobxReact from 'mobx-react';
 import * as React from 'react';
-import { CardDescription } from 'ui/card_description/card_description';
-import { Tooltip } from 'ui/tooltip/tooltip';
+import { CardDescription } from '/src/ui/card_description/card_description';
+import { Tooltip } from '/src/ui/tooltip/tooltip';
 import styles from './card.module.css';
 import { CardNumberItem } from './card_number';
 import { CardSuitItem } from './card_suit';

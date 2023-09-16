@@ -1,6 +1,6 @@
-import { GameCardExtensions } from 'core/game/game_props';
-import { SkillLoader } from 'core/game/package_loader/loader.skills';
-import { TengJiaSkill } from 'core/skills/cards/legion_fight/tengjia';
+import { GameCardExtensions } from '/src/core/game/game_props';
+import { SkillLoader } from '/src/core/game/package_loader/loader.skills';
+import { TengJiaSkill } from '/src/core/skills/cards/legion_fight/tengjia';
 import { ArmorCard } from '../equip_card';
 import { CardSuit } from '../libs/card_props';
 

@@ -1,4 +1,4 @@
-import { CharacterGender } from 'core/characters/character';
+import { CharacterGender } from '/src/core/characters/character';
 import { CharacterSkinInfo } from 'skins/skins';
 
 export interface AudioLoader {

@@ -1,10 +1,10 @@
-import { AiLibrary } from 'core/ai/ai_lib';
-import type { CardId } from 'core/cards/libs/card_props';
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import type { Player } from 'core/player/player';
-import { PlayerCardsArea } from 'core/player/player_props';
-import type { Room } from 'core/room/room';
-import type { HanBingJianSkill } from 'core/skills';
+import { AiLibrary } from '/src/core/ai/ai_lib';
+import type { CardId } from '/src/core/cards/libs/card_props';
+import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import type { Player } from '/src/core/player/player';
+import { PlayerCardsArea } from '/src/core/player/player_props';
+import type { Room } from '/src/core/room/room';
+import type { HanBingJianSkill } from '/src/core/skills';
 import { TriggerSkillTriggerClass } from '../base/trigger_skill_trigger';
 
 export class HanBingJianSkillTrigger extends TriggerSkillTriggerClass<

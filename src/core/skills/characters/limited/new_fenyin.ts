@@ -1,12 +1,12 @@
-import { CardSuit } from 'core/cards/libs/card_props';
-import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, CardMoveStage, PhaseChangeStage, PlayerPhase } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { OnDefineReleaseTiming, TriggerSkill } from 'core/skills/skill';
-import { CompulsorySkill, PersistentSkill, ShadowSkill } from 'core/skills/skill_wrappers';
+import { CardSuit } from '/src/core/cards/libs/card_props';
+import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, CardMoveStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { OnDefineReleaseTiming, TriggerSkill } from '/src/core/skills/skill';
+import { CompulsorySkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'new_fenyin', description: 'new_fenyin_description' })
 export class NewFenYin extends TriggerSkill {

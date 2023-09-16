@@ -1,7 +1,7 @@
-import { CardSuit } from 'core/cards/libs/card_props';
-import { Player } from 'core/player/player';
-import { Algorithm } from 'core/shares/libs/algorithm/index';
-import { Precondition } from 'core/shares/libs/precondition/precondition';
+import { CardSuit } from '/src/core/cards/libs/card_props';
+import { Player } from '/src/core/player/player';
+import { Algorithm } from '/src/core/shares/libs/algorithm/index';
+import { Precondition } from '/src/core/shares/libs/precondition/precondition';
 import * as React from 'react';
 import { Languages, TranslationPack, TranslationsDictionary } from './translation_json_tool';
 import { TranslationModule } from './translation_module';

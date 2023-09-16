@@ -5,16 +5,16 @@ import {
   ServerEventFinder,
   serverResponsiveListenerEvents,
   WorkPlace,
-} from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { Socket } from 'core/network/socket';
-import { ServerPlayer } from 'core/player/player.server';
-import { PlayerId } from 'core/player/player_props';
-import { RoomId } from 'core/room/room';
-import { ServerRoom } from 'core/room/room.server';
-import { Logger } from 'core/shares/libs/logger/logger';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+} from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { Socket } from '/src/core/network/socket';
+import { ServerPlayer } from '/src/core/player/player.server';
+import { PlayerId } from '/src/core/player/player_props';
+import { RoomId } from '/src/core/room/room';
+import { ServerRoom } from '/src/core/room/room.server';
+import { Logger } from '/src/core/shares/libs/logger/logger';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 import IOSocketServer from 'socket.io';
 
 export class ServerSocket extends Socket<WorkPlace.Server> {

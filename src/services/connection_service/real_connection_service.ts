@@ -1,8 +1,8 @@
-import { GameCardExtensions } from 'core/game/game_props';
-import { TemporaryRoomCreationInfo } from 'core/game/game_props';
-import { RoomId } from 'core/room/room';
-import { ChatSocketEvent, LobbySocketEvent } from 'core/shares/types/server_types';
-import { ClientConfig, ServerHostTag } from 'props/config_props';
+import { GameCardExtensions } from '/src/core/game/game_props';
+import { TemporaryRoomCreationInfo } from '/src/core/game/game_props';
+import { RoomId } from '/src/core/room/room';
+import { ChatSocketEvent, LobbySocketEvent } from '/src/core/shares/types/server_types';
+import { ClientConfig, ServerHostTag } from '/src/props/config_props';
 import SocketIOClient from 'socket.io-client';
 import {
   ChatPacketObject,

@@ -1,8 +1,8 @@
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Room } from 'core/room/room';
-import { CommonSkill, ResponsiveSkill } from 'core/skills/skill';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Room } from '/src/core/room/room';
+import { CommonSkill, ResponsiveSkill } from '/src/core/skills/skill';
 
 @CommonSkill({ name: 'jink', description: 'jink_description' })
 export class JinkSkill extends ResponsiveSkill {

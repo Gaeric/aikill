@@ -1,14 +1,14 @@
 import classNames from 'classnames';
-import { GameEventIdentifiers } from 'core/event/event';
-import { ClientTranslationModule } from 'core/translations/translation_module.client';
+import { GameEventIdentifiers } from '/src/core/event/event';
+import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
 import * as mobx from 'mobx';
 import * as mobxReact from 'mobx-react';
-import { RoomPresenter } from 'pages/room/room.presenter';
-import { RoomStore } from 'pages/room/room.store';
+import { RoomPresenter } from '/src/pages/room/room.presenter';
+import { RoomStore } from '/src/pages/room/room.store';
 import * as React from 'react';
-import { ConnectionService } from 'services/connection_service/connection_service';
-import { Button } from 'ui/button/button';
-import { Input } from 'ui/input/input';
+import { ConnectionService } from '/src/services/connection_service/connection_service';
+import { Button } from '/src/ui/button/button';
+import { Input } from '/src/ui/input/input';
 import styles from './message_dialog.module.css';
 import { createRawQuickMessage, quickMessageMaxIndex } from './message_dialog.static';
 

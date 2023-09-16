@@ -1,10 +1,10 @@
-import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { AllStage, CardMoveStage, PhaseChangeStage, PlayerPhase } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { TriggerSkill } from 'core/skills/skill';
-import { CommonSkill, CompulsorySkill, ShadowSkill } from 'core/skills/skill_wrappers';
+import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { AllStage, CardMoveStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { TriggerSkill } from '/src/core/skills/skill';
+import { CommonSkill, CompulsorySkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'pve_classic_lianzhen', description: 'pve_classic_lianzhen_description' })
 export class PveClassicLianZhen extends TriggerSkill {

@@ -1,10 +1,10 @@
-import { VirtualCard } from 'core/cards/card';
-import { CardId } from 'core/cards/libs/card_props';
-import { Peach } from 'core/cards/standard/peach';
-import { Sanguosha } from 'core/game/engine';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { CommonSkill, ViewAsSkill } from 'core/skills/skill';
+import { VirtualCard } from '/src/core/cards/card';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { Peach } from '/src/core/cards/standard/peach';
+import { Sanguosha } from '/src/core/game/engine';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { CommonSkill, ViewAsSkill } from '/src/core/skills/skill';
 
 @CommonSkill({ name: 'jijiu', description: 'jijiu_description' })
 export class JiJiu extends ViewAsSkill {

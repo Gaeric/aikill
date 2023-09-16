@@ -1,4 +1,4 @@
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
+import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
 import { EventEmitterProps } from './event_emitter_props';
 import { ClientSocket } from '../socket.client';
 

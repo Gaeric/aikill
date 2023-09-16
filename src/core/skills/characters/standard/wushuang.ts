@@ -1,12 +1,12 @@
-import { CardMatcher } from 'core/cards/libs/card_matcher';
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { Sanguosha } from 'core/game/engine';
-import { AimStage, AllStage, CardResponseStage, CardUseStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { CompulsorySkill, ShadowSkill, TriggerSkill } from 'core/skills/skill';
-import { TranslationPack } from 'core/translations/translation_json_tool';
+import { CardMatcher } from '/src/core/cards/libs/card_matcher';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { Sanguosha } from '/src/core/game/engine';
+import { AimStage, AllStage, CardResponseStage, CardUseStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { CompulsorySkill, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
 
 @CompulsorySkill({ name: 'wushuang', description: 'wushuang_description' })
 export class WuShuang extends TriggerSkill {

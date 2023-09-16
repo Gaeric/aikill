@@ -1,31 +1,31 @@
-import logoImage from 'assets/images/lobby/logo.png';
+import logoImage from '/src/assets/images/lobby/logo.png';
 import { AudioLoader } from 'audio_loader/audio_loader';
 import classNames from 'classnames';
-import { Sanguosha } from 'core/game/engine';
-import { TemporaryRoomCreationInfo } from 'core/game/game_props';
-import { RoomMode } from 'core/shares/types/room_props';
-import { RoomInfo } from 'core/shares/types/server_types';
-import { TranslationPack } from 'core/translations/translation_json_tool';
-import { ClientTranslationModule } from 'core/translations/translation_module.client';
-import { ElectronData } from 'electron_loader/electron_data';
-import { ElectronLoader } from 'electron_loader/electron_loader';
-import { ImageLoader } from 'image_loader/image_loader';
+import { Sanguosha } from '/src/core/game/engine';
+import { TemporaryRoomCreationInfo } from '/src/core/game/game_props';
+import { RoomMode } from '/src/core/shares/types/room_props';
+import { RoomInfo } from '/src/core/shares/types/server_types';
+import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
+import { ElectronData } from '/src/electron_loader/electron_data';
+import { ElectronLoader } from '/src/electron_loader/electron_loader';
+import { ImageLoader } from '/src/image_loader/image_loader';
 import * as mobx from 'mobx';
 import * as mobxReact from 'mobx-react';
-import { Background } from 'pages/room/ui/background/background';
-import { SettingsDialog } from 'pages/ui/settings/settings';
-import { ServerHostTag } from 'props/config_props';
-import { LobbyButton } from 'props/game_props';
+import { Background } from '/src/pages/room/ui/background/background';
+import { SettingsDialog } from '/src/pages/ui/settings/settings';
+import { ServerHostTag } from '/src/props/config_props';
+import { LobbyButton } from '/src/props/game_props';
 import * as React from 'react';
-import { CampaignService } from 'services/campaign_service/campaign_service';
-import { ConnectionService } from 'services/connection_service/connection_service';
+import { CampaignService } from '/src/services/campaign_service/campaign_service';
+import { ConnectionService } from '/src/services/connection_service/connection_service';
 import { PagePropsWithConfig } from 'types/page_props';
-import { installAudioPlayerService } from 'ui/audio/install';
-import { Button } from 'ui/button/button';
-import { LinkButton } from 'ui/button/link_button';
-import { Picture } from 'ui/picture/picture';
-import { SignalBar } from 'ui/signal_bar/signal_bar';
-import { Tooltip } from 'ui/tooltip/tooltip';
+import { installAudioPlayerService } from '/src/ui/audio/install';
+import { Button } from '/src/ui/button/button';
+import { LinkButton } from '/src/ui/button/link_button';
+import { Picture } from '/src/ui/picture/picture';
+import { SignalBar } from '/src/ui/signal_bar/signal_bar';
+import { Tooltip } from '/src/ui/tooltip/tooltip';
 import lockerImage from './images/locked.png';
 import styles from './lobby.module.css';
 import { Messages } from './messages';
@@ -565,7 +565,7 @@ export class Lobby extends React.Component<LobbyProps> {
           )}
           {this.updateComplete && <span>{this.props.translator.tr(Messages.updateComplete())}</span>}
           {this.props.translator.trx(
-            TranslationPack.translationJsonPatcher('core version: {0}', Sanguosha.Version).toString(),
+            TranslationPack.translationJsonPatcher('/src/core version: {0}', Sanguosha.Version).toString(),
           )}
         </div>
       </div>

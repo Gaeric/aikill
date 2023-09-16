@@ -1,6 +1,6 @@
-import { Precondition } from 'core/shares/libs/precondition/precondition';
-import * as SkillList from 'core/skills';
-import { Skill, SkillPrototype } from 'core/skills/skill';
+import { Precondition } from '/src/core/shares/libs/precondition/precondition';
+import * as SkillList from '/src/core/skills';
+import { Skill, SkillPrototype } from '/src/core/skills/skill';
 
 export class SkillLoader {
   private constructor(private skills: Skill[] = [], private shadowSkills: Skill[] = []) {}

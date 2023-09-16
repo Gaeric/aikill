@@ -1,15 +1,15 @@
-import { CardId } from 'core/cards/libs/card_props';
+import { CardId } from '/src/core/cards/libs/card_props';
 import {
   CardMoveArea,
   CardMoveReason,
   ClientEventFinder,
   GameEventIdentifiers,
   ServerEventFinder,
-} from 'core/event/event';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea, PlayerId } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { ActiveSkill, CommonSkill } from 'core/skills/skill';
+} from '/src/core/event/event';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { ActiveSkill, CommonSkill } from '/src/core/skills/skill';
 
 @CommonSkill({ name: 'dimeng', description: 'dimeng_description' })
 export class DiMeng extends ActiveSkill {

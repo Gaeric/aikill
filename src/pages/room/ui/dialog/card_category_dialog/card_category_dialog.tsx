@@ -1,10 +1,10 @@
-import { CardType } from 'core/cards/card';
-import { Sanguosha } from 'core/game/engine';
-import { Functional } from 'core/shares/libs/functional';
-import { ClientTranslationModule } from 'core/translations/translation_module.client';
-import { ImageLoader } from 'image_loader/image_loader';
+import { CardType } from '/src/core/cards/card';
+import { Sanguosha } from '/src/core/game/engine';
+import { Functional } from '/src/core/shares/libs/functional';
+import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
+import { ImageLoader } from '/src/image_loader/image_loader';
 import * as React from 'react';
-import { FlatDemoCard } from 'ui/card/flat_demo_card';
+import { FlatDemoCard } from '/src/ui/card/flat_demo_card';
 import styles from './card_category_dialog.module.css';
 import { BaseDialog } from '../base_dialog';
 

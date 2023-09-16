@@ -1,5 +1,5 @@
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder, WorkPlace } from 'core/event/event';
-import { PlayerId } from 'core/player/player_props';
+import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder, WorkPlace } from '/src/core/event/event';
+import { PlayerId } from '/src/core/player/player_props';
 
 export type WebSocketWithId<T> = T & {
   id: string;

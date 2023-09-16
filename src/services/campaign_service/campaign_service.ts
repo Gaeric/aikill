@@ -1,23 +1,23 @@
-import { GameProcessor } from 'core/game/game_processor/game_processor';
-import { OneVersusTwoGameProcessor } from 'core/game/game_processor/game_processor.1v2';
-import { TwoVersusTwoGameProcessor } from 'core/game/game_processor/game_processor.2v2';
-import { PveClassicGameProcessor } from 'core/game/game_processor/game_processor.pve_classic';
-import { PveLongshenGameProcessor } from 'core/game/game_processor/game_processor.pve_longshen';
-import { StandardGameProcessor } from 'core/game/game_processor/game_processor.standard';
-import { GameCardExtensions } from 'core/game/game_props';
-import { TemporaryRoomCreationInfo } from 'core/game/game_props';
-import { GameCommonRules } from 'core/game/game_rules';
-import { RecordAnalytics } from 'core/game/record_analytics';
-import { StageProcessor } from 'core/game/stage_processor';
-import { LocalServerEmitter } from 'core/network/local/local_emitter.server';
-import { ServerSocket } from 'core/network/socket.server';
-import { ServerRoom } from 'core/room/room.server';
-import { RoomEventStacker } from 'core/room/utils/room_event_stack';
-import { Logger } from 'core/shares/libs/logger/logger';
-import { Flavor } from 'core/shares/types/host_config';
-import { GameMode } from 'core/shares/types/room_props';
-import { ClientFlavor, ServerHostTag } from 'props/config_props';
-import { CreateGameListenerResponse } from 'services/connection_service/connection_service';
+import { GameProcessor } from '/src/core/game/game_processor/game_processor';
+import { OneVersusTwoGameProcessor } from '/src/core/game/game_processor/game_processor.1v2';
+import { TwoVersusTwoGameProcessor } from '/src/core/game/game_processor/game_processor.2v2';
+import { PveClassicGameProcessor } from '/src/core/game/game_processor/game_processor.pve_classic';
+import { PveLongshenGameProcessor } from '/src/core/game/game_processor/game_processor.pve_longshen';
+import { StandardGameProcessor } from '/src/core/game/game_processor/game_processor.standard';
+import { GameCardExtensions } from '/src/core/game/game_props';
+import { TemporaryRoomCreationInfo } from '/src/core/game/game_props';
+import { GameCommonRules } from '/src/core/game/game_rules';
+import { RecordAnalytics } from '/src/core/game/record_analytics';
+import { StageProcessor } from '/src/core/game/stage_processor';
+import { LocalServerEmitter } from '/src/core/network/local/local_emitter.server';
+import { ServerSocket } from '/src/core/network/socket.server';
+import { ServerRoom } from '/src/core/room/room.server';
+import { RoomEventStacker } from '/src/core/room/utils/room_event_stack';
+import { Logger } from '/src/core/shares/libs/logger/logger';
+import { Flavor } from '/src/core/shares/types/host_config';
+import { GameMode } from '/src/core/shares/types/room_props';
+import { ClientFlavor, ServerHostTag } from '/src/props/config_props';
+import { CreateGameListenerResponse } from '/src/services/connection_service/connection_service';
 
 export class CampaignService {
   private campaginRooms: {

@@ -1,14 +1,14 @@
-import { CardType, VirtualCard } from 'core/cards/card';
-import { CardColor, CardId } from 'core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { Sanguosha } from 'core/game/engine';
-import { AllStage, CardMoveStage, PlayerPhase } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { PlayerCardsArea } from 'core/player/player_props';
-import { Room } from 'core/room/room';
-import { Precondition } from 'core/shares/libs/precondition/precondition';
-import { CommonSkill, TriggerSkill, ViewAsSkill } from 'core/skills/skill';
-import { ShadowSkill } from 'core/skills/skill_wrappers';
+import { CardType, VirtualCard } from '/src/core/cards/card';
+import { CardColor, CardId } from '/src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { Sanguosha } from '/src/core/game/engine';
+import { AllStage, CardMoveStage, PlayerPhase } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { PlayerCardsArea } from '/src/core/player/player_props';
+import { Room } from '/src/core/room/room';
+import { Precondition } from '/src/core/shares/libs/precondition/precondition';
+import { CommonSkill, TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
+import { ShadowSkill } from '/src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'miaoxian', description: 'miaoxian_description' })
 export class MiaoXian extends ViewAsSkill {

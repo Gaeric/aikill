@@ -1,6 +1,6 @@
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { PlayerId } from 'core/player/player_props';
-import { ServerRoom } from 'core/room/room.server';
+import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { PlayerId } from '/src/core/player/player_props';
+import { ServerRoom } from '/src/core/room/room.server';
 
 export type EventEmitterProps = {
   emit(to: string, eventName: string, ...args: any): void;

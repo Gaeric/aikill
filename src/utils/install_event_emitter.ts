@@ -1,5 +1,5 @@
-import { EventEmitterProps } from 'core/network/local/event_emitter_props';
-import { PlayerId } from 'core/player/player_props';
+import { EventEmitterProps } from '/src/core/network/local/event_emitter_props';
+import { PlayerId } from '/src/core/player/player_props';
 
 export function installEventEmitter() {
   if (!(window as any).eventEmitter) {

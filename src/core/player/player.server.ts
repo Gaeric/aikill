@@ -1,9 +1,9 @@
-import { PlayerAI } from 'core/ai/ai';
-import { SmartAI } from 'core/ai/smart_ai';
-import { TrustAI } from 'core/ai/trust_ai';
-import { CharacterId } from 'core/characters/character';
-import { Player } from 'core/player/player';
-import { GameMode } from 'core/shares/types/room_props';
+import { PlayerAI } from '/src/core/ai/ai';
+import { SmartAI } from '/src/core/ai/smart_ai';
+import { TrustAI } from '/src/core/ai/trust_ai';
+import { CharacterId } from '/src/core/characters/character';
+import { Player } from '/src/core/player/player';
+import { GameMode } from '/src/core/shares/types/room_props';
 import { PlayerCards, PlayerCardsArea, PlayerCardsOutside, PlayerId, PlayerStatus } from './player_props';
 
 export class ServerPlayer extends Player {

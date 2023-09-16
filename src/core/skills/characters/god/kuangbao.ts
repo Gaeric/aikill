@@ -1,11 +1,11 @@
-import { GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { EventPacker } from 'core/event/event_packer';
-import { AllStage, DamageEffectStage, GameStartStage } from 'core/game/stage_processor';
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { MarkEnum } from 'core/shares/types/mark_list';
-import { TriggerSkill } from 'core/skills/skill';
-import { CompulsorySkill } from 'core/skills/skill_wrappers';
+import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { EventPacker } from '/src/core/event/event_packer';
+import { AllStage, DamageEffectStage, GameStartStage } from '/src/core/game/stage_processor';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { MarkEnum } from '/src/core/shares/types/mark_list';
+import { TriggerSkill } from '/src/core/skills/skill';
+import { CompulsorySkill } from '/src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'kuangbao', description: 'kuangbao_description' })
 export class KuangBao extends TriggerSkill {

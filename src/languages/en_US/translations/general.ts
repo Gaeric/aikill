@@ -723,7 +723,7 @@ export const UiDictionary: Word[] = [
   // { source: 'Refresh room list', target: '刷新房间' },
   { source: 'please input your username here', target: 'Rlease input your username here first' },
   // { source: 'Change username', target: '更改玩家名' },
-  // { source: 'core version: {0}', target: '内核版本 {0}' },
+  // { source: '/src/core version: {0}', target: '内核版本 {0}' },
   // { source: 'Join', target: '加入' },
   { source: 'lobby', target: 'Lobby' },
   { source: 'room', target: 'Room' },

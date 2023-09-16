@@ -1,8 +1,8 @@
-import { Player } from 'core/player/player';
-import { Room } from 'core/room/room';
-import { Skill, SkillProhibitedSkill, SkillType } from 'core/skills/skill';
-import { OnDefineReleaseTiming, SkillLifeCycle } from 'core/skills/skill_hooks';
-import { CommonSkill, PersistentSkill, ShadowSkill } from 'core/skills/skill_wrappers';
+import { Player } from '/src/core/player/player';
+import { Room } from '/src/core/room/room';
+import { Skill, SkillProhibitedSkill, SkillType } from '/src/core/skills/skill';
+import { OnDefineReleaseTiming, SkillLifeCycle } from '/src/core/skills/skill_hooks';
+import { CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
 
 @ShadowSkill
 @PersistentSkill()

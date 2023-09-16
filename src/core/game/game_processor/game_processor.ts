@@ -1,12 +1,12 @@
-import { CardId } from 'core/cards/libs/card_props';
-import { Character } from 'core/characters/character';
-import { BaseGameEvent, GameEventIdentifiers, ServerEventFinder } from 'core/event/event';
-import { MoveCardEventInfos } from 'core/event/event.server';
-import { Player } from 'core/player/player';
-import { PlayerId, PlayerInfo, PlayerRole } from 'core/player/player_props';
-import { ServerRoom } from 'core/room/room.server';
-import { Logger } from 'core/shares/libs/logger/logger';
-import { Precondition } from 'core/shares/libs/precondition/precondition';
+import { CardId } from '/src/core/cards/libs/card_props';
+import { Character } from '/src/core/characters/character';
+import { BaseGameEvent, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { MoveCardEventInfos } from '/src/core/event/event.server';
+import { Player } from '/src/core/player/player';
+import { PlayerId, PlayerInfo, PlayerRole } from '/src/core/player/player_props';
+import { ServerRoom } from '/src/core/room/room.server';
+import { Logger } from '/src/core/shares/libs/logger/logger';
+import { Precondition } from '/src/core/shares/libs/precondition/precondition';
 import { GameEventStage, PlayerPhase, PlayerPhaseStages, StageProcessor } from '../stage_processor';
 
 export abstract class GameProcessor {
