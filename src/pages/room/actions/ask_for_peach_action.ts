@@ -1,19 +1,34 @@
-import { Card } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { ActiveSkill, FilterSkill, Skill, TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
-import { UniqueSkillRule } from '/src/core/skills/skill_rule';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { BaseAction } from './base_action';
-import { ResponsiveUseCardAction } from './responsive_card_use_action';
+import { Card } from "src/core/cards/card";
+import { CardMatcher } from "src/core/cards/libs/card_matcher";
+import {
+  ClientEventFinder,
+  GameEventIdentifiers,
+  ServerEventFinder,
+} from "src/core/event/event";
+import { EventPacker } from "src/core/event/event_packer";
+import { Player } from "src/core/player/player";
+import { PlayerCardsArea } from "src/core/player/player_props";
+import { Room } from "src/core/room/room";
+import {
+  ActiveSkill,
+  FilterSkill,
+  Skill,
+  TriggerSkill,
+  ViewAsSkill,
+} from "src/core/skills/skill";
+import { UniqueSkillRule } from "src/core/skills/skill_rule";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { BaseAction } from "./base_action";
+import { ResponsiveUseCardAction } from "./responsive_card_use_action";
 
 export class AskForPeachAction extends ResponsiveUseCardAction<GameEventIdentifiers.AskForPeachEvent> {
   public static readonly isSkillDisabled =
-    (room: Room, useByMyself: boolean, player: Player, event: ServerEventFinder<GameEventIdentifiers>) =>
+    (
+      room: Room,
+      useByMyself: boolean,
+      player: Player,
+      event: ServerEventFinder<GameEventIdentifiers>
+    ) =>
     (skill: Skill) => {
       if (UniqueSkillRule.isProhibited(skill, player)) {
         return true;
@@ -22,11 +37,16 @@ export class AskForPeachAction extends ResponsiveUseCardAction<GameEventIdentifi
       if (skill instanceof TriggerSkill) {
         return true;
       } else if (skill instanceof ViewAsSkill) {
-        const matcher = new CardMatcher({ name: useByMyself ? ['alcohol', 'peach'] : ['peach'] });
+        const matcher = new CardMatcher({
+          name: useByMyself ? ["alcohol", "peach"] : ["peach"],
+        });
         return (
           !CardMatcher.match(
-            { name: skill.canViewAs(room, player, undefined, matcher), tag: 'card-matcher' },
-            matcher,
+            {
+              name: skill.canViewAs(room, player, undefined, matcher),
+              tag: "card-matcher",
+            },
+            matcher
           ) || !skill.canUse(room, player, event)
         );
       }
@@ -42,7 +62,7 @@ export class AskForPeachAction extends ResponsiveUseCardAction<GameEventIdentifi
   }
 
   isCardEnabledOnAskingForPeach(card: Card, fromArea: PlayerCardsArea) {
-    for (const skill of this.player.getSkills<FilterSkill>('filter')) {
+    for (const skill of this.player.getSkills<FilterSkill>("filter")) {
       if (!skill.canUseCard(card.Id, this.store.room, this.playerId)) {
         return false;
       }
@@ -71,7 +91,7 @@ export class AskForPeachAction extends ResponsiveUseCardAction<GameEventIdentifi
             card.Id,
             this.selectedCards,
             this.selectedTargets,
-            this.equipSkillCardId,
+            this.equipSkillCardId
           ) &&
           skill.availableCardAreas().includes(fromArea) &&
           (!skill.cardFilter(
@@ -79,14 +99,14 @@ export class AskForPeachAction extends ResponsiveUseCardAction<GameEventIdentifi
             this.player,
             this.selectedCards,
             this.selectedTargets,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           ) ||
             skill.cardFilter(
               this.store.room,
               this.player,
               [...this.selectedCards, card.Id],
               this.selectedTargets,
-              this.selectedCardToPlay,
+              this.selectedCardToPlay
             ))
         );
       } else if (skill instanceof ViewAsSkill) {
@@ -97,7 +117,7 @@ export class AskForPeachAction extends ResponsiveUseCardAction<GameEventIdentifi
             card.Id,
             this.pendingCards,
             this.equipSkillCardId,
-            this.matcher,
+            this.matcher
           ) &&
           skill.availableCardAreas().includes(fromArea) &&
           (!skill.cardFilter(
@@ -105,14 +125,14 @@ export class AskForPeachAction extends ResponsiveUseCardAction<GameEventIdentifi
             this.player,
             this.pendingCards,
             this.selectedTargets,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           ) ||
             skill.cardFilter(
               this.store.room,
               this.player,
               [...this.pendingCards, card.Id],
               this.selectedTargets,
-              this.selectedCardToPlay,
+              this.selectedCardToPlay
             ))
         );
       } else {
@@ -126,10 +146,18 @@ export class AskForPeachAction extends ResponsiveUseCardAction<GameEventIdentifi
       } else if (fromArea === PlayerCardsArea.EquipArea) {
         if (card.Skill instanceof ViewAsSkill) {
           return new CardMatcher({
-            name: card.Skill.canViewAs(this.store.room, this.player, this.selectedCards, this.matcher),
+            name: card.Skill.canViewAs(
+              this.store.room,
+              this.player,
+              this.selectedCards,
+              this.matcher
+            ),
           }).match(this.matcher);
         }
-      } else if (fromArea === PlayerCardsArea.OutsideArea && this.isCardFromParticularArea(card)) {
+      } else if (
+        fromArea === PlayerCardsArea.OutsideArea &&
+        this.isCardFromParticularArea(card)
+      ) {
         return this.matcher.match(card);
       }
     }
@@ -137,7 +165,7 @@ export class AskForPeachAction extends ResponsiveUseCardAction<GameEventIdentifi
   }
 
   async onPlay(translator: ClientTranslationModule) {
-    await new Promise<void>(resolve => {
+    await new Promise<void>((resolve) => {
       this.delightItems();
       this.presenter.highlightCards();
       this.presenter.createIncomingConversation({
@@ -146,40 +174,44 @@ export class AskForPeachAction extends ResponsiveUseCardAction<GameEventIdentifi
       });
 
       this.presenter.defineConfirmButtonActions(() => {
-        const event: ClientEventFinder<GameEventIdentifiers.AskForPeachEvent> = {
-          cardId: this.selectedCardToPlay,
-          fromId: this.playerId,
-        };
+        const event: ClientEventFinder<GameEventIdentifiers.AskForPeachEvent> =
+          {
+            cardId: this.selectedCardToPlay,
+            fromId: this.playerId,
+          };
         this.store.room.broadcast(GameEventIdentifiers.AskForPeachEvent, event);
         this.resetActionHandlers();
         this.resetAction();
-        this.presenter.isSkillDisabled(BaseAction.disableSkills);
+        this.presenter.handleIsSkillDisabled(BaseAction.disableSkills);
         this.presenter.resetSelectedSkill();
         resolve();
       });
       this.presenter.defineCancelButtonActions(() => {
-        const event: ClientEventFinder<GameEventIdentifiers.AskForPeachEvent> = {
-          fromId: this.playerId,
-        };
+        const event: ClientEventFinder<GameEventIdentifiers.AskForPeachEvent> =
+          {
+            fromId: this.playerId,
+          };
         this.store.room.broadcast(GameEventIdentifiers.AskForPeachEvent, event);
         this.resetActionHandlers();
         this.resetAction();
-        this.presenter.isSkillDisabled(BaseAction.disableSkills);
+        this.presenter.handleIsSkillDisabled(BaseAction.disableSkills);
         this.presenter.resetSelectedSkill();
         resolve();
       });
 
       this.presenter.setupPlayersSelectionMatcher((player: Player) => false);
       this.presenter.setupClientPlayerCardActionsMatcher((card: Card) =>
-        this.isCardEnabledOnAskingForPeach(card, PlayerCardsArea.HandArea),
+        this.isCardEnabledOnAskingForPeach(card, PlayerCardsArea.HandArea)
       );
       this.presenter.setupClientPlayerOutsideCardActionsMatcher(
         (card: Card) =>
-          this.isCardEnabledOnAskingForPeach(card, PlayerCardsArea.OutsideArea) ||
-          this.isOutsideCardShowOnSkillTriggered(card),
+          this.isCardEnabledOnAskingForPeach(
+            card,
+            PlayerCardsArea.OutsideArea
+          ) || this.isOutsideCardShowOnSkillTriggered(card)
       );
       this.presenter.setupCardSkillSelectionMatcher((card: Card) =>
-        this.isCardEnabledOnAskingForPeach(card, PlayerCardsArea.EquipArea),
+        this.isCardEnabledOnAskingForPeach(card, PlayerCardsArea.EquipArea)
       );
     });
   }

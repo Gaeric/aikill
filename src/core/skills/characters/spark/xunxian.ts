@@ -1,11 +1,11 @@
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, CardMoveStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { CommonSkill, TriggerSkill } from '/src/core/skills/skill';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, CardMoveStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { CommonSkill, TriggerSkill } from 'src/core/skills/skill';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'xunxian', description: 'xunxian_description' })
 export class XunXian extends TriggerSkill {

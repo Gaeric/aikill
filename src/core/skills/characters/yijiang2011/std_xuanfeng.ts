@@ -1,20 +1,20 @@
-import { CardChoosingOptions } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
+import { CardChoosingOptions } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
 import {
   AllStage,
   CardMoveStage,
   PhaseStageChangeStage,
   PlayerPhase,
   PlayerPhaseStages,
-} from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
-import { CommonSkill, TriggerSkill } from '/src/core/skills/skill';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { Precondition } from 'src/core/shares/libs/precondition/precondition';
+import { CommonSkill, TriggerSkill } from 'src/core/skills/skill';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'std_xuanfeng', description: 'std_xuanfeng_description' })
 export class StdXuanFeng extends TriggerSkill {

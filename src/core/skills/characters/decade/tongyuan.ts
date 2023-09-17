@@ -1,15 +1,15 @@
-import { CardType } from '/src/core/cards/card';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, CardResponseStage, CardUseStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { TargetGroupUtil } from '/src/core/shares/libs/utils/target_group';
-import { ExtralCardSkillProperty } from '/src/core/skills/cards/interface/extral_property';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill, CompulsorySkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CardType } from 'src/core/cards/card';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, CardResponseStage, CardUseStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { TargetGroupUtil } from 'src/core/shares/libs/utils/target_group';
+import { ExtralCardSkillProperty } from 'src/core/skills/cards/interface/extral_property';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill, CompulsorySkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 import { CuiJian, CuiJianEX, CuiJianI, CuiJianII } from './cuijian';
 
 @CompulsorySkill({ name: 'tongyuan', description: 'tongyuan_description' })

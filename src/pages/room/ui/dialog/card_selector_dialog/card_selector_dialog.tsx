@@ -1,15 +1,15 @@
 import classNames from 'classnames';
-import { Card } from '/src/core/cards/card';
-import { CardChoosingOptions, CardId } from '/src/core/cards/libs/card_props';
-import { CharacterId } from '/src/core/characters/character';
-import { Sanguosha } from '/src/core/game/engine';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Functional } from '/src/core/shares/libs/functional';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ImageLoader } from '/src/image_loader/image_loader';
+import { Card } from 'src/core/cards/card';
+import { CardChoosingOptions, CardId } from 'src/core/cards/libs/card_props';
+import { CharacterId } from 'src/core/characters/character';
+import { Sanguosha } from 'src/core/game/engine';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Functional } from 'src/core/shares/libs/functional';
+import { ClientTranslationModule } from 'src/core/translations/translation_module.client';
+import { ImageLoader } from 'src/image_loader/image_loader';
 import * as React from 'react';
-import { ClientCard } from '/src/ui/card/card';
-import { CharacterCard } from '/src/ui/character/character';
+import { ClientCard } from 'src/ui/card/card';
+import { CharacterCard } from 'src/ui/character/character';
 import styles from './card_selector_dialog.module.css';
 import { BaseDialog } from '../base_dialog';
 

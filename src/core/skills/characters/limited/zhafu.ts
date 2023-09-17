@@ -1,14 +1,14 @@
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { AllStage, PhaseStageChangeStage, PlayerPhaseStages } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { ActiveSkill, TriggerSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
-import { CommonSkill, LimitSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { AllStage, PhaseStageChangeStage, PlayerPhaseStages } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { ActiveSkill, TriggerSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
+import { CommonSkill, LimitSkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @LimitSkill({ name: 'zhafu', description: 'zhafu_description' })
 export class ZhaFu extends ActiveSkill {

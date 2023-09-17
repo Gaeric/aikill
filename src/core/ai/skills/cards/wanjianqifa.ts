@@ -1,11 +1,11 @@
-import { AiLibrary } from '/src/core/ai/ai_lib';
-import { ActiveSkillTriggerClass } from '/src/core/ai/skills/base/active_skill_trigger';
-import { CardType } from '/src/core/cards/card';
-import type { CardId } from '/src/core/cards/libs/card_props';
-import type { ClientEventFinder, GameEventIdentifiers } from '/src/core/event/event';
-import type { Player } from '/src/core/player/player';
-import type { Room } from '/src/core/room/room';
-import type { WanJianQiFaSkill } from '/src/core/skills';
+import { AiLibrary } from 'src/core/ai/ai_lib';
+import { ActiveSkillTriggerClass } from 'src/core/ai/skills/base/active_skill_trigger';
+import { CardType } from 'src/core/cards/card';
+import type { CardId } from 'src/core/cards/libs/card_props';
+import type { ClientEventFinder, GameEventIdentifiers } from 'src/core/event/event';
+import type { Player } from 'src/core/player/player';
+import type { Room } from 'src/core/room/room';
+import type { WanJianQiFaSkill } from 'src/core/skills';
 
 export class WanJianQiFaSkillTrigger extends ActiveSkillTriggerClass<WanJianQiFaSkill> {
   skillTrigger = (

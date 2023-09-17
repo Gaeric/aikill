@@ -1,12 +1,12 @@
-import { CardId } from '/src/core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, SkillUseStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { FlagEnum } from '/src/core/shares/types/flag_list';
-import { ActiveSkill, Skill, TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill, LimitSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, SkillUseStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { FlagEnum } from 'src/core/shares/types/flag_list';
+import { ActiveSkill, Skill, TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill, LimitSkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @LimitSkill({ name: 'god_huishi_sec', description: 'god_huishi_sec_description' })
 export class GodHuiShiSec extends ActiveSkill {

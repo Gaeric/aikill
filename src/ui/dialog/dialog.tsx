@@ -1,37 +1,40 @@
-import classNames from 'classnames';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import * as React from 'react';
-import { Curtain } from '/src/ui/curtain/curtain';
-import styles from './dialog.module.css';
+import classNames from "classnames";
+import * as React from "react";
+import { Curtain } from "src/ui/curtain/curtain";
+import styles from "./dialog.module.css";
 
-@mobxReact.observer
-export class Dialog extends React.Component<{ className?: string; children?: React.ReactNode; onClose?(): void }> {
-  private moving = false;
-  private onElementRendered = React.createRef<HTMLDivElement>();
-  private Container = (props: { children?: React.ReactNode }) =>
-    this.props.onClose !== undefined ? (
-      <Curtain onCancel={this.props.onClose}>{props.children}</Curtain>
+export function Dialog(props: {
+  className?: string;
+  children?: React.ReactNode;
+  onClose?(): void;
+}) {
+  const [moving, setMoving] = React.useState(false);
+
+  let onElementRendered = React.useRef<HTMLDivElement>();
+
+  let Container = (prop: { children?: React.ReactNode }) =>
+    props.onClose !== undefined ? (
+      <Curtain onCancel={props.onClose}>{prop.children}</Curtain>
     ) : (
-      <>{props.children}</>
+      <>{prop.children}</>
     );
 
-  @mobx.observable.ref
-  topOffset: number;
-  @mobx.observable.ref
-  leftOffset: number;
+  const [topOffset, setTopOffset] = React.useState<number>();
+  const [leftOffset, setLeftOffset] = React.useState<number>();
 
-  private posX: number;
-  private posY: number;
+  const [posX, setPosX] = React.useState<number>(0);
+  const [posY, setPosY] = React.useState<number>(0);
 
-  private readonly onMouseDown = (e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>) => {
+  let onMouseDown = (
+    e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>
+  ) => {
     if (e.currentTarget !== e.target) {
       return;
     }
 
     e.stopPropagation();
     e.preventDefault();
-    this.moving = true;
+    setMoving(true);
     const clientX =
       (e as React.MouseEvent<HTMLElement, MouseEvent>).clientX ||
       (e as React.TouchEvent<HTMLElement>).touches[0].clientX;
@@ -39,13 +42,14 @@ export class Dialog extends React.Component<{ className?: string; children?: Rea
       (e as React.MouseEvent<HTMLElement, MouseEvent>).clientY ||
       (e as React.TouchEvent<HTMLElement>).touches[0].clientY;
 
-    this.posX = clientX;
-    this.posY = clientY;
+    setPosX(clientX);
+    setPosY(clientY);
   };
 
-  @mobx.action
-  private readonly onMouseMove = (e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>) => {
-    if (!this.moving || e.currentTarget !== e.target) {
+  function onMouseMove(
+    e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>
+  ) {
+    if (!moving || e.currentTarget !== e.target) {
       return;
     }
     e.stopPropagation();
@@ -57,49 +61,57 @@ export class Dialog extends React.Component<{ className?: string; children?: Rea
     const clientY =
       (e as React.MouseEvent<HTMLElement, MouseEvent>).clientY ||
       (e as React.TouchEvent<HTMLElement>).touches[0].clientY;
-    this.leftOffset += clientX - this.posX;
-    this.topOffset += clientY - this.posY;
-    this.posX = clientX;
-    this.posY = clientY;
-  };
 
-  private readonly onMouseUp = (e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>) => {
+    let currentTopOffset = topOffset ? topOffset : 0;
+    let currentLeftOffset = leftOffset ? leftOffset : 0;
+
+    currentLeftOffset += clientX - posX;
+    currentTopOffset += clientY - posY;
+
+    setTopOffset(currentTopOffset);
+    setLeftOffset(currentLeftOffset);
+
+    setPosX(clientX);
+    setPosY(clientY);
+  }
+
+  let onMouseUp = (
+    e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>
+  ) => {
     if (e.currentTarget !== e.target) {
       return;
     }
 
     e.stopPropagation();
     e.preventDefault();
-    this.moving = false;
+    setMoving(false);
   };
 
-  @mobx.action
-  componentDidMount() {
-    if (!this.onElementRendered.current) {
+  React.useEffect(() => {
+    if (!onElementRendered.current) {
       return;
     }
+    if (!topOffset && !leftOffset) {
+      setTopOffset(onElementRendered.current.getBoundingClientRect().top);
+      setLeftOffset(onElementRendered.current.getBoundingClientRect().left);
+    }
+  });
 
-    this.topOffset = this.onElementRendered.current.getBoundingClientRect().top;
-    this.leftOffset = this.onElementRendered.current.getBoundingClientRect().left;
-  }
-
-  render() {
-    return (
-      <this.Container>
-        <div
-          className={classNames(styles.dialog, this.props.className)}
-          onMouseMove={this.onMouseMove}
-          onMouseDown={this.onMouseDown}
-          onMouseUp={this.onMouseUp}
-          onTouchEnd={this.onMouseUp}
-          onTouchStart={this.onMouseDown}
-          onTouchMove={this.onMouseMove}
-          ref={this.onElementRendered}
-          style={{ top: this.topOffset, left: this.leftOffset }}
-        >
-          {this.props.children}
-        </div>
-      </this.Container>
-    );
-  }
+  return (
+    <Container>
+      <div
+        className={classNames(styles.dialog, props.className)}
+        onMouseMove={onMouseMove}
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
+        onTouchEnd={onMouseUp}
+        onTouchStart={onMouseDown}
+        onTouchMove={onMouseMove}
+        ref={onElementRendered}
+        style={{ top: topOffset, left: leftOffset }}
+      >
+        {props.children}
+      </div>
+    </Container>
+  );
 }

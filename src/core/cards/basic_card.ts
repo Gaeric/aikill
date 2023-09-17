@@ -1,5 +1,5 @@
-import { GameCardExtensions } from '/src/core/game/game_props';
-import { Skill } from '/src/core/skills/skill';
+import { GameCardExtensions } from 'src/core/game/game_props';
+import { Skill } from 'src/core/skills/skill';
 import { Card, CardType } from './card';
 import { CardSuit, RealCardId } from './libs/card_props';
 

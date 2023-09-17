@@ -1,11 +1,11 @@
-import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { DamageType } from '/src/core/game/game_props';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { MarkEnum } from '/src/core/shares/types/mark_list';
-import { ActiveSkill } from '/src/core/skills/skill';
-import { CommonSkill } from '/src/core/skills/skill_wrappers';
+import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { DamageType } from 'src/core/game/game_props';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { MarkEnum } from 'src/core/shares/types/mark_list';
+import { ActiveSkill } from 'src/core/skills/skill';
+import { CommonSkill } from 'src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'shenfen', description: 'shenfen_description' })
 export class ShenFen extends ActiveSkill {

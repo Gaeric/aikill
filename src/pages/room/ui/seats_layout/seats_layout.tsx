@@ -1,23 +1,21 @@
-import { Player } from '/src/core/player/player';
-import { ClientPlayer } from '/src/core/player/player.client';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ImageLoader } from '/src/image_loader/image_loader';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import { MoveCard } from '/src/pages/room/animations/move_card/move_card';
-import { RoomPresenter } from '/src/pages/room/room.presenter';
-import { RoomStore } from '/src/pages/room/room.store';
-import * as React from 'react';
-import { CharacterSkinInfo } from 'skins/skins';
-import { Button } from '/src/ui/button/button';
-import styles from './seats_layout.module.css';
-import { PlayerCard } from '../player/player';
+import { Player } from "src/core/player/player";
+import { ClientPlayer } from "src/core/player/player.client";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ImageLoader } from "src/image_loader/image_loader";
+
+import { MoveCard } from "src/pages/room/animations/move_card/move_card";
+import { RoomPresenter } from "src/pages/room/room.presenter";
+import { RoomStore } from "src/pages/room/room.store";
+import * as React from "react";
+import { CharacterSkinInfo } from "src/skins/skins";
+import { Button } from "src/ui/button/button";
+import styles from "./seats_layout.module.css";
+import { PlayerCard } from "../player/player";
 
 type SeatsLayoutProps = {
   store: RoomStore;
   presenter: RoomPresenter;
   translator: ClientTranslationModule;
-  updateFlag: boolean;
   imageLoader: ImageLoader;
   skinData?: CharacterSkinInfo[];
   onClick?(player: Player, selected: boolean): void;
@@ -26,213 +24,247 @@ type SeatsLayoutProps = {
   observerMode?: boolean;
 };
 
-@mobxReact.observer
-export class SeatsLayout extends React.Component<SeatsLayoutProps> {
-  private numberOfPlayers: number = this.props.store.room.Info.numberOfPlayers - 1;
-  private sideNumberOfPlayers: number;
-  private topNumberOfPlayers: number;
+export function SeatsLayout(props: SeatsLayoutProps) {
+  const numberOfPlayers: number = props.store.room.Info.numberOfPlayers - 1;
+  const sideNumberOfPlayers: number = Math.floor(numberOfPlayers / 3);
+  const topNumberOfPlayers: number = numberOfPlayers - sideNumberOfPlayers * 2;
 
-  constructor(props: SeatsLayoutProps) {
-    super(props);
-
-    this.sideNumberOfPlayers = Math.floor(this.numberOfPlayers / 3);
-    this.topNumberOfPlayers = this.numberOfPlayers - this.sideNumberOfPlayers * 2;
-  }
-
-  private readonly onClick = (player?: Player) => (selected: boolean) => {
-    this.props.onClick && player && this.props.onClick(player, selected);
+  const onClick = (player?: Player) => (selected: boolean) => {
+    props.onClick && player && props.onClick(player, selected);
   };
 
-  private readonly onCloseIncomingMessage = (player: Player) => () => {
-    this.props.presenter.onIncomingMessage(player.Id);
-    this.forceUpdate();
+  const onCloseIncomingMessage = (player: Player) => () => {
+    props.presenter.onIncomingMessage(player.Id);
+    // forceUpdate();
   };
 
-  @mobx.computed
-  private get ClientPlayerPosition() {
-    return this.props.presenter.ClientPlayer!.Position;
+  const ClientPlayerPosition = props.presenter.getClientPlayer()!.Position;
+
+  function getLastPosition(position: number = ClientPlayerPosition) {
+    return --position < 0 ? numberOfPlayers : position;
   }
 
-  private getLastPosition(position: number = this.ClientPlayerPosition) {
-    return --position < 0 ? this.numberOfPlayers : position;
+  function getNextPosition(position: number = ClientPlayerPosition) {
+    return ++position > numberOfPlayers ? 0 : position;
   }
 
-  private getNextPosition(position: number = this.ClientPlayerPosition) {
-    return ++position > this.numberOfPlayers ? 0 : position;
-  }
-
-  private getTopPlayerOffsetPosition() {
-    const offset = this.ClientPlayerPosition + this.sideNumberOfPlayers + 1;
-    if (offset > this.numberOfPlayers) {
-      return offset - this.numberOfPlayers - 1;
+  function getTopPlayerOffsetPosition() {
+    const offset = ClientPlayerPosition + sideNumberOfPlayers + 1;
+    if (offset > numberOfPlayers) {
+      return offset - numberOfPlayers - 1;
     } else {
       return offset;
     }
   }
 
-  private readonly onRequestView = (player: Player) => () => {
-    this.props.onRequestView?.(player);
+  const onRequestView = (player: Player) => () => {
+    props.onRequestView?.(player);
   };
 
-  private readonly renderRequestViewButton = (player: Player) =>
-    this.props.observerMode && (
-      <Button variant="primary" onClick={this.onRequestView(player)} className={styles.observeButton}>
-        {this.props.translator.tr('Observe')}
+  const renderRequestViewButton = (player: Player) =>
+    props.observerMode && (
+      <Button
+        variant="primary"
+        onClick={() => onRequestView(player)}
+        className={styles.observeButton}
+      >
+        {props.translator.tr("Observe")}
       </Button>
     );
 
-  private getLeftPlayers() {
-    let numberOfPlayers = this.sideNumberOfPlayers;
+  function getLeftPlayers() {
+    let numberOfPlayers = sideNumberOfPlayers;
     const players: JSX.Element[] = [];
-    if (this.ClientPlayerPosition === undefined) {
+    if (ClientPlayerPosition === undefined) {
       return;
     }
 
-    let playerIndex = this.getLastPosition();
+    let playerIndex = getLastPosition();
     while (numberOfPlayers > 0) {
-      const player = this.props.store.room.Players[playerIndex] as ClientPlayer | undefined;
+      const player = props.store.room.Players[playerIndex] as
+        | ClientPlayer
+        | undefined;
 
       players.unshift(
         <div className={styles.playerCard}>
           <PlayerCard
             key={playerIndex}
-            imageLoader={this.props.imageLoader}
-            onClick={this.onClick(player)}
-            skinData={this.props.skinData}
-            delight={this.props.store.delightedPlayers !== undefined ? this.props.store.delightedPlayers : undefined}
-            disabled={!this.props.playerSelectableMatcher || !this.props.playerSelectableMatcher(player)}
-            store={this.props.store}
+            imageLoader={props.imageLoader}
+            onClick={() => onClick(player)}
+            skinData={props.skinData}
+            delight={
+              props.store.delightedPlayers !== undefined
+                ? props.store.delightedPlayers
+                : undefined
+            }
+            disabled={
+              !props.playerSelectableMatcher ||
+              !props.playerSelectableMatcher(player)
+            }
+            store={props.store}
             player={player}
-            translator={this.props.translator}
-            presenter={this.props.presenter}
+            translator={props.translator}
+            presenter={props.presenter}
             playerPhase={
-              this.props.store.room.CurrentPlayer === player ? this.props.store.room.CurrentPlayerPhase : undefined
+              props.store.room.CurrentPlayer === player
+                ? props.store.room.CurrentPlayerPhase
+                : undefined
             }
-            actionTimeLimit={this.props.store.notificationTime}
-            inAction={player !== undefined && this.props.store.notifiedPlayers.includes(player.Id)}
-            incomingMessage={player && this.props.store.incomingUserMessages[player.Id]}
-            onCloseIncomingMessage={player && this.onCloseIncomingMessage(player)}
-            selected={this.props.store.selectedPlayers.includes(player!)}
+            actionTimeLimit={props.store.notificationTime}
+            inAction={
+              player !== undefined &&
+              props.store.notifiedPlayers.includes(player.Id)
+            }
+            incomingMessage={
+              player && props.store.incomingUserMessages[player.Id]
+            }
+            onCloseIncomingMessage={player && onCloseIncomingMessage(player)}
+            selected={props.store.selectedPlayers.includes(player!)}
           />
-          {player && this.renderRequestViewButton(player)}
-        </div>,
-      );
-      do {
-        playerIndex = this.getLastPosition(playerIndex);
-      } while (playerIndex === this.ClientPlayerPosition);
-      numberOfPlayers--;
-    }
-
-    return players;
-  }
-  private getRightPlayers() {
-    let numberOfPlayers = this.sideNumberOfPlayers;
-    const players: JSX.Element[] = [];
-    if (this.ClientPlayerPosition === undefined) {
-      return;
-    }
-
-    let playerIndex = this.getNextPosition();
-    while (numberOfPlayers > 0) {
-      const player = this.props.store.room.Players[playerIndex] as ClientPlayer | undefined;
-
-      players.unshift(
-        <div className={styles.playerCard}>
-          <PlayerCard
-            key={playerIndex}
-            imageLoader={this.props.imageLoader}
-            onClick={this.onClick(player)}
-            skinData={this.props.skinData}
-            delight={this.props.store.delightedPlayers !== undefined ? this.props.store.delightedPlayers : undefined}
-            disabled={!this.props.playerSelectableMatcher || !this.props.playerSelectableMatcher(player)}
-            store={this.props.store}
-            player={player}
-            translator={this.props.translator}
-            presenter={this.props.presenter}
-            playerPhase={
-              this.props.store.room.CurrentPlayer === player ? this.props.store.room.CurrentPlayerPhase : undefined
-            }
-            actionTimeLimit={this.props.store.notificationTime}
-            inAction={player !== undefined && this.props.store.notifiedPlayers.includes(player.Id)}
-            incomingMessage={player && this.props.store.incomingUserMessages[player.Id]}
-            onCloseIncomingMessage={player && this.onCloseIncomingMessage(player)}
-            selected={this.props.store.selectedPlayers.includes(player!)}
-          />
-          {player && this.renderRequestViewButton(player)}
-        </div>,
-      );
-      do {
-        playerIndex = this.getNextPosition(playerIndex);
-      } while (playerIndex === this.ClientPlayerPosition);
-      numberOfPlayers--;
-    }
-
-    return players;
-  }
-
-  private getTopPlayers() {
-    let playerIndex = this.getTopPlayerOffsetPosition();
-    const players: JSX.Element[] = [];
-
-    let numberOfPlayers = this.topNumberOfPlayers;
-    while (numberOfPlayers > 0) {
-      const player = this.props.store.room.Players[playerIndex] as ClientPlayer | undefined;
-
-      players.unshift(
-        <div className={styles.playerCard}>
-          <PlayerCard
-            key={playerIndex}
-            imageLoader={this.props.imageLoader}
-            onClick={this.onClick(player)}
-            delight={this.props.store.delightedPlayers !== undefined ? this.props.store.delightedPlayers : undefined}
-            disabled={!this.props.playerSelectableMatcher || !this.props.playerSelectableMatcher(player)}
-            store={this.props.store}
-            player={player}
-            skinData={this.props.skinData}
-            translator={this.props.translator}
-            presenter={this.props.presenter}
-            playerPhase={
-              this.props.store.room.CurrentPlayer === player ? this.props.store.room.CurrentPlayerPhase : undefined
-            }
-            actionTimeLimit={this.props.store.notificationTime}
-            inAction={player !== undefined && this.props.store.notifiedPlayers.includes(player.Id)}
-            incomingMessage={player && this.props.store.incomingUserMessages[player.Id]}
-            onCloseIncomingMessage={player && this.onCloseIncomingMessage(player)}
-            selected={this.props.store.selectedPlayers.includes(player!)}
-          />
-          {player && this.renderRequestViewButton(player)}
-        </div>,
-      );
-
-      do {
-        playerIndex = this.getNextPosition(playerIndex);
-      } while (playerIndex === this.ClientPlayerPosition);
-      numberOfPlayers--;
-    }
-
-    return players;
-  }
-
-  render() {
-    return (
-      <div className={styles.seatsLayout}>
-        <div className={styles.leftSeats}>{this.getLeftPlayers()}</div>
-        <div className={styles.central}>
-          <div className={styles.topSeats}>{this.getTopPlayers()}</div>
-          <div className={styles.gamePad} id="gamePad">
-            {
-              <MoveCard
-                store={this.props.store}
-                presenter={this.props.presenter}
-                imageLoader={this.props.imageLoader}
-                translator={this.props.translator}
-                updateFlag={this.props.store.updateUIFlag}
-              />
-            }
-          </div>
+          {player && renderRequestViewButton(player)}
         </div>
-        <div className={styles.rightSeats}>{this.getRightPlayers()}</div>
-      </div>
-    );
+      );
+      do {
+        playerIndex = getLastPosition(playerIndex);
+      } while (playerIndex === ClientPlayerPosition);
+      numberOfPlayers--;
+    }
+
+    return players;
   }
+  function getRightPlayers() {
+    let numberOfPlayers = sideNumberOfPlayers;
+    const players: JSX.Element[] = [];
+    if (ClientPlayerPosition === undefined) {
+      return;
+    }
+
+    let playerIndex = getNextPosition();
+    while (numberOfPlayers > 0) {
+      const player = props.store.room.Players[playerIndex] as
+        | ClientPlayer
+        | undefined;
+      console.log(players);
+      players.unshift(
+        <div className={styles.playerCard}>
+          <PlayerCard
+            key={playerIndex}
+            imageLoader={props.imageLoader}
+            onClick={() => onClick(player)}
+            skinData={props.skinData}
+            delight={
+              props.store.delightedPlayers !== undefined
+                ? props.store.delightedPlayers
+                : undefined
+            }
+            disabled={
+              !props.playerSelectableMatcher ||
+              !props.playerSelectableMatcher(player)
+            }
+            store={props.store}
+            player={player}
+            translator={props.translator}
+            presenter={props.presenter}
+            playerPhase={
+              props.store.room.CurrentPlayer === player
+                ? props.store.room.CurrentPlayerPhase
+                : undefined
+            }
+            actionTimeLimit={props.store.notificationTime}
+            inAction={
+              player !== undefined &&
+              props.store.notifiedPlayers.includes(player.Id)
+            }
+            incomingMessage={
+              player && props.store.incomingUserMessages[player.Id]
+            }
+            onCloseIncomingMessage={player && onCloseIncomingMessage(player)}
+            selected={props.store.selectedPlayers.includes(player!)}
+          />
+          {player && renderRequestViewButton(player)}
+        </div>
+      );
+      do {
+        playerIndex = getNextPosition(playerIndex);
+      } while (playerIndex === ClientPlayerPosition);
+      numberOfPlayers--;
+    }
+    return players;
+  }
+
+  function getTopPlayers() {
+    let playerIndex = getTopPlayerOffsetPosition();
+    const players: JSX.Element[] = [];
+
+    let numberOfPlayers = topNumberOfPlayers;
+    while (numberOfPlayers > 0) {
+      const player = props.store.room.Players[playerIndex] as
+        | ClientPlayer
+        | undefined;
+
+      players.unshift(
+        <div className={styles.playerCard}>
+          <PlayerCard
+            key={playerIndex}
+            imageLoader={props.imageLoader}
+            onClick={() => onClick(player)}
+            delight={
+              props.store.delightedPlayers !== undefined
+                ? props.store.delightedPlayers
+                : undefined
+            }
+            disabled={
+              !props.playerSelectableMatcher ||
+              !props.playerSelectableMatcher(player)
+            }
+            store={props.store}
+            player={player}
+            skinData={props.skinData}
+            translator={props.translator}
+            presenter={props.presenter}
+            playerPhase={
+              props.store.room.CurrentPlayer === player
+                ? props.store.room.CurrentPlayerPhase
+                : undefined
+            }
+            actionTimeLimit={props.store.notificationTime}
+            inAction={
+              player !== undefined &&
+              props.store.notifiedPlayers.includes(player.Id)
+            }
+            incomingMessage={
+              player && props.store.incomingUserMessages[player.Id]
+            }
+            onCloseIncomingMessage={player && onCloseIncomingMessage(player)}
+            selected={props.store.selectedPlayers.includes(player!)}
+          />
+          {player && renderRequestViewButton(player)}
+        </div>
+      );
+
+      do {
+        playerIndex = getNextPosition(playerIndex);
+      } while (playerIndex === ClientPlayerPosition);
+      numberOfPlayers--;
+    }
+    return players;
+  }
+
+  return (
+    <div className={styles.seatsLayout}>
+      <div className={styles.leftSeats}>{getLeftPlayers()}</div>
+      <div className={styles.central}>
+        <div className={styles.topSeats}>{getTopPlayers()}</div>
+        <div className={styles.gamePad} id="gamePad">
+          <MoveCard
+            store={props.store}
+            presenter={props.presenter}
+            imageLoader={props.imageLoader}
+            translator={props.translator}
+          />
+        </div>
+      </div>
+      <div className={styles.rightSeats}>{getRightPlayers()}</div>
+    </div>
+  );
 }

@@ -1,21 +1,32 @@
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventEmitterProps } from './event_emitter_props';
-import { ClientSocket } from '../socket.client';
+import {
+  ClientEventFinder,
+  GameEventIdentifiers,
+  ServerEventFinder,
+} from "src/core/event/event";
+import { EventEmitterProps } from "./event_emitter_props";
+import { ClientSocket } from "../socket.client";
 
 export class LocalClientEmitter extends ClientSocket {
-  constructor(private emitter: EventEmitterProps, roomId: string) {
-    super('', roomId);
+  constructor(private emitter: EventEmitterProps, roomId: string, time: "") {
+    super("", roomId, time);
+    this.time = new Date().getTime();
   }
 
-  public notify<I extends GameEventIdentifiers>(type: I, content: ClientEventFinder<I>) {
-    this.emitter.send('client-' + type.toString(), content);
+  public notify<I extends GameEventIdentifiers>(
+    type: I,
+    content: ClientEventFinder<I>
+  ) {
+    this.emitter.send("client-" + type.toString(), content);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected init() {}
 
-  public on<T extends GameEventIdentifiers>(type: T, receiver: (event: ServerEventFinder<T>) => void): ClientSocket {
-    this.emitter.on('server-' + type.toString(), receiver);
+  public on<T extends GameEventIdentifiers>(
+    type: T,
+    receiver: (event: ServerEventFinder<T>) => void
+  ): ClientSocket {
+    this.emitter.on("server-" + type.toString(), receiver);
 
     return this;
   }

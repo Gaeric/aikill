@@ -1,15 +1,15 @@
-import { EventProcessSteps, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, CardUseStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { TargetGroupUtil } from '/src/core/shares/libs/utils/target_group';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
-import { CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+import { EventProcessSteps, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, CardUseStage, PhaseChangeStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { TargetGroupUtil } from 'src/core/shares/libs/utils/target_group';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
+import { CommonSkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'dangmo', description: 'dangmo_description' })
 export class DangMo extends TriggerSkill {

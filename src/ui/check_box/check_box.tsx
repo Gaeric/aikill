@@ -1,7 +1,6 @@
-import classNames from 'classnames';
-import { observer } from 'mobx-react';
-import * as React from 'react';
-import styles from './check_box.module.css';
+import classNames from "classnames";
+import * as React from "react";
+import styles from "./check_box.module.css";
 
 export type CheckBoxProps<Value = string | number> = {
   onChecked?(checked: boolean): void;
@@ -12,7 +11,7 @@ export type CheckBoxProps<Value = string | number> = {
   className?: string;
 };
 
-export const CheckBox = observer((props: CheckBoxProps) => {
+export const CheckBox = (props: CheckBoxProps) => {
   const onChange = () => {
     props.onChecked?.(!props.checked);
   };
@@ -32,4 +31,4 @@ export const CheckBox = observer((props: CheckBoxProps) => {
       </label>
     </div>
   );
-});
+};

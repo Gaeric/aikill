@@ -1,24 +1,39 @@
-import { Card } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { ActiveSkill, FilterSkill, Skill, TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
-import { UniqueSkillRule } from '/src/core/skills/skill_rule';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { BaseAction } from './base_action';
-import { RoomPresenter } from '../room.presenter';
-import { RoomStore } from '../room.store';
+import { Card } from "src/core/cards/card";
+import { CardMatcher } from "src/core/cards/libs/card_matcher";
+import {
+  ClientEventFinder,
+  GameEventIdentifiers,
+  ServerEventFinder,
+} from "src/core/event/event";
+import { EventPacker } from "src/core/event/event_packer";
+import { Player } from "src/core/player/player";
+import { PlayerCardsArea, PlayerId } from "src/core/player/player_props";
+import { Room } from "src/core/room/room";
+import {
+  ActiveSkill,
+  FilterSkill,
+  Skill,
+  TriggerSkill,
+  ViewAsSkill,
+} from "src/core/skills/skill";
+import { UniqueSkillRule } from "src/core/skills/skill_rule";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { BaseAction } from "./base_action";
+import { RoomPresenter } from "../room.presenter";
+import { RoomStore } from "../room.store";
 
 export class ResponsiveUseCardAction<
   T extends
     | GameEventIdentifiers.AskForCardUseEvent
-    | GameEventIdentifiers.AskForPeachEvent = GameEventIdentifiers.AskForCardUseEvent,
+    | GameEventIdentifiers.AskForPeachEvent = GameEventIdentifiers.AskForCardUseEvent
 > extends BaseAction {
   public static isSkillsOnResponsiveCardUseDisabled =
-    (room: Room, matcher: CardMatcher, player: Player, event: ServerEventFinder<GameEventIdentifiers>) =>
+    (
+      room: Room,
+      matcher: CardMatcher,
+      player: Player,
+      event: ServerEventFinder<GameEventIdentifiers>
+    ) =>
     (skill: Skill) => {
       if (UniqueSkillRule.isProhibited(skill, player)) {
         return true;
@@ -28,8 +43,9 @@ export class ResponsiveUseCardAction<
         return true;
       } else if (skill instanceof ViewAsSkill) {
         return (
-          !new CardMatcher({ name: skill.canViewAs(room, player, undefined, matcher) }).match(matcher) ||
-          !skill.canUse(room, player, event)
+          !new CardMatcher({
+            name: skill.canViewAs(room, player, undefined, matcher),
+          }).match(matcher) || !skill.canUse(room, player, event)
         );
       }
 
@@ -47,18 +63,19 @@ export class ResponsiveUseCardAction<
     presenter: RoomPresenter,
     askForEvent: ServerEventFinder<T>,
     translator: ClientTranslationModule,
-    cardMatcher?: CardMatcher,
+    cardMatcher?: CardMatcher
   ) {
-    const dynamicEvent = askForEvent as unknown as ServerEventFinder<GameEventIdentifiers.AskForCardUseEvent>;
+    const dynamicEvent =
+      askForEvent as unknown as ServerEventFinder<GameEventIdentifiers.AskForCardUseEvent>;
     super(playerId, store, presenter, translator, dynamicEvent.scopedTargets);
     this.askForEvent = askForEvent;
     this.extraUse = !!dynamicEvent.extraUse;
     this.matcher = cardMatcher || new CardMatcher(dynamicEvent.cardMatcher);
 
     if (!EventPacker.isUncancellableEvent(this.askForEvent)) {
-      this.presenter.enableActionButton('cancel');
+      this.presenter.enableActionButton("cancel");
     } else {
-      this.presenter.disableActionButton('cancel');
+      this.presenter.disableActionButton("cancel");
     }
   }
 
@@ -70,8 +87,12 @@ export class ResponsiveUseCardAction<
     return false;
   }
 
-  isCardEnabledOnResponsiveUse(card: Card, fromArea: PlayerCardsArea, matcher: CardMatcher) {
-    for (const skill of this.player.getSkills<FilterSkill>('filter')) {
+  isCardEnabledOnResponsiveUse(
+    card: Card,
+    fromArea: PlayerCardsArea,
+    matcher: CardMatcher
+  ) {
+    for (const skill of this.player.getSkills<FilterSkill>("filter")) {
       if (!skill.canUseCard(card.Id, this.store.room, this.playerId)) {
         return false;
       }
@@ -96,7 +117,8 @@ export class ResponsiveUseCardAction<
         const selectedCardsRange = skill.numberOfCards();
         if (
           selectedCardsRange !== undefined &&
-          this.selectedCards.length < selectedCardsRange[selectedCardsRange.length - 1]
+          this.selectedCards.length <
+            selectedCardsRange[selectedCardsRange.length - 1]
         ) {
           return true;
         }
@@ -108,7 +130,7 @@ export class ResponsiveUseCardAction<
             card.Id,
             this.selectedCards,
             this.selectedTargets,
-            this.equipSkillCardId,
+            this.equipSkillCardId
           ) &&
           skill.availableCardAreas().includes(fromArea) &&
           (!skill.cardFilter(
@@ -116,14 +138,14 @@ export class ResponsiveUseCardAction<
             this.player,
             this.selectedCards,
             this.selectedTargets,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           ) ||
             skill.cardFilter(
               this.store.room,
               this.player,
               [...this.selectedCards, card.Id],
               this.selectedTargets,
-              this.selectedCardToPlay,
+              this.selectedCardToPlay
             ))
         );
       } else if (skill instanceof ViewAsSkill) {
@@ -134,7 +156,7 @@ export class ResponsiveUseCardAction<
             card.Id,
             this.pendingCards,
             this.equipSkillCardId,
-            this.matcher,
+            this.matcher
           ) &&
           skill.availableCardAreas().includes(fromArea) &&
           (!skill.cardFilter(
@@ -142,14 +164,14 @@ export class ResponsiveUseCardAction<
             this.player,
             this.pendingCards,
             this.selectedTargets,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           ) ||
             skill.cardFilter(
               this.store.room,
               this.player,
               [...this.pendingCards, card.Id],
               this.selectedTargets,
-              this.selectedCardToPlay,
+              this.selectedCardToPlay
             ))
         );
       } else {
@@ -158,7 +180,10 @@ export class ResponsiveUseCardAction<
     }
 
     if (this.selectedCardToPlay === undefined) {
-      if (!this.extraUse && !this.player.canUseCard(this.store.room, card.Id, matcher)) {
+      if (
+        !this.extraUse &&
+        !this.player.canUseCard(this.store.room, card.Id, matcher)
+      ) {
         return false;
       }
 
@@ -167,10 +192,18 @@ export class ResponsiveUseCardAction<
       } else if (fromArea === PlayerCardsArea.EquipArea) {
         if (card.Skill instanceof ViewAsSkill) {
           return new CardMatcher({
-            name: card.Skill.canViewAs(this.store.room, this.player, this.pendingCards, this.matcher),
+            name: card.Skill.canViewAs(
+              this.store.room,
+              this.player,
+              this.pendingCards,
+              this.matcher
+            ),
           }).match(this.matcher);
         }
-      } else if (fromArea === PlayerCardsArea.OutsideArea && this.isCardFromParticularArea(card)) {
+      } else if (
+        fromArea === PlayerCardsArea.OutsideArea &&
+        this.isCardFromParticularArea(card)
+      ) {
         return matcher.match(card);
       }
     }
@@ -178,8 +211,13 @@ export class ResponsiveUseCardAction<
   }
 
   isPlayerEnabled(player: Player): boolean {
-    const event = this.askForEvent as unknown as ServerEventFinder<GameEventIdentifiers.AskForCardUseEvent>;
-    if (!event.commonUse && this.scopedTargets && this.scopedTargets.includes(player.Id)) {
+    const event = this
+      .askForEvent as unknown as ServerEventFinder<GameEventIdentifiers.AskForCardUseEvent>;
+    if (
+      !event.commonUse &&
+      this.scopedTargets &&
+      this.scopedTargets.includes(player.Id)
+    ) {
       return true;
     }
 
@@ -194,12 +232,12 @@ export class ResponsiveUseCardAction<
   }
 
   onResetAction() {
-    this.presenter.disableActionButton('cancel');
+    this.presenter.disableActionButton("cancel");
     this.presenter.closeIncomingConversation();
   }
 
   onPlay(translator: ClientTranslationModule) {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       this.delightItems();
       this.presenter.highlightCards();
       this.presenter.createIncomingConversation({
@@ -208,48 +246,81 @@ export class ResponsiveUseCardAction<
       });
 
       this.presenter.defineConfirmButtonActions(() => {
-        const event: ClientEventFinder<GameEventIdentifiers.AskForCardUseEvent> = {
-          cardId: this.selectedCardToPlay,
-          toIds: this.selectedTargets.length > 0 ? this.selectedTargets : undefined,
-          fromId: this.playerId,
-        };
-        this.store.room.broadcast(GameEventIdentifiers.AskForCardUseEvent, event);
+        const event: ClientEventFinder<GameEventIdentifiers.AskForCardUseEvent> =
+          {
+            cardId: this.selectedCardToPlay,
+            toIds:
+              this.selectedTargets.length > 0
+                ? this.selectedTargets
+                : undefined,
+            fromId: this.playerId,
+          };
+        this.store.room.broadcast(
+          GameEventIdentifiers.AskForCardUseEvent,
+          event
+        );
         this.resetActionHandlers();
         this.resetAction();
-        this.presenter.isSkillDisabled(BaseAction.disableSkills);
+        this.presenter.handleIsSkillDisabled(BaseAction.disableSkills);
         this.presenter.resetSelectedSkill();
         resolve();
       });
       this.presenter.defineCancelButtonActions(() => {
-        const event: ClientEventFinder<GameEventIdentifiers.AskForCardUseEvent> = {
-          fromId: this.playerId,
-        };
-        this.store.room.broadcast(GameEventIdentifiers.AskForCardUseEvent, event);
+        const event: ClientEventFinder<GameEventIdentifiers.AskForCardUseEvent> =
+          {
+            fromId: this.playerId,
+          };
+        this.store.room.broadcast(
+          GameEventIdentifiers.AskForCardUseEvent,
+          event
+        );
         this.resetActionHandlers();
         this.resetAction();
-        this.presenter.isSkillDisabled(BaseAction.disableSkills);
+        this.presenter.handleIsSkillDisabled(BaseAction.disableSkills);
         this.presenter.resetSelectedSkill();
         resolve();
       });
 
       //TODO: optimize auto selection
-      const event = this.askForEvent as unknown as ServerEventFinder<GameEventIdentifiers.AskForCardUseEvent>;
-      if (this.scopedTargets && this.scopedTargets.length === 1 && !event.commonUse) {
+      const event = this
+        .askForEvent as unknown as ServerEventFinder<GameEventIdentifiers.AskForCardUseEvent>;
+      if (
+        this.scopedTargets &&
+        this.scopedTargets.length === 1 &&
+        !event.commonUse
+      ) {
         this.selectedTargets = this.scopedTargets.slice();
-        this.onClickPlayer(this.store.room.getPlayerById(this.selectedTargets[0]), true);
+        this.onClickPlayer(
+          this.store.room.getPlayerById(this.selectedTargets[0]),
+          true
+        );
       } else {
-        this.presenter.setupPlayersSelectionMatcher((player: Player) => this.isPlayerEnabled(player));
+        this.presenter.setupPlayersSelectionMatcher((player: Player) =>
+          this.isPlayerEnabled(player)
+        );
       }
       this.presenter.setupClientPlayerCardActionsMatcher((card: Card) =>
-        this.isCardEnabledOnResponsiveUse(card, PlayerCardsArea.HandArea, this.matcher),
+        this.isCardEnabledOnResponsiveUse(
+          card,
+          PlayerCardsArea.HandArea,
+          this.matcher
+        )
       );
       this.presenter.setupClientPlayerOutsideCardActionsMatcher(
         (card: Card) =>
           this.isOutsideCardShowOnSkillTriggered(card, this.matcher) ||
-          this.isCardEnabledOnResponsiveUse(card, PlayerCardsArea.OutsideArea, this.matcher),
+          this.isCardEnabledOnResponsiveUse(
+            card,
+            PlayerCardsArea.OutsideArea,
+            this.matcher
+          )
       );
       this.presenter.setupCardSkillSelectionMatcher((card: Card) =>
-        this.isCardEnabledOnResponsiveUse(card, PlayerCardsArea.EquipArea, this.matcher),
+        this.isCardEnabledOnResponsiveUse(
+          card,
+          PlayerCardsArea.EquipArea,
+          this.matcher
+        )
       );
     });
   }

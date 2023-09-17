@@ -1,13 +1,13 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { AimStage, AllStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { JudgeMatcher, JudgeMatcherEnum } from '/src/core/shares/libs/judge_matchers';
-import { AimGroupUtil } from '/src/core/shares/libs/utils/aim_group';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill } from '/src/core/skills/skill_wrappers';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { AimStage, AllStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { JudgeMatcher, JudgeMatcherEnum } from 'src/core/shares/libs/judge_matchers';
+import { AimGroupUtil } from 'src/core/shares/libs/utils/aim_group';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill } from 'src/core/skills/skill_wrappers';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'xin_chijie', description: 'xin_chijie_description' })
 export class XinChiJie extends TriggerSkill {

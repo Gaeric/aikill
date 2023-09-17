@@ -1,5 +1,5 @@
-import { GameCharacterExtensions } from '/src/core/game/game_props';
-import { SkillLoader } from '/src/core/game/package_loader/loader.skills';
+import { GameCharacterExtensions } from 'src/core/game/game_props';
+import { SkillLoader } from 'src/core/game/package_loader/loader.skills';
 import { Armor, Character, CharacterGender, CharacterNationality } from '../character';
 
 const skillLoaderInstance = SkillLoader.getInstance();

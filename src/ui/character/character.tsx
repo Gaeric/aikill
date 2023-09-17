@@ -1,14 +1,15 @@
-import classNames from 'classnames';
-import { Character, getNationalityRawText } from '/src/core/characters/character';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ImageLoader } from '/src/image_loader/image_loader';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import * as React from 'react';
-import { Armor } from '/src/ui/armor/armor';
-import styles from './character.module.css';
-import { NationalityBadge } from '../badge/badge';
-import { CharacterHp } from '../hp/hp';
+import classNames from "classnames";
+import {
+  Character,
+  getNationalityRawText,
+} from "src/core/characters/character";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ImageLoader } from "src/image_loader/image_loader";
+import * as React from "react";
+import { Armor } from "src/ui/armor/armor";
+import styles from "./character.module.css";
+import { NationalityBadge } from "../badge/badge";
+import { CharacterHp } from "../hp/hp";
 
 export type CharacterCardProps = {
   character: Character;
@@ -17,77 +18,84 @@ export type CharacterCardProps = {
   onClick?(character: Character): void;
   disabled?: boolean;
   className?: string;
-  size?: 'regular' | 'small' | 'tiny';
+  size?: "regular" | "small" | "tiny";
   selected?: boolean;
 };
 
-@mobxReact.observer
-export class CharacterCard extends React.Component<CharacterCardProps> {
-  @mobx.observable.ref
-  private characterImage: string | undefined;
-
-  private readonly onClick = () => {
-    if (!this.props.disabled) {
-      this.props.onClick && this.props.onClick(this.props.character);
-      this.forceUpdate();
+export function CharacterCard(props: CharacterCardProps) {
+  const [characterImage, setCharacterImage] = React.useState<
+    string | undefined
+  >(props.imageLoader.getCharacterImage(props.character.Name).src);
+  function onClick() {
+    if (!props.disabled) {
+      props.onClick && props.onClick(props.character);
+      // forceUpdate();
     }
-  };
-
-  @mobx.action
-  async componentDidMount() {
-    this.characterImage = (await this.props.imageLoader.getCharacterImage(this.props.character.Name)).src;
+  }
+  async function getImage() {
+    if (!characterImage) {
+      let url = (
+        await props.imageLoader.getCharacterImage(props.character.Name)
+      ).src;
+      if (url) {
+        setCharacterImage(() => url);
+      }
+    }
   }
 
-  @mobx.action
-  async componentDidUpdate() {
-    this.characterImage = (await this.props.imageLoader.getCharacterImage(this.props.character.Name)).src;
-  }
-  render() {
-    const { character, translator, className, size, selected, onClick } = this.props;
-    return (
-      <div
-        className={classNames(styles.characterCard, className, {
-          [styles.small]: size === 'small',
-          [styles.tiny]: size === 'tiny',
-          [styles.selected]: selected,
-          [styles.clickable]: !!onClick,
-        })}
-        onClick={this.onClick}
-      >
-        {this.characterImage ? (
-          <>
-            <NationalityBadge size={size} nationality={character.Nationality} isLord={character.isLord()}>
-              {translator.tr(character.Name)}
-            </NationalityBadge>
-            <div className={styles.hpContainer}>
-              <Armor
-                className={styles.characterArmor}
-                imgClassName={styles.characterArmorImage}
-                amount={character.Armor}
-              />
-              <CharacterHp
-                character={character}
-                className={classNames(styles.characterHp, {
-                  [styles.small]: size === 'small',
-                  [styles.tiny]: size === 'tiny',
-                })}
-              />
-            </div>
-            <img
-              className={classNames(styles.characterImage, {
-                [styles.small]: size === 'small',
-                [styles.tiny]: size === 'tiny',
-              })}
-              src={this.characterImage}
-              alt=""
+  React.useEffect(() => {
+    getImage();
+  });
+
+  const { character, translator, className, size, selected } = props;
+  return (
+    <div
+      className={classNames(styles.characterCard, className, {
+        [styles.small]: size === "small",
+        [styles.tiny]: size === "tiny",
+        [styles.selected]: selected,
+        [styles.clickable]: !!onClick,
+      })}
+      onClick={onClick}
+    >
+      {characterImage ? (
+        <>
+          <NationalityBadge
+            size={size}
+            nationality={character.Nationality}
+            isLord={character.isLord()}
+          >
+            {translator.tr(character.Name)}
+          </NationalityBadge>
+          <div className={styles.hpContainer}>
+            <Armor
+              className={styles.characterArmor}
+              imgClassName={styles.characterArmorImage}
+              amount={character.Armor}
             />
-          </>
-        ) : (
-          <p>
-            {translator.tr(getNationalityRawText(character.Nationality))} {translator.tr(character.Name)}
-          </p>
-        )}
-      </div>
-    );
-  }
+            <CharacterHp
+              character={character}
+              className={classNames(styles.characterHp, {
+                [styles.small]: size === "small",
+                [styles.tiny]: size === "tiny",
+              })}
+            />
+          </div>
+          <img
+            className={classNames(styles.characterImage, {
+              [styles.small]: size === "small",
+              [styles.tiny]: size === "tiny",
+            })}
+            src={characterImage}
+            alt=""
+          />
+        </>
+      ) : (
+        <p>
+          {translator.tr(getNationalityRawText(character.Nationality))}{" "}
+          {translator.tr(character.Name)}
+        </p>
+      )}
+    </div>
+  );
 }

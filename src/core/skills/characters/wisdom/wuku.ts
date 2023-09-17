@@ -1,11 +1,11 @@
-import { CardType } from '/src/core/cards/card';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, CardUseStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { CompulsorySkill, OnDefineReleaseTiming, TriggerSkill } from '/src/core/skills/skill';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CardType } from 'src/core/cards/card';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, CardUseStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { CompulsorySkill, OnDefineReleaseTiming, TriggerSkill } from 'src/core/skills/skill';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CompulsorySkill({ name: 'wuku', description: 'wuku_description' })
 export class WuKu extends TriggerSkill implements OnDefineReleaseTiming {

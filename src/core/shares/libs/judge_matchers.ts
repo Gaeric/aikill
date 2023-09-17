@@ -1,5 +1,5 @@
-import { Card, CardType } from '/src/core/cards/card';
-import { CardSuit } from '/src/core/cards/libs/card_props';
+import { Card, CardType } from 'src/core/cards/card';
+import { CardSuit } from 'src/core/cards/libs/card_props';
 import { Precondition } from './precondition/precondition';
 
 export const enum JudgeMatcherEnum {

@@ -1,13 +1,13 @@
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, CardUseStage, PhaseStageChangeStage, PlayerPhaseStages } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { CommonSkill, PersistentSkill, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, CardUseStage, PhaseStageChangeStage, PlayerPhaseStages } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { CommonSkill, PersistentSkill, ShadowSkill, TriggerSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
 import { JieZhong } from './jiezhong';
 
 @CommonSkill({ name: 'longyin', description: 'longyin_description' })

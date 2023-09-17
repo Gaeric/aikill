@@ -1,10 +1,10 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { CommonSkill, TriggerSkill } from '/src/core/skills/skill';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, PhaseChangeStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { CommonSkill, TriggerSkill } from 'src/core/skills/skill';
 
 @CommonSkill({ name: 'keji', description: 'keji_description' })
 export class KeJi extends TriggerSkill {

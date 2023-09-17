@@ -1,12 +1,12 @@
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { AllStage, DamageEffectStage, PhaseStageChangeStage, PlayerPhaseStages } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { CommonSkill, RulesBreakerSkill, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { AllStage, DamageEffectStage, PhaseStageChangeStage, PlayerPhaseStages } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { CommonSkill, RulesBreakerSkill, ShadowSkill, TriggerSkill } from 'src/core/skills/skill';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'quanji', description: 'quanji_description' })
 export class QuanJi extends TriggerSkill {

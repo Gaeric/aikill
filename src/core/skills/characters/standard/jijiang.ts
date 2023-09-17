@@ -1,16 +1,16 @@
-import { Card, VirtualCard } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { Slash } from '/src/core/cards/standard/slash';
-import { CharacterNationality } from '/src/core/characters/character';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, CardResponseStage, CardUseStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { CommonSkill, LordSkill, ShadowSkill, TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { Card, VirtualCard } from 'src/core/cards/card';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { Slash } from 'src/core/cards/standard/slash';
+import { CharacterNationality } from 'src/core/characters/character';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, CardResponseStage, CardUseStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { CommonSkill, LordSkill, ShadowSkill, TriggerSkill, ViewAsSkill } from 'src/core/skills/skill';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'jijiang', description: 'jijiang_description' })
 @LordSkill

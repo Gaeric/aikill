@@ -1,6 +1,6 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
 import {
   AllStage,
   CardUseStage,
@@ -8,14 +8,14 @@ import {
   PhaseStageChangeStage,
   PlayerPhase,
   PlayerPhaseStages,
-} from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
-import { CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
+import { CommonSkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'guanchao', description: 'guanchao_description' })
 export class GuanChao extends TriggerSkill {

@@ -1,11 +1,15 @@
-import { CharacterGender } from '/src/core/characters/character';
-import { CharacterSkinInfo } from 'skins/skins';
+import { CharacterGender } from "src/core/characters/character";
+import { CharacterSkinInfo } from "src/skins/skins";
 
 export interface AudioLoader {
   getRoomBackgroundMusic(): string;
   getLobbyBackgroundMusic(): string;
   getGameStartAudio(): string;
-  getCardAudio(skillName: string, gender: CharacterGender, characterName?: string): Promise<string>;
+  getCardAudio(
+    skillName: string,
+    gender: CharacterGender,
+    characterName?: string,
+  ): Promise<string>;
   getSkillAudio(
     skillName: string,
     gender: CharacterGender,

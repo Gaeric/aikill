@@ -1,9 +1,9 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, PhaseStageChangeStage, PlayerPhase, PlayerPhaseStages } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { CommonSkill, TriggerSkill } from '/src/core/skills/skill';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, PhaseStageChangeStage, PlayerPhase, PlayerPhaseStages } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { CommonSkill, TriggerSkill } from 'src/core/skills/skill';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'guanxing', description: 'guanxing_description' })
 export class GuanXing extends TriggerSkill {

@@ -1,12 +1,12 @@
-import { CharacterNationality } from '/src/core/characters/character';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AimStage, AllStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { OnDefineReleaseTiming, TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CharacterNationality } from 'src/core/characters/character';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AimStage, AllStage, PhaseChangeStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { OnDefineReleaseTiming, TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 import { YuWei } from './yuwei';
 
 const enum ShiYuanEffect {

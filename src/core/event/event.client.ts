@@ -1,7 +1,7 @@
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CharacterId } from '/src/core/characters/character';
-import { DamageType, GameInfo, TemporaryRoomCreationInfo, WaitingRoomGameSettings } from '/src/core/game/game_props';
-import { PlayerCardsArea, PlayerId, PlayerInfo } from '/src/core/player/player_props';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CharacterId } from 'src/core/characters/character';
+import { DamageType, GameInfo, TemporaryRoomCreationInfo, WaitingRoomGameSettings } from 'src/core/game/game_props';
+import { PlayerCardsArea, PlayerId, PlayerInfo } from 'src/core/player/player_props';
 import {
   EventUtilities,
   GameEventIdentifiers,

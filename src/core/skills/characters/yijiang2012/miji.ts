@@ -1,12 +1,12 @@
-import { MiJiSkillTrigger } from '/src/core/ai/skills/characters/yijiang2012/miji';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, PhaseStageChangeStage, PlayerPhaseStages } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { AI, CommonSkill, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+import { MiJiSkillTrigger } from 'src/core/ai/skills/characters/yijiang2012/miji';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, PhaseStageChangeStage, PlayerPhaseStages } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { AI, CommonSkill, ShadowSkill, TriggerSkill } from 'src/core/skills/skill';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @AI(MiJiSkillTrigger)
 @CommonSkill({ name: 'miji', description: 'miji_description' })

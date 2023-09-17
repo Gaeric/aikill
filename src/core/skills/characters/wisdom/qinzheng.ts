@@ -1,15 +1,15 @@
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { AllStage, CardResponseStage, CardUseStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { CompulsorySkill, TriggerSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
-import { PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { AllStage, CardResponseStage, CardUseStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { CompulsorySkill, TriggerSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
+import { PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CompulsorySkill({ name: 'qinzheng', description: 'qinzheng_description' })
 export class QinZheng extends TriggerSkill implements OnDefineReleaseTiming {

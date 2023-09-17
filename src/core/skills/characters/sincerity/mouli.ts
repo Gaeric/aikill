@@ -1,18 +1,18 @@
-import { VirtualCard } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { Jink } from '/src/core/cards/standard/jink';
-import { Slash } from '/src/core/cards/standard/slash';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, CardUseStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { System } from '/src/core/shares/libs/system';
-import { ActiveSkill, CommonSkill, OnDefineReleaseTiming, TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
-import { PersistentSkill, ShadowSkill, SideEffectSkill } from '/src/core/skills/skill_wrappers';
+import { VirtualCard } from 'src/core/cards/card';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { Jink } from 'src/core/cards/standard/jink';
+import { Slash } from 'src/core/cards/standard/slash';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, CardUseStage, PhaseChangeStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { System } from 'src/core/shares/libs/system';
+import { ActiveSkill, CommonSkill, OnDefineReleaseTiming, TriggerSkill, ViewAsSkill } from 'src/core/skills/skill';
+import { PersistentSkill, ShadowSkill, SideEffectSkill } from 'src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'mouli', description: 'mouli_description' })
 export class MouLi extends ActiveSkill implements OnDefineReleaseTiming {

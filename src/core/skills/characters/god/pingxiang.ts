@@ -1,10 +1,10 @@
-import { VirtualCard } from '/src/core/cards/card';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { ActiveSkill, CommonSkill, RulesBreakerSkill, ShadowSkill } from '/src/core/skills/skill';
-import { LimitSkill } from '/src/core/skills/skill_wrappers';
+import { VirtualCard } from 'src/core/cards/card';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { ActiveSkill, CommonSkill, RulesBreakerSkill, ShadowSkill } from 'src/core/skills/skill';
+import { LimitSkill } from 'src/core/skills/skill_wrappers';
 
 @LimitSkill({ name: 'pingxiang', description: 'pingxiang_description' })
 export class PingXiang extends ActiveSkill {

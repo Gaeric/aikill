@@ -11,10 +11,9 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.4.0",
+    "chalk": "^5.3.0",
     "classnames": "^2.3.2",
     "history": "^5.3.0",
-    "mobx": "^6.10.2",
-    "mobx-react": "^9.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
@@ -22,10 +21,12 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.4.0",
+    "@types/node": "^20.6.2",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.3",
     "@vitejs/plugin-react-swc": "^3.3.2",
+    "markdown-it": "^13.0.1",
     "typescript": "^5.0.2",
     "vite": "^4.4.4"
   }

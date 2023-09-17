@@ -1,12 +1,12 @@
-import { CharacterNationality } from '/src/core/characters/character';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { AimStage, AllStage, CardUseStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { CompulsorySkill, LordSkill } from '/src/core/skills/skill_wrappers';
+import { CharacterNationality } from 'src/core/characters/character';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { AimStage, AllStage, CardUseStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { CompulsorySkill, LordSkill } from 'src/core/skills/skill_wrappers';
 
 @LordSkill
 @CompulsorySkill({ name: 'mou_jiuyuan', description: 'mou_jiuyuan_description' })

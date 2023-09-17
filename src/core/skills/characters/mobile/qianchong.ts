@@ -1,9 +1,9 @@
-import { CardType } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardColor, CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { INFINITE_DISTANCE, INFINITE_TRIGGERING_TIMES } from '/src/core/game/game_props';
+import { CardType } from 'src/core/cards/card';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardColor, CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { INFINITE_DISTANCE, INFINITE_TRIGGERING_TIMES } from 'src/core/game/game_props';
 import {
   AllStage,
   CardMoveStage,
@@ -12,15 +12,15 @@ import {
   PlayerPhase,
   PlayerPhaseStages,
   StagePriority,
-} from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { Functional } from '/src/core/shares/libs/functional';
-import { RulesBreakerSkill, TriggerSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
-import { CommonSkill, CompulsorySkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { Functional } from 'src/core/shares/libs/functional';
+import { RulesBreakerSkill, TriggerSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
+import { CommonSkill, CompulsorySkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 import { WeiMu } from '../forest/weimu';
 import { MingZhe } from '../sp/mingzhe';
 

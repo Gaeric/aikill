@@ -1,16 +1,16 @@
-import { VirtualCard } from '/src/core/cards/card';
-import { FireSlash } from '/src/core/cards/legion_fight/fire_slash';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, CardUseStage, PhaseChangeStage, PlayerPhase, StagePriority } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { TargetGroupUtil } from '/src/core/shares/libs/utils/target_group';
-import { CommonSkill, PersistentSkill, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+import { VirtualCard } from 'src/core/cards/card';
+import { FireSlash } from 'src/core/cards/legion_fight/fire_slash';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, CardUseStage, PhaseChangeStage, PlayerPhase, StagePriority } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { TargetGroupUtil } from 'src/core/shares/libs/utils/target_group';
+import { CommonSkill, PersistentSkill, ShadowSkill, TriggerSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 import { ChunLao } from './chunlao';
 
 @CommonSkill({ name: 'lihuo', description: 'lihuo_description' })

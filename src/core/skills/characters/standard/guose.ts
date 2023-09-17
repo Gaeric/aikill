@@ -1,13 +1,13 @@
-import { VirtualCard } from '/src/core/cards/card';
-import { CardMatcher, CardMatcherProps } from '/src/core/cards/libs/card_matcher';
-import { CardId, CardSuit } from '/src/core/cards/libs/card_props';
-import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { ActiveSkill, CommonSkill } from '/src/core/skills/skill';
+import { VirtualCard } from 'src/core/cards/card';
+import { CardMatcher, CardMatcherProps } from 'src/core/cards/libs/card_matcher';
+import { CardId, CardSuit } from 'src/core/cards/libs/card_props';
+import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { ActiveSkill, CommonSkill } from 'src/core/skills/skill';
 
 @CommonSkill({ name: 'guose', description: 'guose_description' })
 export class GuoSe extends ActiveSkill {

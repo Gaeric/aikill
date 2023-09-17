@@ -1,12 +1,12 @@
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, DamageEffectStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { MarkEnum } from '/src/core/shares/types/mark_list';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { CompulsorySkill } from '/src/core/skills/skill_wrappers';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, DamageEffectStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { MarkEnum } from 'src/core/shares/types/mark_list';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { CompulsorySkill } from 'src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'mingshi', description: 'mingshi_description' })
 export class MingShi extends TriggerSkill {

@@ -1,14 +1,14 @@
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CharacterNationality } from '/src/core/characters/character';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, PhaseStageChangeStage, PlayerPhaseStages } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { Algorithm } from '/src/core/shares/libs/algorithm';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { CompulsorySkill } from '/src/core/skills/skill_wrappers';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CharacterNationality } from 'src/core/characters/character';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, PhaseStageChangeStage, PlayerPhaseStages } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { Algorithm } from 'src/core/shares/libs/algorithm';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { CompulsorySkill } from 'src/core/skills/skill_wrappers';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 import { YaoHu } from './yaohu';
 
 @CompulsorySkill({ name: 'jutu', description: 'jutu_description' })

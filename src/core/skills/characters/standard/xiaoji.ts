@@ -1,12 +1,12 @@
-import { XiaoJiSkillTrigger } from '/src/core/ai/skills/characters/standard/xiaoji';
-import { CardType } from '/src/core/cards/card';
-import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, CardMoveStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { AI, CommonSkill, TriggerSkill } from '/src/core/skills/skill';
+import { XiaoJiSkillTrigger } from 'src/core/ai/skills/characters/standard/xiaoji';
+import { CardType } from 'src/core/cards/card';
+import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, CardMoveStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { AI, CommonSkill, TriggerSkill } from 'src/core/skills/skill';
 
 @AI(XiaoJiSkillTrigger)
 @CommonSkill({ name: 'xiaoji', description: 'xiaoji_description' })

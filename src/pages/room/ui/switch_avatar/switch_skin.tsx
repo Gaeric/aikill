@@ -1,5 +1,5 @@
-import { PlayerId } from '/src/core/player/player_props';
-import { CharacterSkinInfo } from 'skins/skins';
+import { PlayerId } from 'src/core/player/player_props';
+import { CharacterSkinInfo } from 'src/skins/skins';
 
 export type HistoryCharacterSkin = {
   playerId: PlayerId;

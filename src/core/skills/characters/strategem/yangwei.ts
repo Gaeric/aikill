@@ -1,9 +1,9 @@
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { INFINITE_DISTANCE } from '/src/core/game/game_props';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { INFINITE_DISTANCE } from 'src/core/game/game_props';
 import {
   AllStage,
   CardUseStage,
@@ -11,12 +11,12 @@ import {
   PhaseStageChangeStage,
   PlayerPhase,
   PlayerPhaseStages,
-} from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { ActiveSkill, OnDefineReleaseTiming, RulesBreakerSkill, TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+} from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { ActiveSkill, OnDefineReleaseTiming, RulesBreakerSkill, TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'yangwei', description: 'yangwei_description' })
 export class YangWei extends ActiveSkill {

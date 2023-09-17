@@ -1,6 +1,6 @@
-import { CharacterId } from '/src/core/characters/character';
-import { HuaShenInfo, Player } from '/src/core/player/player';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CharacterId } from 'src/core/characters/character';
+import { HuaShenInfo, Player } from 'src/core/player/player';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 import {
   PlayerCards,
   PlayerCardsArea,

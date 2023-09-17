@@ -1,19 +1,19 @@
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
 import {
   AllStage,
   DamageEffectStage,
   PhaseStageChangeStage,
   PlayerPhase,
   PlayerPhaseStages,
-} from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { CommonSkill, CompulsorySkill, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { CommonSkill, CompulsorySkill, ShadowSkill, TriggerSkill } from 'src/core/skills/skill';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 import { CiXiao } from './cixiao';
 
 @CompulsorySkill({ name: 'panshi', description: 'panshi_description' })

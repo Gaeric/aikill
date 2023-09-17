@@ -1,16 +1,17 @@
-import classNames from 'classnames';
-import { GameEventIdentifiers } from '/src/core/event/event';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import { RoomPresenter } from '/src/pages/room/room.presenter';
-import { RoomStore } from '/src/pages/room/room.store';
-import * as React from 'react';
-import { ConnectionService } from '/src/services/connection_service/connection_service';
-import { Button } from '/src/ui/button/button';
-import { Input } from '/src/ui/input/input';
-import styles from './message_dialog.module.css';
-import { createRawQuickMessage, quickMessageMaxIndex } from './message_dialog.static';
+import classNames from "classnames";
+import { GameEventIdentifiers } from "src/core/event/event";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { RoomPresenter } from "src/pages/room/room.presenter";
+import { RoomStore } from "src/pages/room/room.store";
+import * as React from "react";
+import { ConnectionService } from "src/services/connection_service/connection_service";
+import { Button } from "src/ui/button/button";
+import { Input } from "src/ui/input/input";
+import styles from "./message_dialog.module.css";
+import {
+  createRawQuickMessage,
+  quickMessageMaxIndex,
+} from "./message_dialog.static";
 
 export type MessageDialogProps = {
   store: RoomStore;
@@ -22,32 +23,32 @@ export type MessageDialogProps = {
   fixedHeight: number;
 };
 
-const tabOptions: ['room', 'lobby'] = ['room', 'lobby'];
+const tabOptions: ["room", "lobby"] = ["room", "lobby"];
 const Tab = ({
   onClickTab,
   translator,
   defaultTab,
   hasIncomingMessage,
 }: {
-  onClickTab(tab: 'room' | 'lobby'): void;
+  onClickTab(tab: "room" | "lobby"): void;
   translator: ClientTranslationModule;
-  defaultTab: 'room' | 'lobby';
+  defaultTab: "room" | "lobby";
   hasIncomingMessage: boolean;
 }) => {
-  const onTab = (tab: 'room' | 'lobby') => () => {
+  const onTab = (tab: "room" | "lobby") => () => {
     setTab(tab);
     onClickTab(tab);
   };
 
-  const [selectedTab, setTab] = React.useState<'room' | 'lobby'>(defaultTab);
+  const [selectedTab, setTab] = React.useState<"room" | "lobby">(defaultTab);
   return (
     <div className={styles.tabs}>
-      {tabOptions.map(tab => (
+      {tabOptions.map((tab) => (
         <span
           key={tab}
           className={classNames(styles.tab, {
             [styles.selected]: tab === selectedTab,
-            [styles.new]: hasIncomingMessage && tab === 'lobby',
+            [styles.new]: hasIncomingMessage && tab === "lobby",
           })}
           onClick={onTab(tab)}
         >
@@ -59,66 +60,78 @@ const Tab = ({
   );
 };
 
-@mobxReact.observer
-export class MessageDialog extends React.Component<MessageDialogProps> {
-  private userMessageDialogElementRef = React.createRef<HTMLDivElement>();
-  private readonly textMessageMinHeight = 160;
+export function MessageDialog(props: MessageDialogProps) {
+  let userMessageDialogElementRef = React.useRef<HTMLDivElement>();
+  let textMessageMinHeight = 160;
 
-  @mobx.observable.ref
-  private currentTab: 'room' | 'lobby' = 'room';
-  @mobx.observable.ref
-  private incomingMessage: boolean = false;
-  @mobx.observable.ref
-  private textMessage: string | undefined;
-  @mobx.observable.ref
-  private hideQuickChatItems: boolean = true;
-  @mobx.action
-  private readonly onMessageChange = (value?: string) => {
-    this.textMessage = value;
+  const [currentTab, setCurrentTab] = React.useState<"room" | "lobby">("room");
+  const [incomingMessage, setIncomingMessage] = React.useState(false);
+
+  const [hideQuickChatItems, setHideQuickChatItems] = React.useState(true);
+  const [textMessage, setTextMessage] = React.useState<string | undefined>();
+  const [chatMessages, setChatMessages] = React.useState<JSX.Element[]>([]);
+
+  let onMessageChange = (value?: string) => {
+    setTextMessage(value);
   };
-  @mobx.observable.shallow
-  private chatMessages: JSX.Element[] = [];
 
-  private readonly onClickSendButton = (event: React.FormEvent<HTMLFormElement>) => {
+  let onClickSendButton = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (this.currentTab === 'room') {
-      !this.props.replayMode &&
-        this.props.store.room.broadcast(GameEventIdentifiers.UserMessageEvent, {
-          message: this.textMessage!,
-          playerId: this.props.presenter.ClientPlayer!.Id,
+    if (currentTab === "room") {
+      !props.replayMode &&
+        props.store.room.broadcast(GameEventIdentifiers.UserMessageEvent, {
+          message: textMessage!,
+          playerId: props.presenter.getClientPlayer().Id,
         });
     } else {
-      this.props.connectionService.Chat.send(this.textMessage!, this.props.presenter.ClientPlayer!.Name);
+      props.connectionService.Chat.send(
+        textMessage!,
+        props.presenter.getClientPlayer().Name
+      );
     }
-    this.onMessageChange('');
+    onMessageChange("");
   };
 
-  componentDidMount() {
-    this.chatMessages = this.props.connectionService.Chat.chatHistory().map((message, index) => {
-      const date = new Date(message.timestamp);
-      return (
-        <span className={styles.message} key={index}>
-          <b>{message.from}</b>
-          {` [${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}]: ${message.message}`}
-        </span>
-      );
-    });
+  // React.useEffect(() => {
+  //   setChatMessages(
+  //     props.connectionService.Chat.chatHistory().map((message, index) => {
+  //       const date = new Date(message.timestamp);
+  //       return (
+  //         <span className={styles.message} key={index}>
+  //           <b>{message.from}</b>
+  //           {` [${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}]: ${
+  //             message.message
+  //           }`}
+  //         </span>
+  //       );
+  //     })
+  //   );
 
-    this.props.connectionService.Chat.received(
-      mobx.action(chatObject => {
-        this.incomingMessage = this.currentTab !== 'lobby';
-        const date = new Date(chatObject.timestamp);
-        this.chatMessages.push(
-          <span className={styles.message}>
-            <b>{chatObject.from}</b>
-            {` [${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}]: ${chatObject.message}`}
-          </span>,
-        );
-      }),
-    );
-  }
+  //   props.connectionService.Chat.received((chatObject) => {
+  //     setIncomingMessage(currentTab !== "lobby");
 
-  private getQuickChatContents() {
+  //     const date = new Date(chatObject.timestamp);
+  //     chatMessages.push(
+  //       <span className={styles.message}>
+  //         <b>{chatObject.from}</b>
+  //         {` [${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}]: ${
+  //           chatObject.message
+  //         }`}
+  //       </span>
+  //     );
+  //   });
+
+  //   return () => {
+  //     props.connectionService.Chat.disconnect();
+  //   };
+  // }, []);
+  React.useEffect(() => {
+    if (userMessageDialogElementRef.current) {
+      userMessageDialogElementRef.current.scrollTop =
+        userMessageDialogElementRef.current.scrollHeight;
+    }
+  }, [userMessageDialogElementRef.current]);
+  function getQuickChatContents() {
     const contents: string[] = [];
     for (let i = 0; i <= quickMessageMaxIndex; i++) {
       contents.push(createRawQuickMessage(i));
@@ -127,49 +140,39 @@ export class MessageDialog extends React.Component<MessageDialogProps> {
     return contents;
   }
 
-  componentWillUnmount() {
-    this.props.connectionService.Chat.disconnect();
-  }
-
-  componentDidUpdate() {
-    if (this.userMessageDialogElementRef.current) {
-      this.userMessageDialogElementRef.current.scrollTop = this.userMessageDialogElementRef.current.scrollHeight;
-    }
-  }
-
-  @mobx.action
-  private readonly onClickTab = (tab: 'room' | 'lobby') => {
-    this.incomingMessage = false;
-    this.currentTab = tab;
+  let onClickTab = (tab: "room" | "lobby") => {
+    setIncomingMessage(false);
+    setCurrentTab(tab);
   };
 
-  @mobx.action
-  private readonly onClickQuickChatButton = () => {
-    this.hideQuickChatItems = !this.hideQuickChatItems;
+  let onClickQuickChatButton = () => {
+    setHideQuickChatItems(!hideQuickChatItems);
   };
 
-  @mobx.action
-  private onClickQuickChatItem = (content: string) => () => {
-    !this.props.replayMode &&
-      this.props.store.room.broadcast(GameEventIdentifiers.UserMessageEvent, {
+  let onClickQuickChatItem = (content: string) => () => {
+    !props.replayMode &&
+      props.store.room.broadcast(GameEventIdentifiers.UserMessageEvent, {
         message: content,
-        playerId: this.props.presenter.ClientPlayer!.Id,
+        playerId: props.presenter.getClientPlayer().Id,
       });
-
-    this.hideQuickChatItems = !this.hideQuickChatItems;
+    setHideQuickChatItems(!hideQuickChatItems);
   };
 
-  private getSkillAudios() {
-    return this.props.presenter.ClientPlayer !== undefined && this.props.presenter.ClientPlayer.Character
-      ? this.props.presenter
-          .ClientPlayer!.Character.Skills.filter(skill => !skill.isShadowSkill())
+  function getSkillAudios() {
+    return props.presenter.getClientPlayer() !== undefined &&
+      props.presenter.getClientPlayer().Character
+      ? props.presenter
+          .ClientPlayer!.Character.Skills.filter(
+            (skill) => !skill.isShadowSkill()
+          )
           .reduce<string[]>((audioNames, skill) => {
-            const characterName = this.props.presenter.ClientPlayer!.Character.Name;
+            const characterName =
+              props.presenter.getClientPlayer().Character.Name;
             for (let i = 1; i <= skill.audioIndex(); i++) {
               audioNames.push(
                 skill.RelatedCharacters.includes(characterName)
-                  ? '$' + skill.Name + '.' + characterName + ':' + i
-                  : '$' + skill.Name + ':' + i,
+                  ? "$" + skill.Name + "." + characterName + ":" + i
+                  : "$" + skill.Name + ":" + i
               );
             }
 
@@ -178,61 +181,82 @@ export class MessageDialog extends React.Component<MessageDialogProps> {
       : [];
   }
 
-  render() {
-    return (
-      <div className={styles.chat}>
-        <Tab
-          onClickTab={this.onClickTab}
-          translator={this.props.translator}
-          hasIncomingMessage={this.incomingMessage}
-          defaultTab={this.currentTab}
-        />
-        <div
-          className={styles.messageDialog}
-          ref={this.userMessageDialogElementRef}
-          style={{
-            minHeight: this.textMessageMinHeight,
-            height: this.userMessageDialogElementRef.current
-              ? `${this.userMessageDialogElementRef.current.clientHeight + this.props.fixedHeight}px`
-              : undefined,
-          }}
-        >
-          {(this.currentTab === 'room' ? this.props.store.messageLog : this.chatMessages).map((log, index) => (
+  return (
+    <div className={styles.chat}>
+      <Tab
+        onClickTab={onClickTab}
+        translator={props.translator}
+        hasIncomingMessage={incomingMessage}
+        defaultTab={currentTab}
+      />
+      <div
+        className={styles.messageDialog}
+        ref={userMessageDialogElementRef}
+        style={{
+          minHeight: textMessageMinHeight,
+          height: userMessageDialogElementRef.current
+            ? `${
+                userMessageDialogElementRef.current.clientHeight +
+                props.fixedHeight
+              }px`
+            : undefined,
+        }}
+      >
+        {(currentTab === "room" ? props.store.messageLog : chatMessages).map(
+          (log, index) => (
             <p className={styles.messageLine} key={index}>
               {log}
             </p>
-          ))}
-        </div>
+          )
+        )}
+      </div>
 
-        <form className={classNames(styles.inputLabel, this.props.className)} onSubmit={this.onClickSendButton}>
-          {!this.hideQuickChatItems ? (
-            <div className={styles.quickChat}>
-              {[...this.getSkillAudios(), ...this.getQuickChatContents()].map((content, index) => (
+      <form
+        className={classNames(styles.inputLabel, props.className)}
+        onSubmit={onClickSendButton}
+      >
+        {!hideQuickChatItems ? (
+          <div className={styles.quickChat}>
+            {[...getSkillAudios(), ...getQuickChatContents()].map(
+              (content, index) => (
                 <div>
-                  <span key={index} className={styles.quickChatItems} onClick={this.onClickQuickChatItem(content)}>
-                    {this.props.translator.tr(content)}
+                  <span
+                    key={index}
+                    className={styles.quickChatItems}
+                    onClick={onClickQuickChatItem(content)}
+                  >
+                    {props.translator.tr(content)}
                   </span>
                   <br />
                 </div>
-              ))}
-            </div>
-          ) : (
-            <></>
-          )}
-          <Input
-            className={styles.chatInput}
-            onChange={this.onMessageChange}
-            placeholder={this.props.translator.tr('please enter your text here')}
-            value={this.textMessage}
-          />
-          <Button className={styles.sendButton} variant="primary" type="button" onClick={this.onClickQuickChatButton}>
-            💬
-          </Button>
-          <Button className={styles.sendButton} variant="primary" disabled={!this.textMessage}>
-            {this.props.translator.tr('send')}
-          </Button>
-        </form>
-      </div>
-    );
-  }
+              )
+            )}
+          </div>
+        ) : (
+          <></>
+        )}
+        <Input
+          className={styles.chatInput}
+          onChange={onMessageChange}
+          placeholder={props.translator.tr("please enter your text here")}
+          value={textMessage}
+        />
+        <Button
+          className={styles.sendButton}
+          variant="primary"
+          type="button"
+          onClick={onClickQuickChatButton}
+        >
+          💬
+        </Button>
+        <Button
+          className={styles.sendButton}
+          variant="primary"
+          disabled={!textMessage}
+        >
+          {props.translator.tr("send")}
+        </Button>
+      </form>
+    </div>
+  );
 }

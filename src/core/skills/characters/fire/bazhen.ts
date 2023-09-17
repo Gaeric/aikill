@@ -1,10 +1,10 @@
-import { CardType } from '/src/core/cards/card';
-import { CharacterEquipSections } from '/src/core/characters/character';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { BaGuaZhenSkill } from '/src/core/skills/cards/standard/baguazhen';
-import { CompulsorySkill } from '/src/core/skills/skill_wrappers';
+import { CardType } from 'src/core/cards/card';
+import { CharacterEquipSections } from 'src/core/characters/character';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { BaGuaZhenSkill } from 'src/core/skills/cards/standard/baguazhen';
+import { CompulsorySkill } from 'src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'bazhen', description: 'bazhen_description' })
 export class BaZhen extends BaGuaZhenSkill {

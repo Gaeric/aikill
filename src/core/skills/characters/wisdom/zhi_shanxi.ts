@@ -1,11 +1,11 @@
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, PhaseStageChangeStage, PlayerPhaseStages, RecoverEffectStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
-import { CommonSkill, OnDefineReleaseTiming, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, PhaseStageChangeStage, PlayerPhaseStages, RecoverEffectStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { Precondition } from 'src/core/shares/libs/precondition/precondition';
+import { CommonSkill, OnDefineReleaseTiming, ShadowSkill, TriggerSkill } from 'src/core/skills/skill';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'zhi_shanxi', description: 'zhi_shanxi_description' })
 export class ZhiShanXi extends TriggerSkill implements OnDefineReleaseTiming {

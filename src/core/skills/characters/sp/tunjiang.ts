@@ -1,11 +1,11 @@
-import { CharacterNationality } from '/src/core/characters/character';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, PhaseStageChangeStage, PlayerPhase, PlayerPhaseStages } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { TargetGroupUtil } from '/src/core/shares/libs/utils/target_group';
-import { CommonSkill, TriggerSkill } from '/src/core/skills/skill';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CharacterNationality } from 'src/core/characters/character';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, PhaseStageChangeStage, PlayerPhase, PlayerPhaseStages } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { TargetGroupUtil } from 'src/core/shares/libs/utils/target_group';
+import { CommonSkill, TriggerSkill } from 'src/core/skills/skill';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'tunjiang', description: 'tunjiang_description' })
 export class TunJiang extends TriggerSkill {

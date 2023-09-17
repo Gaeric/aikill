@@ -1,12 +1,12 @@
-import { Card } from '/src/core/cards/card';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, HpChangeStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { Skill, SkillProhibitedSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming, SkillLifeCycle } from '/src/core/skills/skill_hooks';
-import { UniqueSkillRule } from '/src/core/skills/skill_rule';
-import { CompulsorySkill } from '/src/core/skills/skill_wrappers';
+import { Card } from 'src/core/cards/card';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, HpChangeStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { Skill, SkillProhibitedSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming, SkillLifeCycle } from 'src/core/skills/skill_hooks';
+import { UniqueSkillRule } from 'src/core/skills/skill_rule';
+import { CompulsorySkill } from 'src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'chanyuan', description: 'chanyuan_description' })
 export class ChanYuan extends SkillProhibitedSkill implements OnDefineReleaseTiming {

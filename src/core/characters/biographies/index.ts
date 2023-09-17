@@ -1,4 +1,4 @@
-import { Character } from '/src/core/characters/character';
+import { Character } from 'src/core/characters/character';
 import { CaoAnMin } from './caoanmin';
 import { CaoSong } from './caosong';
 import { DingYuan } from './dingyuan';

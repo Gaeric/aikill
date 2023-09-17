@@ -1,18 +1,18 @@
-import { CardId } from '/src/core/cards/libs/card_props';
-import { Character, CharacterGender, CharacterId, CharacterNationality } from '/src/core/characters/character';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { Character, CharacterGender, CharacterId, CharacterNationality } from 'src/core/characters/character';
 import {
   CardMoveArea,
   CardMoveReason,
   ClientEventFinder,
   GameEventIdentifiers,
   ServerEventFinder,
-} from '/src/core/event/event';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId, PlayerInfo, PlayerRole } from '/src/core/player/player_props';
-import { Functional } from '/src/core/shares/libs/functional';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
-import { GameMode } from '/src/core/shares/types/room_props';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/event/event';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId, PlayerInfo, PlayerRole } from 'src/core/player/player_props';
+import { Functional } from 'src/core/shares/libs/functional';
+import { Precondition } from 'src/core/shares/libs/precondition/precondition';
+import { GameMode } from 'src/core/shares/types/room_props';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 import { StandardGameProcessor } from './game_processor.standard';
 import { Sanguosha } from '../engine';
 import { GameEventStage, PlayerDiedStage } from '../stage_processor';

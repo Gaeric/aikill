@@ -1,10 +1,10 @@
-import { CardId } from '/src/core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { ActiveSkill } from '/src/core/skills/skill';
-import { CommonSkill } from '/src/core/skills/skill_wrappers';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { ActiveSkill } from 'src/core/skills/skill';
+import { CommonSkill } from 'src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'songshu', description: 'songshu_description' })
 export class SongShu extends ActiveSkill {

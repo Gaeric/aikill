@@ -1,12 +1,12 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { Functional } from '/src/core/shares/libs/functional';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill } from '/src/core/skills/skill_wrappers';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, PhaseChangeStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { Functional } from 'src/core/shares/libs/functional';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill } from 'src/core/skills/skill_wrappers';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'fenli', description: 'fenli_description' })
 export class FenLi extends TriggerSkill {

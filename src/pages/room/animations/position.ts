@@ -1,5 +1,5 @@
-import { PlayerId } from '/src/core/player/player_props';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
+import { PlayerId } from "src/core/player/player_props";
+import { Precondition } from "src/core/shares/libs/precondition/precondition";
 
 export type Point = {
   x: number;
@@ -15,14 +15,14 @@ export class AnimationPosition {
     | undefined;
 
   constructor() {
-    document.addEventListener('resize', () => {
+    document.addEventListener("resize", () => {
       this.positions = undefined;
     });
   }
 
   insertPlayer(playerId: PlayerId) {
     this.positions = this.positions || [];
-    if (this.positions.find(position => position.playerId === playerId)) {
+    if (this.positions.find((position) => position.playerId === playerId)) {
       return;
     }
 
@@ -32,7 +32,7 @@ export class AnimationPosition {
   private calculatePlayerPosition(playerId: PlayerId) {
     const playerCardElement = Precondition.exists(
       document.getElementById(playerId),
-      `Unrendered player card of ${playerId}`,
+      `Unrendered player card of ${playerId}`
     );
     const playerOffset = this.getOffset(playerCardElement);
     const position = {
@@ -41,7 +41,9 @@ export class AnimationPosition {
     };
 
     this.positions = this.positions || [];
-    const existingPosition = this.positions.find(position => position.playerId === playerId);
+    const existingPosition = this.positions.find(
+      (position) => position.playerId === playerId
+    );
     if (existingPosition) {
       existingPosition.position = position;
     } else {
@@ -53,9 +55,10 @@ export class AnimationPosition {
   }
 
   private calculateCurrentPlayerPosition(playerId: PlayerId) {
+    console.log(playerId);
     const playerCardElement = Precondition.exists(
       document.getElementById(playerId),
-      `Unrendered player card of ${playerId}`,
+      `Unrendered player card of ${playerId}`
     );
     const playerOffset = this.getOffset(playerCardElement);
     const position = {
@@ -64,7 +67,9 @@ export class AnimationPosition {
     };
 
     this.positions = this.positions || [];
-    const existingPosition = this.positions.find(position => position.playerId === playerId);
+    const existingPosition = this.positions.find(
+      (position) => position.playerId === playerId
+    );
     if (existingPosition) {
       existingPosition.position = position;
     } else {
@@ -91,8 +96,8 @@ export class AnimationPosition {
     }
 
     return Precondition.exists(
-      this.positions!.find(position => position.playerId === playerId),
-      `player ${playerId} not found`,
+      this.positions!.find((position) => position.playerId === playerId),
+      `player ${playerId} not found`
     ).position!;
   }
 }

@@ -1,12 +1,12 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { AimStage, AllStage, CardUseStage, PlayerDiedStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { TargetGroupUtil } from '/src/core/shares/libs/utils/target_group';
-import { MarkEnum } from '/src/core/shares/types/mark_list';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { CompulsorySkill } from '/src/core/skills/skill_wrappers';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { AimStage, AllStage, CardUseStage, PlayerDiedStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { TargetGroupUtil } from 'src/core/shares/libs/utils/target_group';
+import { MarkEnum } from 'src/core/shares/types/mark_list';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { CompulsorySkill } from 'src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'god_fuhai', description: 'god_fuhai_description' })
 export class GodFuHai extends TriggerSkill {

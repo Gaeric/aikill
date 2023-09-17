@@ -1,8 +1,8 @@
-import { GameInfo } from '/src/core/game/game_props';
-import { GameCommonRules } from '/src/core/game/game_rules';
-import { RecordAnalytics } from '/src/core/game/record_analytics';
-import { ClientOfflineSocket } from '/src/core/network/socket.offline';
-import { ClientPlayer } from '/src/core/player/player.client';
+import { GameInfo } from 'src/core/game/game_props';
+import { GameCommonRules } from 'src/core/game/game_rules';
+import { RecordAnalytics } from 'src/core/game/record_analytics';
+import { ClientOfflineSocket } from 'src/core/network/socket.offline';
+import { ClientPlayer } from 'src/core/player/player.client';
 import { RoomId } from './room';
 import { ClientRoom } from './room.client';
 import { RoomEventStacker } from './utils/room_event_stack';

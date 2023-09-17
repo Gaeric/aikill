@@ -1,82 +1,94 @@
-import classNames from 'classnames';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ImageLoader } from '/src/image_loader/image_loader';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import { RoomPresenter } from '/src/pages/room/room.presenter';
-import { RoomStore } from '/src/pages/room/room.store';
-import * as React from 'react';
-import { ClientCard } from '/src/ui/card/card';
-import styles from './move_card.module.css';
+import classNames from "classnames";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ImageLoader } from "src/image_loader/image_loader";
+import { RoomPresenter } from "src/pages/room/room.presenter";
+import { RoomStore } from "src/pages/room/room.store";
+import * as React from "react";
+import { ClientCard } from "src/ui/card/card";
+import styles from "./move_card.module.css";
+import { useState } from "react";
 
 type MoveCardProps = {
   translator: ClientTranslationModule;
   imageLoader: ImageLoader;
   presenter: RoomPresenter;
   store: RoomStore;
-  updateFlag: boolean;
 };
 
-@mobxReact.observer
-export class MoveCard extends React.Component<MoveCardProps> {
-  private displayedCardsRef = React.createRef<HTMLDivElement>();
-  private readonly cardWidth = 120;
-  private readonly cardMargin = 2;
+export function MoveCard(props: MoveCardProps) {
+  let displayedCardsRef = React.useRef<HTMLDivElement>();
+  let cardWidth = 120;
+  let cardMargin = 2;
 
-  @mobx.observable.ref
-  private focusedCardIndex: number | undefined;
+  const [focusedCardIndex, setFocusedCardIndex] = useState<number | null>(null);
 
-  private calculateDisplayedCardOffset(totalCards: number, index: number) {
-    const container = this.displayedCardsRef.current;
+  function calculateDisplayedCardOffset(totalCards: number, index: number) {
+    const container = displayedCardsRef.current;
     if (!container) {
-      return this.cardMargin;
+      return cardMargin;
     }
 
     const containerWidth = container.clientWidth;
     const innerOffset =
-      Math.min(this.cardWidth * totalCards + this.cardMargin * (totalCards + 1), containerWidth) / 2 -
-      this.cardWidth / 2;
-    if (containerWidth < totalCards * (this.cardWidth + this.cardMargin)) {
-      const offset = (totalCards * (this.cardWidth + this.cardMargin) - containerWidth) / (totalCards - 1);
-      return (totalCards - index - 1) * (this.cardMargin + this.cardWidth - offset) - innerOffset;
+      Math.min(
+        cardWidth * totalCards + cardMargin * (totalCards + 1),
+        containerWidth
+      ) /
+        2 -
+      cardWidth / 2;
+    if (containerWidth < totalCards * (cardWidth + cardMargin)) {
+      const offset =
+        (totalCards * (cardWidth + cardMargin) - containerWidth) /
+        (totalCards - 1);
+      return (
+        (totalCards - index - 1) * (cardMargin + cardWidth - offset) -
+        innerOffset
+      );
     } else {
-      return (totalCards - index - 1) * (this.cardMargin + this.cardWidth) + this.cardMargin * 2 - innerOffset;
+      return (
+        (totalCards - index - 1) * (cardMargin + cardWidth) +
+        cardMargin * 2 -
+        innerOffset
+      );
     }
   }
 
-  private readonly onDisplayCardFocused = (index: number) =>
-    mobx.action(() => {
-      this.focusedCardIndex = index;
-    });
-
-  @mobx.action
-  private readonly onDisplayCardLeft = () => {
-    this.focusedCardIndex = undefined;
-  };
-
-  render() {
-    return (
-      <div className={styles.displayedCards} ref={this.displayedCardsRef}>
-        {this.props.store.displayedCards.map((displayCard, index) => (
-          <ClientCard
-            id={displayCard.animationPlayed ? undefined : displayCard.card.Id.toString()}
-            imageLoader={this.props.imageLoader}
-            key={index}
-            card={displayCard.card}
-            tags={displayCard.tag}
-            width={this.cardWidth}
-            offsetLeft={this.calculateDisplayedCardOffset(this.props.store.displayedCards.length, index)}
-            translator={this.props.translator}
-            className={classNames(styles.displayedCard, {
-              [styles.darken]: displayCard.buried,
-              [styles.focused]: this.focusedCardIndex === index,
-            })}
-            onMouseEnter={this.onDisplayCardFocused(index)}
-            onMouseLeave={this.onDisplayCardLeft}
-            style={this.props.store.displayedCardsAnimationStyles[displayCard.card.Id]}
-          />
-        ))}
-      </div>
-    );
+  function onDisplayCardFocused(index: number) {
+    setFocusedCardIndex(index);
   }
+
+  function onDisplayCardLeft() {
+    setFocusedCardIndex(null);
+  }
+
+  return (
+    <div className={styles.displayedCards} ref={displayedCardsRef}>
+      {props.store.displayedCards.map((displayCard, index) => (
+        <ClientCard
+          id={
+            displayCard.animationPlayed
+              ? undefined
+              : displayCard.card.Id.toString()
+          }
+          imageLoader={props.imageLoader}
+          key={index}
+          card={displayCard.card}
+          tags={displayCard.tag}
+          width={cardWidth}
+          offsetLeft={calculateDisplayedCardOffset(
+            props.store.displayedCards.length,
+            index
+          )}
+          translator={props.translator}
+          className={classNames(styles.displayedCard, {
+            [styles.darken]: displayCard.buried,
+            [styles.focused]: focusedCardIndex === index,
+          })}
+          onMouseEnter={() => onDisplayCardFocused(index)}
+          onMouseLeave={() => onDisplayCardLeft()}
+          style={props.store.displayedCardsAnimationStyles[displayCard.card.Id]}
+        />
+      ))}
+    </div>
+  );
 }

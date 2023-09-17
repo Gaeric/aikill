@@ -1,12 +1,12 @@
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardChoosingOptions, CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, PhaseStageChangeStage, PlayerPhase, PlayerPhaseStages } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { GlobalFilterSkill, TriggerSkill } from '/src/core/skills/skill';
-import { CompulsorySkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardChoosingOptions, CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, PhaseStageChangeStage, PlayerPhase, PlayerPhaseStages } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { GlobalFilterSkill, TriggerSkill } from 'src/core/skills/skill';
+import { CompulsorySkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'chezheng', description: 'chezheng_description' })
 export class CheZheng extends TriggerSkill {

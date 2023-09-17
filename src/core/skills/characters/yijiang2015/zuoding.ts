@@ -1,13 +1,13 @@
-import { CardSuit } from '/src/core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { AimStage, AllStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { AimGroupUtil } from '/src/core/shares/libs/utils/aim_group';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill } from '/src/core/skills/skill_wrappers';
+import { CardSuit } from 'src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { AimStage, AllStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { AimGroupUtil } from 'src/core/shares/libs/utils/aim_group';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill } from 'src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'zuoding', description: 'zuoding_description' })
 export class ZuoDing extends TriggerSkill {

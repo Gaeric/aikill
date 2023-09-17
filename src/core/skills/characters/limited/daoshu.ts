@@ -1,13 +1,13 @@
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId, CardSuit } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { DamageType } from '/src/core/game/game_props';
-import { AllStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId, CardSuit } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { DamageType } from 'src/core/game/game_props';
+import { AllStage, PhaseChangeStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
 import {
   ActiveSkill,
   CommonSkill,
@@ -15,8 +15,8 @@ import {
   PersistentSkill,
   ShadowSkill,
   TriggerSkill,
-} from '/src/core/skills/skill';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/skills/skill';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'daoshu', description: 'daoshu_description' })
 export class DaoShu extends ActiveSkill {

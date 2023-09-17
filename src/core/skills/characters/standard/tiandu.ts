@@ -1,8 +1,8 @@
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, JudgeEffectStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { CommonSkill, TriggerSkill } from '/src/core/skills/skill';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, JudgeEffectStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { CommonSkill, TriggerSkill } from 'src/core/skills/skill';
 
 @CommonSkill({ name: 'tiandu', description: 'tiandu_description' })
 export class TianDu extends TriggerSkill {

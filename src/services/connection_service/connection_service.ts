@@ -1,8 +1,8 @@
-import { GameCardExtensions } from '/src/core/game/game_props';
-import { TemporaryRoomCreationInfo } from '/src/core/game/game_props';
-import { RoomId } from '/src/core/room/room';
-import { LobbySocketEvent, LobbySocketEventPicker } from '/src/core/shares/types/server_types';
-import { ServerHostTag } from '/src/props/config_props';
+import { GameCardExtensions } from 'src/core/game/game_props';
+import { TemporaryRoomCreationInfo } from 'src/core/game/game_props';
+import { RoomId } from 'src/core/room/room';
+import { LobbySocketEvent, LobbySocketEventPicker } from 'src/core/shares/types/server_types';
+import { ServerHostTag } from 'src/props/config_props';
 
 export type ChatPacketObject = { message: string; from: string; timestamp: number };
 export type RoomListListenerResponse = {

@@ -1,21 +1,21 @@
-import { CardType } from '/src/core/cards/card';
-import { CardId } from '/src/core/cards/libs/card_props';
+import { CardType } from 'src/core/cards/card';
+import { CardId } from 'src/core/cards/libs/card_props';
 import {
   CardMoveArea,
   CardMovedBySpecifiedReason,
   CardMoveReason,
   GameEventIdentifiers,
   ServerEventFinder,
-} from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { AimStage, AllStage, CardMoveStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { AimGroupUtil } from '/src/core/shares/libs/utils/aim_group';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { AimStage, AllStage, CardMoveStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { AimGroupUtil } from 'src/core/shares/libs/utils/aim_group';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'jijun', description: 'jijun_description' })
 export class JiJun extends TriggerSkill {

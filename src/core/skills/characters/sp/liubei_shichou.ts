@@ -1,13 +1,13 @@
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CharacterNationality } from '/src/core/characters/character';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { DamageType } from '/src/core/game/game_props';
-import { AllStage, DamageEffectStage, PhaseStageChangeStage, PlayerPhaseStages } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { CompulsorySkill, LimitSkill, LordSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CharacterNationality } from 'src/core/characters/character';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { DamageType } from 'src/core/game/game_props';
+import { AllStage, DamageEffectStage, PhaseStageChangeStage, PlayerPhaseStages } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { CompulsorySkill, LimitSkill, LordSkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
 
 @LordSkill
 @LimitSkill({ name: 'liubei_shichou', description: 'liubei_shichou_description' })

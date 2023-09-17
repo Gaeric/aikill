@@ -1,6 +1,6 @@
-import { Sanguosha } from '/src/core/game/engine';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
-import { ImageLoader } from '/src/image_loader/image_loader';
+import { Sanguosha } from 'src/core/game/engine';
+import { Precondition } from 'src/core/shares/libs/precondition/precondition';
+import { ImageLoader } from 'src/image_loader/image_loader';
 
 export class RoomAvatarService {
   constructor(private imageLoader: ImageLoader) {}

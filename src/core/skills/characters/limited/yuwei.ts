@@ -1,5 +1,5 @@
-import { Skill } from '/src/core/skills/skill';
-import { CompulsorySkill, LordSkill } from '/src/core/skills/skill_wrappers';
+import { Skill } from 'src/core/skills/skill';
+import { CompulsorySkill, LordSkill } from 'src/core/skills/skill_wrappers';
 
 @LordSkill
 @CompulsorySkill({ name: 'yuwei', description: 'yuwei_description' })

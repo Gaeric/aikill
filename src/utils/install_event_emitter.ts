@@ -1,5 +1,5 @@
-import { EventEmitterProps } from '/src/core/network/local/event_emitter_props';
-import { PlayerId } from '/src/core/player/player_props';
+import { EventEmitterProps } from "src/core/network/local/event_emitter_props";
+import { PlayerId } from "src/core/player/player_props";
 
 export function installEventEmitter() {
   if (!(window as any).eventEmitter) {
@@ -11,16 +11,21 @@ class EventEmitter implements EventEmitterProps {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
-  private static instace: EventEmitter;
+  private static instance: EventEmitter;
 
-  private onHangingEventCallback: { [K: string]: (...args: any) => void | Promise<void> } = {};
+  private onHangingEventCallback: {
+    [K: string]: (...args: any) => void | Promise<void>;
+  } = {};
 
   static getInstance() {
-    if (!this.instace) {
-      this.instace = new EventEmitter();
+    if (!this.instance) {
+      this.instance = new EventEmitter();
     }
 
-    return this.instace;
+    // console.log("emitter instance is ");
+    // console.log(this.instance);
+
+    return this.instance;
   }
 
   async send(evtName: string, ...args: any) {

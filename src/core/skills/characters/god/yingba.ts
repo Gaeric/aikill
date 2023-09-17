@@ -1,13 +1,13 @@
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { INFINITE_DISTANCE } from '/src/core/game/game_props';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { MarkEnum } from '/src/core/shares/types/mark_list';
-import { ActiveSkill, RulesBreakerSkill } from '/src/core/skills/skill';
-import { CommonSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { INFINITE_DISTANCE } from 'src/core/game/game_props';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { MarkEnum } from 'src/core/shares/types/mark_list';
+import { ActiveSkill, RulesBreakerSkill } from 'src/core/skills/skill';
+import { CommonSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'yingba', description: 'yingba_description' })
 export class YingBa extends ActiveSkill {

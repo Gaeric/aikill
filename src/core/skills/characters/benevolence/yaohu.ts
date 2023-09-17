@@ -1,9 +1,9 @@
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { DamageCardEnum } from '/src/core/cards/libs/card_props';
-import { CharacterNationality } from '/src/core/characters/character';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { DamageCardEnum } from 'src/core/cards/libs/card_props';
+import { CharacterNationality } from 'src/core/characters/character';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
 import {
   AimStage,
   AllStage,
@@ -11,16 +11,16 @@ import {
   PhaseStageChangeStage,
   PlayerPhase,
   PlayerPhaseStages,
-} from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { Functional } from '/src/core/shares/libs/functional';
-import { AimGroupUtil } from '/src/core/shares/libs/utils/aim_group';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
-import { CircleSkill, CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { Functional } from 'src/core/shares/libs/functional';
+import { AimGroupUtil } from 'src/core/shares/libs/utils/aim_group';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
+import { CircleSkill, CommonSkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 import { JuTu } from './jutu';
 
 @CircleSkill

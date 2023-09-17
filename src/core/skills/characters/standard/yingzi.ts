@@ -1,8 +1,8 @@
-import { CardDrawReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, DrawCardStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { CompulsorySkill, RulesBreakerSkill, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
+import { CardDrawReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, DrawCardStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { CompulsorySkill, RulesBreakerSkill, ShadowSkill, TriggerSkill } from 'src/core/skills/skill';
 
 @CompulsorySkill({ name: 'yingzi', description: 'yingzi_description' })
 export class YingZi extends TriggerSkill {

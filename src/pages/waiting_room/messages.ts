@@ -1,5 +1,5 @@
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
+import { ClientTranslationModule } from 'src/core/translations/translation_module.client';
 
 export const createTranslationMessages = (translator: ClientTranslationModule) => ({
   systemNotification: () => translator.tr('system notification'),

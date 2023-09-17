@@ -1,20 +1,20 @@
-import { CardType } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { INFINITE_DISTANCE, INFINITE_TRIGGERING_TIMES } from '/src/core/game/game_props';
-import { AimStage, AllStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { AimGroupUtil } from '/src/core/shares/libs/utils/aim_group';
-import { QingGangSkill } from '/src/core/skills/cards/standard/qinggang';
-import { ActiveSkill, FilterSkill, RulesBreakerSkill, TriggerSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
-import { CommonSkill, PersistentSkill, ShadowSkill, UniqueSkill } from '/src/core/skills/skill_wrappers';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CardType } from 'src/core/cards/card';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { INFINITE_DISTANCE, INFINITE_TRIGGERING_TIMES } from 'src/core/game/game_props';
+import { AimStage, AllStage, PhaseChangeStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { AimGroupUtil } from 'src/core/shares/libs/utils/aim_group';
+import { QingGangSkill } from 'src/core/skills/cards/standard/qinggang';
+import { ActiveSkill, FilterSkill, RulesBreakerSkill, TriggerSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
+import { CommonSkill, PersistentSkill, ShadowSkill, UniqueSkill } from 'src/core/skills/skill_wrappers';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'xianzhen', description: 'xianzhen_description' })
 export class XianZhen extends ActiveSkill {

@@ -1,8 +1,8 @@
-import { VirtualCard } from '/src/core/cards/card';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
+import { VirtualCard } from 'src/core/cards/card';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
 import { PlayerPhase } from './stage_processor';
 
 type RecordCurrentType = 'phase' | 'round' | 'circle';

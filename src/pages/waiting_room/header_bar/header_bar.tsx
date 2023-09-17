@@ -1,17 +1,15 @@
-import { AudioLoader } from 'audio_loader/audio_loader';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ElectronData } from '/src/electron_loader/electron_data';
-import { ElectronLoader } from '/src/electron_loader/electron_loader';
-import { ImageLoader } from '/src/image_loader/image_loader';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import { Banner } from '/src/pages/room/ui/banner/banner';
-import { SettingsDialog } from '/src/pages/ui/settings/settings';
-import { ServerHostTag } from '/src/props/config_props';
-import * as React from 'react';
-import { ConnectionService } from '/src/services/connection_service/connection_service';
-import { AudioService } from '/src/ui/audio/install';
-import styles from './header_bar.module.css';
+import { AudioLoader } from "audio_loader/audio_loader";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ElectronData } from "src/electron_loader/electron_data";
+import { ElectronLoader } from "src/electron_loader/electron_loader";
+import { ImageLoader } from "src/image_loader/image_loader";
+import { Banner } from "src/pages/room/ui/banner/banner";
+import { SettingsDialog } from "src/pages/ui/settings/settings";
+import { ServerHostTag } from "src/props/config_props";
+import * as React from "react";
+import { ConnectionService } from "src/services/connection_service/connection_service";
+import { AudioService } from "src/ui/audio/install";
+import styles from "./header_bar.module.css";
 
 export type HeaderBarProps = {
   electronLoader: ElectronLoader;
@@ -24,71 +22,76 @@ export type HeaderBarProps = {
   roomId?: number | string;
   defaultPing?: number;
   host?: ServerHostTag;
-  variant?: 'room' | 'waitingRoom';
+  variant?: "room" | "waitingRoom";
   getConnectionService(campaignMode: boolean): ConnectionService;
 };
 
-@mobxReact.observer
-export class HeaderBar extends React.Component<HeaderBarProps> {
-  @mobx.observable.ref
-  openSettings = false;
-  @mobx.observable.ref
-  private defaultMainVolume = this.props.electronLoader.getData(ElectronData.MainVolume)
-    ? Number.parseInt(this.props.electronLoader.getData(ElectronData.MainVolume), 10)
-    : 50;
-  @mobx.observable.ref
-  private defaultGameVolume = this.props.electronLoader.getData(ElectronData.GameVolume)
-    ? Number.parseInt(this.props.electronLoader.getData(ElectronData.GameVolume), 10)
-    : 50;
-  @mobx.action
-  private readonly onClickSettings = () => {
-    this.openSettings = true;
+export function HeaderBar(props: HeaderBarProps) {
+  const [openSettings, setOpenSettings] = React.useState(false);
+
+  const [defaultMainVolume, setDefaultMainVolume] = React.useState(
+    props.electronLoader.getData(ElectronData.MainVolume)
+      ? Number.parseInt(
+          props.electronLoader.getData(ElectronData.MainVolume),
+          10
+        )
+      : 50
+  );
+
+  const [defaultGameVolume, setDefaultGameVolume] = React.useState(
+    props.electronLoader.getData(ElectronData.GameVolume)
+      ? Number.parseInt(
+          props.electronLoader.getData(ElectronData.GameVolume),
+          10
+        )
+      : 50
+  );
+
+  let onClickSettings = () => {
+    setOpenSettings(true);
   };
-  @mobx.action
-  private readonly onCloseSettings = () => {
-    this.openSettings = false;
+  let onCloseSettings = () => {
+    setOpenSettings(false);
   };
 
-  private readonly settings = {
-    onVolumeChange: mobx.action((volume: number) => {
-      this.props.electronLoader.setData(ElectronData.GameVolume, volume.toString());
-      this.defaultGameVolume = volume;
-      this.props.audioService.changeGameVolume();
-    }),
-    onMainVolumeChange: mobx.action((volume: number) => {
-      this.props.electronLoader.setData(ElectronData.MainVolume, volume.toString());
-      this.defaultMainVolume = volume;
-      this.props.audioService.changeBGMVolume();
-    }),
+  let settings = {
+    onVolumeChange: (volume: number) => {
+      props.electronLoader.setData(ElectronData.GameVolume, volume.toString());
+      setDefaultGameVolume(volume);
+      props.audioService.changeGameVolume();
+    },
+    onMainVolumeChange: (volume: number) => {
+      props.electronLoader.setData(ElectronData.MainVolume, volume.toString());
+      setDefaultMainVolume(volume);
+      props.audioService.changeBGMVolume();
+    },
   };
 
-  render() {
-    return (
-      <>
-        <Banner
-          variant={this.props.variant}
-          translator={this.props.translator}
-          roomName={this.props.roomName}
-          defaultPing={this.props.defaultPing}
-          className={styles.roomBanner}
-          connectionService={this.props.getConnectionService(this.props.isCampaignMode)}
-          onClickSettings={this.onClickSettings}
-          host={this.props.host}
+  return (
+    <>
+      <Banner
+        variant={props.variant}
+        translator={props.translator}
+        roomName={props.roomName}
+        defaultPing={props.defaultPing}
+        className={styles.roomBanner}
+        connectionService={props.getConnectionService(props.isCampaignMode)}
+        onClickSettings={onClickSettings}
+        host={props.host}
+      />
+
+      {openSettings && (
+        <SettingsDialog
+          defaultGameVolume={defaultGameVolume}
+          defaultMainVolume={defaultMainVolume}
+          imageLoader={props.imageLoader}
+          translator={props.translator}
+          onMainVolumeChange={settings.onMainVolumeChange}
+          onGameVolumeChange={settings.onVolumeChange}
+          onConfirm={onCloseSettings}
+          electronLoader={props.electronLoader}
         />
-
-        {this.openSettings && (
-          <SettingsDialog
-            defaultGameVolume={this.defaultGameVolume}
-            defaultMainVolume={this.defaultMainVolume}
-            imageLoader={this.props.imageLoader}
-            translator={this.props.translator}
-            onMainVolumeChange={this.settings.onMainVolumeChange}
-            onGameVolumeChange={this.settings.onVolumeChange}
-            onConfirm={this.onCloseSettings}
-            electronLoader={this.props.electronLoader}
-          />
-        )}
-      </>
-    );
-  }
+      )}
+    </>
+  );
 }

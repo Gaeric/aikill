@@ -1,17 +1,17 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
 import {
   AllStage,
   PhaseChangeStage,
   PhaseStageChangeStage,
   PlayerPhase,
   PlayerPhaseStages,
-} from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId, PlayerRole } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
-import { CompulsorySkill, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
+} from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId, PlayerRole } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { Precondition } from 'src/core/shares/libs/precondition/precondition';
+import { CompulsorySkill, ShadowSkill, TriggerSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
 
 @CompulsorySkill({ name: 'wangzun', description: 'wangzun_description' })
 export class WangZun extends TriggerSkill {

@@ -1,11 +1,11 @@
-import { CardType, VirtualCard } from '/src/core/cards/card';
-import { CardId, CardSuit } from '/src/core/cards/libs/card_props';
-import { Duel } from '/src/core/cards/standard/duel';
-import { Slash } from '/src/core/cards/standard/slash';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { DamageType } from '/src/core/game/game_props';
+import { CardType, VirtualCard } from 'src/core/cards/card';
+import { CardId, CardSuit } from 'src/core/cards/libs/card_props';
+import { Duel } from 'src/core/cards/standard/duel';
+import { Slash } from 'src/core/cards/standard/slash';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { DamageType } from 'src/core/game/game_props';
 import {
   AimStage,
   AllStage,
@@ -17,16 +17,16 @@ import {
   PlayerPhase,
   PlayerPhaseStages,
   StagePriority,
-} from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { TargetGroupUtil } from '/src/core/shares/libs/utils/target_group';
-import { MarkEnum } from '/src/core/shares/types/mark_list';
-import { ExtralCardSkillProperty } from '/src/core/skills/cards/interface/extral_property';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { AwakeningSkill, CommonSkill, CompulsorySkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { TargetGroupUtil } from 'src/core/shares/libs/utils/target_group';
+import { MarkEnum } from 'src/core/shares/types/mark_list';
+import { ExtralCardSkillProperty } from 'src/core/skills/cards/interface/extral_property';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { AwakeningSkill, CommonSkill, CompulsorySkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 import { PveClassicLianZhen } from './pve_classic_lianzhen';
 import { PveClassicQiSha } from './pve_classic_qisha';
 import { PveClassicTianJi } from './pve_classic_tianji';

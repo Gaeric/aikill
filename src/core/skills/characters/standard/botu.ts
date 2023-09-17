@@ -1,9 +1,9 @@
-import { CardSuit } from '/src/core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, PhaseStageChangeStage, PlayerPhaseStages } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { CircleSkill, CommonSkill, TriggerSkill } from '/src/core/skills/skill';
+import { CardSuit } from 'src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, PhaseStageChangeStage, PlayerPhaseStages } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { CircleSkill, CommonSkill, TriggerSkill } from 'src/core/skills/skill';
 
 @CircleSkill
 @CommonSkill({ name: 'botu', description: 'botu_description' })

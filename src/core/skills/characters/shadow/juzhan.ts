@@ -1,13 +1,13 @@
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardChoosingOptions, CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { AimStage, AllStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { AimGroupUtil } from '/src/core/shares/libs/utils/aim_group';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardChoosingOptions, CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { AimStage, AllStage, PhaseChangeStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { AimGroupUtil } from 'src/core/shares/libs/utils/aim_group';
 import {
   CommonSkill,
   GlobalFilterSkill,
@@ -16,9 +16,9 @@ import {
   ShadowSkill,
   SwitchSkillState,
   TriggerSkill,
-} from '/src/core/skills/skill';
-import { SwitchSkill } from '/src/core/skills/skill_wrappers';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/skills/skill';
+import { SwitchSkill } from 'src/core/skills/skill_wrappers';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @SwitchSkill()
 @CommonSkill({ name: 'juzhan', description: 'juzhan_description' })

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import { PlayerRole } from '/src/core/player/player_props';
-import { GameMode } from '/src/core/shares/types/room_props';
+import { PlayerRole } from 'src/core/player/player_props';
+import { GameMode } from 'src/core/shares/types/room_props';
 import * as React from 'react';
 import lord1v2Mask from './images/1v2_lord.png';
 import rebel1v2Mask from './images/1v2_rebel.png';

@@ -1,12 +1,12 @@
-import { CardType } from '/src/core/cards/card';
-import { CardChoosingOptions } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, DamageEffectStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { CommonSkill, TriggerSkill } from '/src/core/skills/skill';
+import { CardType } from 'src/core/cards/card';
+import { CardChoosingOptions } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, DamageEffectStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { CommonSkill, TriggerSkill } from 'src/core/skills/skill';
 
 @CommonSkill({ name: 'qiaomeng', description: 'qiaomeng_description' })
 export class QiaoMeng extends TriggerSkill {

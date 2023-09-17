@@ -1,10 +1,10 @@
-import { CharacterEquipSections } from '/src/core/characters/character';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { AllStage, DamageEffectStage, PhaseChangeStage, PlayerDiedStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
+import { CharacterEquipSections } from 'src/core/characters/character';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { AllStage, DamageEffectStage, PhaseChangeStage, PlayerDiedStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
 import {
   CommonSkill,
   PersistentSkill,
@@ -13,9 +13,9 @@ import {
   SkillProhibitedSkill,
   SkillType,
   TriggerSkill,
-} from '/src/core/skills/skill';
-import { OnDefineReleaseTiming, SkillLifeCycle } from '/src/core/skills/skill_hooks';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/skills/skill';
+import { OnDefineReleaseTiming, SkillLifeCycle } from 'src/core/skills/skill_hooks';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'duorui', description: 'duorui_description' })
 export class DuoRui extends TriggerSkill implements OnDefineReleaseTiming {

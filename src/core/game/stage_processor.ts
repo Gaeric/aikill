@@ -1,6 +1,6 @@
-import { GameEventIdentifiers } from '/src/core/event/event';
-import { Logger } from '/src/core/shares/libs/logger/logger';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
+import { GameEventIdentifiers } from 'src/core/event/event';
+import { Logger } from 'src/core/shares/libs/logger/logger';
+import { Precondition } from 'src/core/shares/libs/precondition/precondition';
 
 export const enum PlayerPhaseStages {
   PhaseBeginStart,

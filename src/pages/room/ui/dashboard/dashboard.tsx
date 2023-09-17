@@ -1,43 +1,40 @@
-import classNames from 'classnames';
-import { Card, VirtualCard } from '/src/core/cards/card';
-import { EquipCard } from '/src/core/cards/equip_card';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { Sanguosha } from '/src/core/game/engine';
-import { PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { ClientPlayer } from '/src/core/player/player.client';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Functional } from '/src/core/shares/libs/functional';
-import { Skill } from '/src/core/skills/skill';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ImageLoader } from '/src/image_loader/image_loader';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import { RoomPresenter } from '/src/pages/room/room.presenter';
-import { RoomStore } from '/src/pages/room/room.store';
-import * as React from 'react';
-import { CharacterSkinInfo } from 'skins/skins';
-import { PlayerPhaseBadge } from '/src/ui/badge/badge';
-import { AutoButton } from '/src/ui/button/auto_button';
-import { Button } from '/src/ui/button/button';
-import { ClientCard } from '/src/ui/card/card';
-import { AbortedCardItem } from './aborted_card_item/aborted_card_item';
-import styles from './dashboard.module.css';
-import { EquipCardItem } from './equip_card_item/equip_card_item';
-import armorSlot from './images/armor.png';
-import defenseHorseSlot from './images/defense_horse.png';
-import offenseHorseSlot from './images/offense_horse.png';
-import weaponSlot from './images/weapon.png';
-import { DelayedTrickIcon } from '../icon/delayed_trick_icon';
-import { JudgeAreaDisabledIcon } from '../icon/judge_area_disabled_icon';
-import { PlayerAvatar } from '../player_avatar/player_avatar';
-import { PlayingBar } from '../playing_bar/playing_bar';
+import classNames from "classnames";
+import { Card, VirtualCard } from "src/core/cards/card";
+import { EquipCard } from "src/core/cards/equip_card";
+import { CardId } from "src/core/cards/libs/card_props";
+import { Sanguosha } from "src/core/game/engine";
+import { PlayerPhase } from "src/core/game/stage_processor";
+import { Player } from "src/core/player/player";
+import { ClientPlayer } from "src/core/player/player.client";
+import { PlayerCardsArea } from "src/core/player/player_props";
+import { Functional } from "src/core/shares/libs/functional";
+import { Skill } from "src/core/skills/skill";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ImageLoader } from "src/image_loader/image_loader";
+import { RoomPresenter } from "src/pages/room/room.presenter";
+import { RoomStore } from "src/pages/room/room.store";
+import * as React from "react";
+import { CharacterSkinInfo } from "src/skins/skins";
+import { PlayerPhaseBadge } from "src/ui/badge/badge";
+import { AutoButton } from "src/ui/button/auto_button";
+import { Button } from "src/ui/button/button";
+import { ClientCard } from "src/ui/card/card";
+import { AbortedCardItem } from "./aborted_card_item/aborted_card_item";
+import styles from "./dashboard.module.css";
+import { EquipCardItem } from "./equip_card_item/equip_card_item";
+import armorSlot from "./images/armor.png";
+import defenseHorseSlot from "./images/defense_horse.png";
+import offenseHorseSlot from "./images/offense_horse.png";
+import weaponSlot from "./images/weapon.png";
+import { DelayedTrickIcon } from "../icon/delayed_trick_icon";
+import { JudgeAreaDisabledIcon } from "../icon/judge_area_disabled_icon";
+import { PlayerAvatar } from "../player_avatar/player_avatar";
+import { PlayingBar } from "../playing_bar/playing_bar";
 
 export type DashboardProps = {
   store: RoomStore;
   presenter: RoomPresenter;
   translator: ClientTranslationModule;
-  updateFlag: boolean;
   imageLoader: ImageLoader;
   skinData?: CharacterSkinInfo[];
   observerMode: boolean;
@@ -58,144 +55,176 @@ export type DashboardProps = {
   isSkillDisabled(skill: Skill): boolean;
 };
 
-@mobxReact.observer
-export class Dashboard extends React.Component<DashboardProps> {
-  private readonly onClick = (card: Card) => (selected: boolean) => {
-    this.props.onClick && this.props.onClick(card, selected);
+export function Dashboard(props: DashboardProps) {
+  let onClick = (card: Card) => (selected: boolean) => {
+    props.onClick && props.onClick(card, selected);
   };
-  private readonly onClickEquipment = (card: Card) => (selected: boolean) => {
-    this.props.onClickEquipment && this.props.onClickEquipment(card, selected);
+  let onClickEquipment = (card: Card) => (selected: boolean) => {
+    props.onClickEquipment && props.onClickEquipment(card, selected);
   };
 
-  @mobx.observable.ref
-  private cardOffset: number = 0;
-  @mobx.observable.ref
-  private onFocusCardIndex: number = -1;
+  const [cardOffset, setCardOffset] = React.useState(0);
 
-  private handBoardRef = React.createRef<HTMLDivElement>();
-  private readonly handCardWidth = 120;
-  private readonly cardMargin = 2;
+  const [onFocusCardIndex, setOnFocusCardIndex] = React.useState(-1);
 
-  @mobx.action
-  componentDidUpdate() {
-    const { presenter } = this.props;
-    if (this.handBoardRef.current && presenter.ClientPlayer) {
-      const width = this.handBoardRef.current.clientWidth - 35;
-      const numOfHandCards =
-        presenter.ClientPlayer.getCardIds(PlayerCardsArea.HandArea).length + this.AvailableOutsideCards.length;
-      if (width < numOfHandCards * (this.handCardWidth + this.cardMargin)) {
-        this.cardOffset = -(numOfHandCards * (this.handCardWidth + this.cardMargin) - width) / (numOfHandCards - 1);
+  let handBoardRef = React.createRef<HTMLDivElement>();
+  const handCardWidth = 120;
+  const cardMargin = 2;
+
+  const { presenter } = props;
+  const numOfHandCards =
+    presenter.getClientPlayer().getCardIds(PlayerCardsArea.HandArea).length +
+    AvailableOutsideCards.length;
+  React.useEffect(() => {
+    if (handBoardRef.current && presenter.getClientPlayer()) {
+      const width = handBoardRef.current.clientWidth - 35;
+      if (width < numOfHandCards * (handCardWidth + cardMargin)) {
+        setCardOffset(
+          -(numOfHandCards * (handCardWidth + cardMargin) - width) /
+            (numOfHandCards - 1)
+        );
       } else {
-        this.cardOffset = this.cardMargin;
+        setCardOffset(cardMargin);
       }
     }
-  }
+  });
 
-  getEquipCardsSection() {
-    const equipCards = this.props.presenter.ClientPlayer?.getCardIds(PlayerCardsArea.EquipArea).map(cardId =>
-      Sanguosha.getCardById<EquipCard>(cardId),
-    );
+  function getEquipCardsSection() {
+    const equipCards = props.presenter
+      .getClientPlayer()
+      ?.getCardIds(PlayerCardsArea.EquipArea)
+      .map((cardId) => Sanguosha.getCardById<EquipCard>(cardId));
 
-    const abortedSections = this.props.presenter.ClientPlayer?.DisabledEquipSections;
+    const abortedSections =
+      props.presenter.getClientPlayer()?.DisabledEquipSections;
 
     return (
       <div className={styles.equipSection}>
         <div className={styles.equipSlots}>
           <img className={styles.weaponSlot} src={weaponSlot} alt="" />
           <img className={styles.armorSlot} src={armorSlot} alt="" />
-          <img className={styles.defenseHorseSlot} src={defenseHorseSlot} alt="" />
-          <img className={styles.offenseHorseSlot} src={offenseHorseSlot} alt="" />
+          <img
+            className={styles.defenseHorseSlot}
+            src={defenseHorseSlot}
+            alt=""
+          />
+          <img
+            className={styles.offenseHorseSlot}
+            src={offenseHorseSlot}
+            alt=""
+          />
         </div>
-        {equipCards?.map(card => (
+        {equipCards?.map((card) => (
           <EquipCardItem
-            imageLoader={this.props.imageLoader}
-            translator={this.props.translator}
+            imageLoader={props.imageLoader}
+            translator={props.translator}
             card={card}
             key={card.Id}
-            onClick={this.onClickEquipment(card)}
-            disabled={!this.props.cardSkillEnableMatcher || !this.props.cardSkillEnableMatcher(card)}
-            highlight={this.props.store.highlightedCards}
+            onClick={onClickEquipment(card)}
+            disabled={
+              !props.cardSkillEnableMatcher ||
+              !props.cardSkillEnableMatcher(card)
+            }
+            highlight={props.store.highlightedCards}
           />
         ))}
-        {abortedSections?.map(section => (
-          <AbortedCardItem key={section} imageLoader={this.props.imageLoader} abortedSection={section} />
+        {abortedSections?.map((section) => (
+          <AbortedCardItem
+            key={section}
+            imageLoader={props.imageLoader}
+            abortedSection={section}
+          />
         ))}
       </div>
     );
   }
 
-  get AvailableOutsideCards() {
-    if (!this.props.outsideCardEnableMatcher || !this.props.presenter.ClientPlayer) {
+  function AvailableOutsideCards() {
+    if (!props.outsideCardEnableMatcher || !props.presenter.getClientPlayer()) {
       return [];
     }
 
     const availableCards: { areaName; card: Card }[] = [];
-    for (const [areaName, cards] of Object.entries(this.props.presenter.ClientPlayer.getOutsideAreaCards())) {
-      if (this.props.presenter.ClientPlayer.isCharacterOutsideArea(areaName)) {
+    for (const [areaName, cards] of Object.entries(
+      props.presenter.getClientPlayer().getOutsideAreaCards()
+    )) {
+      if (props.presenter.getClientPlayer().isCharacterOutsideArea(areaName)) {
         continue;
       }
       availableCards.push(
         ...cards
-          .filter(card => this.props.outsideCardEnableMatcher!(Sanguosha.getCardById(card)))
-          .map(cardId => ({
+          .filter((card) =>
+            props.outsideCardEnableMatcher!(Sanguosha.getCardById(card))
+          )
+          .map((cardId) => ({
             areaName,
             card: Sanguosha.getCardById(cardId),
-          })),
+          }))
       );
     }
 
     return availableCards;
   }
 
-  getHandCardTags(cardId: CardId) {
-    if (!this.props.presenter.ClientPlayer) {
+  function getHandCardTags(cardId: CardId) {
+    if (!props.presenter.getClientPlayer()) {
       return;
     }
 
     const cardTags: string[] = [];
-    for (const [cardTag, cardIds] of Object.entries(this.props.presenter.ClientPlayer.getAllCardTags())) {
-      cardIds.includes(VirtualCard.getActualCards([cardId])[0]) && cardTags.push(cardTag);
+    for (const [cardTag, cardIds] of Object.entries(
+      props.presenter.getClientPlayer().getAllCardTags()
+    )) {
+      cardIds.includes(VirtualCard.getActualCards([cardId])[0]) &&
+        cardTags.push(cardTag);
     }
 
     if (Sanguosha.getCardById(cardId).isVirtualCard()) {
-      const generatedSkill = Sanguosha.getCardById<VirtualCard>(cardId).GeneratedBySkill;
+      const generatedSkill =
+        Sanguosha.getCardById<VirtualCard>(cardId).GeneratedBySkill;
       cardTags.includes(generatedSkill) || cardTags.push(generatedSkill);
     }
 
     return cardTags.length > 0 ? cardTags : undefined;
   }
 
-  getCardXOffset(index: number) {
-    let offsetX = index * (this.handCardWidth + this.cardOffset);
-    if (this.cardOffset !== this.cardMargin && this.onFocusCardIndex >= 0 && index > this.onFocusCardIndex) {
-      offsetX = index * (this.handCardWidth + this.cardOffset) - this.cardOffset + this.cardMargin;
+  function getCardXOffset(index: number) {
+    let offsetX = index * (handCardWidth + cardOffset);
+    if (
+      cardOffset !== cardMargin &&
+      onFocusCardIndex >= 0 &&
+      index > onFocusCardIndex
+    ) {
+      offsetX = index * (handCardWidth + cardOffset) - cardOffset + cardMargin;
     }
     return offsetX;
   }
 
-  private readonly onFocusCard = (index: number) =>
-    mobx.action(() => {
-      this.onFocusCardIndex = index;
-    });
+  function onFocusCard(index: number) {
+    setOnFocusCardIndex(index);
+  }
 
-  @mobx.computed
-  get AllClientHandCards() {
-    const outsideCards = this.AvailableOutsideCards.map((cardInfo, index) => {
-      const isSelected = this.props.store.selectedCards.includes(cardInfo.card.Id);
-      const isDisabled = !this.props.outsideCardEnableMatcher || !this.props.outsideCardEnableMatcher(cardInfo.card);
+  function AllClientHandCards() {
+    const outsideCards = AvailableOutsideCards().map((cardInfo, index) => {
+      const isSelected = props.store.selectedCards.includes(cardInfo.card.Id);
+      const isDisabled =
+        !props.outsideCardEnableMatcher ||
+        !props.outsideCardEnableMatcher(cardInfo.card);
       return (
         <ClientCard
-          imageLoader={this.props.imageLoader}
+          imageLoader={props.imageLoader}
           key={cardInfo.card.Id}
-          width={this.handCardWidth}
-          offsetLeft={this.getCardXOffset(index)}
-          translator={this.props.translator}
+          width={handCardWidth}
+          offsetLeft={getCardXOffset(index)}
+          translator={props.translator}
           card={cardInfo.card}
-          highlight={this.props.store.highlightedCards}
-          onMouseEnter={isSelected || isDisabled ? undefined : this.onFocusCard(index)}
-          onMouseLeave={this.onFocusCard(-2)}
-          onSelected={this.onClick(cardInfo.card)}
-          tags={[this.props.translator.tr(cardInfo.areaName)]}
+          highlight={props.store.highlightedCards}
+          onMouseEnter={
+            isSelected || isDisabled ? undefined : () => onFocusCard(index)
+          }
+          onMouseLeave={() => onFocusCard(-2)}
+          onSelected={onClick(cardInfo.card)}
+          tags={[props.translator.tr(cardInfo.areaName)]}
           className={styles.handCard}
           disabled={isDisabled}
           selected={isSelected}
@@ -204,235 +233,275 @@ export class Dashboard extends React.Component<DashboardProps> {
     });
 
     const handcards =
-      this.props.presenter.ClientPlayer?.getCardIds(PlayerCardsArea.HandArea)
+      props.presenter
+        .getClientPlayer()
+        ?.getCardIds(PlayerCardsArea.HandArea)
         .filter(
-          cardId =>
-            !this.props.handcardHiddenMatcher || !this.props.handcardHiddenMatcher(Sanguosha.getCardById(cardId)),
+          (cardId) =>
+            !props.handcardHiddenMatcher ||
+            !props.handcardHiddenMatcher(Sanguosha.getCardById(cardId))
         )
         .map((cardId, index) => {
           const card = Sanguosha.getCardById(cardId);
-
-          const isSelected = this.props.store.selectedCards.includes(card.Id);
-          const isDisabled = !this.props.cardEnableMatcher || !this.props.cardEnableMatcher(card);
+          const isSelected = props.store.selectedCards.includes(card.Id);
+          const isDisabled =
+            !props.cardEnableMatcher || !props.cardEnableMatcher(card);
           return (
             <ClientCard
-              imageLoader={this.props.imageLoader}
+              imageLoader={props.imageLoader}
               key={cardId}
-              width={this.handCardWidth}
-              offsetLeft={this.getCardXOffset(index + outsideCards.length)}
-              translator={this.props.translator}
-              onMouseEnter={isSelected || isDisabled ? undefined : this.onFocusCard(index + outsideCards.length)}
-              onMouseLeave={this.onFocusCard(-2)}
-              card={!this.props.observerMode ? card : undefined}
-              tags={this.getHandCardTags(cardId)}
-              highlight={this.props.store.highlightedCards}
-              onSelected={this.onClick(card)}
+              width={handCardWidth}
+              offsetLeft={getCardXOffset(index + outsideCards.length)}
+              translator={props.translator}
+              onMouseEnter={
+                isSelected || isDisabled
+                  ? undefined
+                  : () => onFocusCard(index + outsideCards.length)
+              }
+              onMouseLeave={() => onFocusCard(-2)}
+              card={!props.observerMode ? card : undefined}
+              tags={getHandCardTags(cardId)}
+              highlight={props.store.highlightedCards}
+              onSelected={onClick(card)}
               className={styles.handCard}
               disabled={isDisabled}
               selected={isSelected}
             />
           );
         }) || [];
-
     return [...outsideCards, ...handcards];
   }
 
-  getPlayerJudgeCards() {
-    const judgeAreaDisabled = this.props.presenter.ClientPlayer?.judgeAreaDisabled();
+  function getPlayerJudgeCards() {
+    const judgeAreaDisabled = props.presenter
+      .getClientPlayer()
+      ?.judgeAreaDisabled();
 
     return (
       <div className={styles.judges}>
         {judgeAreaDisabled ? <JudgeAreaDisabledIcon /> : <></>}
-        {this.props.presenter.ClientPlayer?.getCardIds(PlayerCardsArea.JudgeArea).map(cardId => (
-          <DelayedTrickIcon
-            key={cardId}
-            imageLoader={this.props.imageLoader}
-            card={Sanguosha.getCardById(cardId)}
-            translator={this.props.translator}
-            className={styles.judgeNames}
-          />
-        ))}
+        {props.presenter
+          .getClientPlayer()
+          ?.getCardIds(PlayerCardsArea.JudgeArea)
+          .map((cardId) => (
+            <DelayedTrickIcon
+              key={cardId}
+              imageLoader={props.imageLoader}
+              card={Sanguosha.getCardById(cardId)}
+              translator={props.translator}
+              className={styles.judgeNames}
+            />
+          ))}
       </div>
     );
   }
 
-  getPlayerHandBoard() {
+  function getPlayerHandBoard() {
     const buttons = (
       <>
-        {(this.props.store.actionButtonStatus.finish ||
-          this.props.store.actionButtonStatus.cancel ||
-          this.props.store.actionButtonStatus.confirm) && (
+        {(props.store.actionButtonStatus.finish ||
+          props.store.actionButtonStatus.cancel ||
+          props.store.actionButtonStatus.confirm) && (
           <AutoButton
             variant="confirm"
-            disabled={!this.props.store.actionButtonStatus.confirm}
-            onClick={this.props.onClickConfirmButton}
+            disabled={!props.store.actionButtonStatus.confirm}
+            onClick={props.onClickConfirmButton}
           />
         )}
-        {this.props.store.actionButtonStatus.cancel && (
+        {props.store.actionButtonStatus.cancel && (
           <AutoButton
             variant="cancel"
-            disabled={!this.props.store.actionButtonStatus.cancel}
-            onClick={this.props.onClickCancelButton}
+            disabled={!props.store.actionButtonStatus.cancel}
+            onClick={props.onClickCancelButton}
           />
         )}
-        {this.props.store.actionButtonStatus.finish && (
+        {props.store.actionButtonStatus.finish && (
           <AutoButton
             variant="finish"
-            disabled={!this.props.store.actionButtonStatus.finish}
-            onClick={this.props.onClickFinishButton}
+            disabled={!props.store.actionButtonStatus.finish}
+            onClick={props.onClickFinishButton}
           />
         )}
       </>
     );
-
     return (
-      <div className={styles.handBoard} ref={this.handBoardRef}>
-        {this.props.store.inAction && (
-          <PlayingBar className={styles.playBar} playTime={this.props.store.notificationTime} />
+      <div className={styles.handBoard} ref={handBoardRef}>
+        {props.store.inAction && (
+          <PlayingBar
+            className={styles.playBar}
+            playTime={props.store.notificationTime}
+          />
         )}
-        {this.getPlayerJudgeCards()}
-        <div className={styles.userActionsButtons}>{!this.props.observerMode && buttons}</div>
+        {getPlayerJudgeCards()}
+        <div className={styles.userActionsButtons}>
+          {!props.observerMode && buttons}
+        </div>
         <div className={styles.handCards}>
-          {this.AllClientHandCards}
+          {AllClientHandCards()}
           <div
             className={classNames(styles.trustedCover, {
-              [styles.hide]: !this.props.presenter.ClientPlayer!.isTrusted(),
+              [styles.hide]: !props.presenter.getClientPlayer().isTrusted(),
             })}
           >
-            {this.props.translator.tr('in trusted')}
+            {props.translator.tr("in trusted")}
           </div>
         </div>
       </div>
     );
   }
 
-  private readonly onCloseIncomingMessage = (player: Player) => () => {
-    this.props.presenter.onIncomingMessage(player.Id);
-    this.forceUpdate();
+  const onCloseIncomingMessage = (player: Player) => () => {
+    props.presenter.onIncomingMessage(player.Id);
+    // forceUpdate();
   };
 
-  private readonly onTrusted = () => {
-    const player = this.props.presenter.ClientPlayer!;
+  let onTrusted = () => {
+    const player = props.presenter.getClientPlayer();
     if (player.isTrusted()) {
-      this.props.store.room.emitStatus('player', player.Id);
+      props.store.room.emitStatus("player", player.Id);
     } else {
-      this.props.store.room.emitStatus('trusted', player.Id);
-      this.props.onTrusted?.();
+      props.store.room.emitStatus("trusted", player.Id);
+      props.onTrusted?.();
     }
   };
 
-  private readonly onSortHandcards = () => {
-    const handcards = this.props.presenter.ClientPlayer?.getCardIds(PlayerCardsArea.HandArea) || [];
-    this.props.presenter.ClientPlayer?.setupCards(PlayerCardsArea.HandArea, Functional.sortCards(handcards));
-    this.props.presenter.broadcastUIUpdate();
+  let onSortHandcards = () => {
+    const handcards =
+      props.presenter.getClientPlayer()?.getCardIds(PlayerCardsArea.HandArea) ||
+      [];
+    props.presenter
+      .getClientPlayer()
+      ?.setupCards(PlayerCardsArea.HandArea, Functional.sortCards(handcards));
+    props.presenter.broadcastUIUpdate();
   };
 
-  private readonly onReverseSelectCards = () => {
-    const handcards = this.props.presenter.ClientPlayer?.getCardIds(PlayerCardsArea.HandArea) || [];
+  let onReverseSelectCards = () => {
+    const handcards =
+      props.presenter.getClientPlayer()?.getCardIds(PlayerCardsArea.HandArea) ||
+      [];
     for (const cardId of handcards) {
       const card = Sanguosha.getCardById(cardId);
 
-      if (this.props.store.selectedCards.includes(cardId)) {
-        this.props.presenter.unselectCard(card);
+      if (props.store.selectedCards.includes(cardId)) {
+        props.presenter.unselectCard(card);
       } else {
-        this.props.presenter.selectCard(card);
+        props.presenter.selectCard(card);
       }
     }
-    this.props.store.validSelectionAction?.();
+    props.store.validSelectionAction?.();
   };
 
-  private readonly onSelectTips = () => {
-    const handcards = this.props.presenter.ClientPlayer?.getCardIds(PlayerCardsArea.HandArea) || [];
+  let onSelectTips = () => {
+    const handcards =
+      props.presenter.getClientPlayer()?.getCardIds(PlayerCardsArea.HandArea) ||
+      [];
 
-    if (this.props.store.selectedCards.length === 0) {
+    if (props.store.selectedCards.length === 0) {
       for (const cardId of handcards) {
         const card = Sanguosha.getCardById(cardId);
-        const isDisabled = !this.props.cardEnableMatcher || !this.props.cardEnableMatcher(card);
+        const isDisabled =
+          !props.cardEnableMatcher || !props.cardEnableMatcher(card);
         if (!isDisabled) {
-          this.props.onClick && this.props.onClick(card, true);
+          props.onClick && props.onClick(card, true);
         }
       }
     } else {
       for (const cardId of handcards) {
         const card = Sanguosha.getCardById(cardId);
-        this.props.onClick && this.props.onClick(card, false);
+        props.onClick && props.onClick(card, false);
       }
     }
   };
 
-  private readonly createShortcutButtons = (player: ClientPlayer) => {
+  function createShortcutButtons(player: ClientPlayer) {
     const buttonDisabled =
-      !this.props.store.room.isPlaying() || this.props.store.room.isGameOver() || this.props.observerMode;
+      !props.store.room.isPlaying() ||
+      props.store.room.isGameOver() ||
+      props.observerMode;
 
     return (
       <div className={styles.actionButtons}>
-        <Button variant="primary" className={styles.actionButton} onClick={this.onTrusted} disabled={buttonDisabled}>
-          {this.props.translator.tr(player.isTrusted() ? 'cancel trusted' : 'trusted')}
-        </Button>
         <Button
           variant="primary"
           className={styles.actionButton}
-          onClick={this.onSortHandcards}
+          onClick={onTrusted}
           disabled={buttonDisabled}
         >
-          {this.props.translator.tr('adjust handcards')}
+          {props.translator.tr(
+            player.isTrusted() ? "cancel trusted" : "trusted"
+          )}
         </Button>
         <Button
           variant="primary"
           className={styles.actionButton}
-          onClick={this.onReverseSelectCards}
+          onClick={onSortHandcards}
+          disabled={buttonDisabled}
+        >
+          {props.translator.tr("adjust handcards")}
+        </Button>
+        <Button
+          variant="primary"
+          className={styles.actionButton}
+          onClick={onReverseSelectCards}
           disabled={
             buttonDisabled ||
-            this.props.store.room.CurrentPlayer !== player ||
-            this.props.store.room.CurrentPlayerPhase !== PlayerPhase.DropCardStage
+            props.store.room.CurrentPlayer !== player ||
+            props.store.room.CurrentPlayerPhase !== PlayerPhase.DropCardStage
           }
         >
-          {this.props.translator.tr('reverse select')}
+          {props.translator.tr("reverse select")}
         </Button>
         <Button
           variant="primary"
           className={styles.actionButton}
-          onClick={this.onSelectTips}
-          disabled={!this.props.store.room.isPlaying() || this.props.store.room.isGameOver()}
+          onClick={onSelectTips}
+          disabled={
+            !props.store.room.isPlaying() || props.store.room.isGameOver()
+          }
         >
-          {this.props.translator.tr('select tips')}
+          {props.translator.tr("select tips")}
         </Button>
-      </div>
-    );
-  };
-
-  render() {
-    const player = this.props.presenter.ClientPlayer!;
-    return (
-      <div className={styles.dashboard} id={this.props.store.clientPlayerId}>
-        {this.createShortcutButtons(player)}
-        {this.getEquipCardsSection()}
-
-        {this.props.store.room.CurrentPlayer === player && this.props.store.room.CurrentPlayerPhase !== undefined && (
-          <PlayerPhaseBadge
-            stage={this.props.store.room.CurrentPlayerPhase}
-            translator={this.props.translator}
-            className={styles.playerPhaseStage}
-          />
-        )}
-        {this.getPlayerHandBoard()}
-        <PlayerAvatar
-          imageLoader={this.props.imageLoader}
-          updateFlag={this.props.store.updateUIFlag}
-          delight={this.props.store.delightedPlayers !== undefined ? this.props.store.delightedPlayers : undefined}
-          disabled={!this.props.playerSelectableMatcher || !this.props.playerSelectableMatcher(player)}
-          onClick={this.props.onClickPlayer}
-          store={this.props.store}
-          skinData={this.props.skinData}
-          presenter={this.props.presenter}
-          translator={this.props.translator}
-          onClickSkill={this.props.onClickSkill}
-          isSkillDisabled={this.props.isSkillDisabled}
-          incomingMessage={this.props.store.incomingUserMessages[player.Id]}
-          onCloseIncomingMessage={this.onCloseIncomingMessage(player)}
-          selected={this.props.store.selectedPlayers.includes(player)}
-        />
       </div>
     );
   }
+
+  const player = props.presenter.getClientPlayer();
+  return (
+    <div className={styles.dashboard} id={props.store.clientPlayerId}>
+      {createShortcutButtons(player)}
+      {getEquipCardsSection()}
+
+      {props.store.room.CurrentPlayer === player &&
+        props.store.room.CurrentPlayerPhase !== undefined && (
+          <PlayerPhaseBadge
+            stage={props.store.room.CurrentPlayerPhase}
+            translator={props.translator}
+            className={styles.playerPhaseStage}
+          />
+        )}
+      {getPlayerHandBoard()}
+      <PlayerAvatar
+        imageLoader={props.imageLoader}
+        delight={
+          props.store.delightedPlayers !== undefined
+            ? props.store.delightedPlayers
+            : undefined
+        }
+        disabled={
+          !props.playerSelectableMatcher ||
+          !props.playerSelectableMatcher(player)
+        }
+        onClick={props.onClickPlayer}
+        store={props.store}
+        skinData={props.skinData}
+        presenter={props.presenter}
+        translator={props.translator}
+        onClickSkill={props.onClickSkill}
+        isSkillDisabled={props.isSkillDisabled}
+        incomingMessage={props.store.incomingUserMessages[player.Id]}
+        onCloseIncomingMessage={onCloseIncomingMessage(player)}
+        selected={props.store.selectedPlayers.includes(player)}
+      />
+    </div>
+  );
 }

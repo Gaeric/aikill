@@ -1,12 +1,12 @@
-import { PeachSkillTrigger } from '/src/core/ai/skills/cards/peach';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
-import { ActiveSkill, AI, CommonSkill, SelfTargetSkill } from '/src/core/skills/skill';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { PeachSkillTrigger } from 'src/core/ai/skills/cards/peach';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { Precondition } from 'src/core/shares/libs/precondition/precondition';
+import { ActiveSkill, AI, CommonSkill, SelfTargetSkill } from 'src/core/skills/skill';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 import { ExtralCardSkillProperty } from '../interface/extral_property';
 
 @AI(PeachSkillTrigger)

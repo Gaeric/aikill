@@ -1,15 +1,15 @@
-import { JieDaoShaRenSkillTrigger } from '/src/core/ai/skills/cards/jiedaosharen';
-import { CardType } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
-import { TargetGroupUtil } from '/src/core/shares/libs/utils/target_group';
-import { ActiveSkill, AI, CommonSkill } from '/src/core/skills/skill';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { JieDaoShaRenSkillTrigger } from 'src/core/ai/skills/cards/jiedaosharen';
+import { CardType } from 'src/core/cards/card';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { Precondition } from 'src/core/shares/libs/precondition/precondition';
+import { TargetGroupUtil } from 'src/core/shares/libs/utils/target_group';
+import { ActiveSkill, AI, CommonSkill } from 'src/core/skills/skill';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 import { ExtralCardSkillProperty } from '../interface/extral_property';
 
 @AI(JieDaoShaRenSkillTrigger)

@@ -1,11 +1,11 @@
-import { VirtualCard } from '/src/core/cards/card';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, PlayerDyingStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { MarkEnum } from '/src/core/shares/types/mark_list';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { CompulsorySkill } from '/src/core/skills/skill_wrappers';
+import { VirtualCard } from 'src/core/cards/card';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, PlayerDyingStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { MarkEnum } from 'src/core/shares/types/mark_list';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { CompulsorySkill } from 'src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'shajue', description: 'shajue_description' })
 export class ShaJue extends TriggerSkill {

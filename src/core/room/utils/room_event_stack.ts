@@ -1,5 +1,8 @@
-import { EventPicker, GameEventIdentifiers, WorkPlace } from '/src/core/event/event';
-import { compress, decompress } from '/src/core/shares/libs/utils/shrink_string';
+import {
+  EventPicker,
+  GameEventIdentifiers,
+  WorkPlace,
+} from "src/core/event/event";
 
 export class RoomEventStacker<T extends WorkPlace> {
   private eventStack: EventPicker<GameEventIdentifiers, T>[] = [];
@@ -8,14 +11,16 @@ export class RoomEventStacker<T extends WorkPlace> {
   }
 
   async toString(): Promise<string> {
-    return await compress(JSON.stringify(this.eventStack));
+    return JSON.stringify(this.eventStack);
   }
 
-  static async toString(eventStack: EventPicker<GameEventIdentifiers, WorkPlace>[]): Promise<string> {
-    return await compress(JSON.stringify(eventStack));
+  static async toString(
+    eventStack: EventPicker<GameEventIdentifiers, WorkPlace>[]
+  ): Promise<string> {
+    return JSON.stringify(eventStack);
   }
 
   static async toStack(eventsString: string) {
-    return JSON.parse(await decompress(eventsString));
+    return JSON.parse(eventsString);
   }
 }

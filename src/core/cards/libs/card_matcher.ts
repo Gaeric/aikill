@@ -1,6 +1,6 @@
-import { Card, CardType } from '/src/core/cards/card';
-import { Algorithm } from '/src/core/shares/libs/algorithm';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
+import { Card, CardType } from 'src/core/cards/card';
+import { Algorithm } from 'src/core/shares/libs/algorithm';
+import { Precondition } from 'src/core/shares/libs/precondition/precondition';
 import { CardId, CardSuit } from './card_props';
 
 export type CardMatcherProps = {

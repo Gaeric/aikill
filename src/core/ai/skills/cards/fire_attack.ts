@@ -1,15 +1,15 @@
-import { AiLibrary } from '/src/core/ai/ai_lib';
-import { ActiveSkillTriggerClass } from '/src/core/ai/skills/base/active_skill_trigger';
-import type { Card } from '/src/core/cards/card';
-import { CardSuit } from '/src/core/cards/libs/card_props';
-import type { CardId } from '/src/core/cards/libs/card_props';
-import type { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import type { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import type { PlayerId } from '/src/core/player/player_props';
-import type { Room } from '/src/core/room/room';
-import type { FireAttackSkill } from '/src/core/skills';
+import { AiLibrary } from 'src/core/ai/ai_lib';
+import { ActiveSkillTriggerClass } from 'src/core/ai/skills/base/active_skill_trigger';
+import type { Card } from 'src/core/cards/card';
+import { CardSuit } from 'src/core/cards/libs/card_props';
+import type { CardId } from 'src/core/cards/libs/card_props';
+import type { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import type { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import type { PlayerId } from 'src/core/player/player_props';
+import type { Room } from 'src/core/room/room';
+import type { FireAttackSkill } from 'src/core/skills';
 
 export class FireAttackSkillTrigger extends ActiveSkillTriggerClass<FireAttackSkill> {
   protected filterTargets(room: Room, ai: Player, skill: FireAttackSkill, card: CardId, enemies: Player[]) {

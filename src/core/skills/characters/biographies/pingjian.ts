@@ -1,7 +1,7 @@
-import { CardId } from '/src/core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
 import {
   AllStage,
   DamageEffectStage,
@@ -10,11 +10,11 @@ import {
   PlayerPhase,
   PlayerPhaseStages,
   SkillEffectStage,
-} from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { FlagEnum } from '/src/core/shares/types/flag_list';
+} from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { FlagEnum } from 'src/core/shares/types/flag_list';
 import {
   ActiveSkill,
   CommonSkill,
@@ -22,8 +22,8 @@ import {
   PersistentSkill,
   ShadowSkill,
   TriggerSkill,
-} from '/src/core/skills/skill';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/skills/skill';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'pingjian', description: 'pingjian_description' })
 export class PingJian extends ActiveSkill {

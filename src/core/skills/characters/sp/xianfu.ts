@@ -1,12 +1,12 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { DamageType } from '/src/core/game/game_props';
-import { AllStage, DamageEffectStage, GameBeginStage, RecoverEffectStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill, CompulsorySkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { DamageType } from 'src/core/game/game_props';
+import { AllStage, DamageEffectStage, GameBeginStage, RecoverEffectStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill, CompulsorySkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'xianfu', description: 'xianfu_description' })
 export class XianFu extends TriggerSkill {

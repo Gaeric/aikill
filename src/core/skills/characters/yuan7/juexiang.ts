@@ -1,13 +1,13 @@
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId, CardSuit } from '/src/core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, PhaseChangeStage, PlayerDiedStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { FilterSkill, OnDefineReleaseTiming, TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId, CardSuit } from 'src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, PhaseChangeStage, PlayerDiedStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { FilterSkill, OnDefineReleaseTiming, TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
 import { HeXian, JiXian, LieXian, RouXian } from './qingxiancanpu';
 
 @CommonSkill({ name: 'juexiang', description: 'juexiang_description' })

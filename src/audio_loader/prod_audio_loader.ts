@@ -1,15 +1,15 @@
-import { CharacterGender } from '/src/core/characters/character';
-import { Sanguosha } from '/src/core/game/engine';
-import { CharacterSkinInfo } from 'skins/skins';
-import { AudioLoader } from './audio_loader';
-import lobbyBGM from './audios/bgm/lobby.mp3';
-import roomBGM from './audios/bgm/room.mp3';
-import chainAudio from './audios/chain.mp3';
-import damageAudio from './audios/damage.mp3';
-import seriousDamageAudio from './audios/damage2.mp3';
-import equipAudio from './audios/equip.mp3';
-import gameStartAudio from './audios/gamestart.mp3';
-import lostHpAudio from './audios/loseHp.mp3';
+import { CharacterGender } from "src/core/characters/character";
+import { Sanguosha } from "src/core/game/engine";
+import { CharacterSkinInfo } from "src/skins/skins";
+import { AudioLoader } from "./audio_loader";
+import lobbyBGM from "/sgsFile/audios/bgm/lobby.mp3";
+import roomBGM from "/sgsFile/audios/bgm/room.mp3";
+import chainAudio from "/sgsFile/audios/chain.mp3";
+import damageAudio from "/sgsFile/audios/damage.mp3";
+import seriousDamageAudio from "/sgsFile/audios/damage2.mp3";
+import equipAudio from "/sgsFile/audios/equip.mp3";
+import gameStartAudio from "/sgsFile/audios/gamestart.mp3";
+import lostHpAudio from "/sgsFile/audios/loseHp.mp3";
 export class ProdAudioLoader implements AudioLoader {
   getLobbyBackgroundMusic() {
     return lobbyBGM;
@@ -35,14 +35,22 @@ export class ProdAudioLoader implements AudioLoader {
     return chainAudio;
   }
 
-  async getQuickChatAudio(index: number, gender: CharacterGender): Promise<string> {
-    return (await import(`./audios/quickChats/${gender === CharacterGender.Female ? 'female' : 'male'}/${index}.mp3`))
-      .default;
+  async getQuickChatAudio(
+    index: number,
+    gender: CharacterGender,
+  ): Promise<string> {
+    return `/sgsFile/audios/quickChats/${
+      gender === CharacterGender.Female ? "female" : "male"
+    }/${index}.mp3`;
   }
 
-  async getCardAudio(cardName: string, gender: CharacterGender, characterName?: string): Promise<string> {
-    const genderString = gender === CharacterGender.Female ? 'female' : 'male';
-    return (await import(`./audios/cards/${genderString}/${cardName}.ogg`)).default;
+  async getCardAudio(
+    cardName: string,
+    gender: CharacterGender,
+    characterName?: string,
+  ): Promise<string> {
+    const genderString = gender === CharacterGender.Female ? "female" : "male";
+    return `/sgsFile/audios/cards/${genderString}/${cardName}.ogg`;
   }
 
   async getSkillAudio(
@@ -54,19 +62,23 @@ export class ProdAudioLoader implements AudioLoader {
     const skill = Sanguosha.getSkillBySkillName(skillName);
 
     if (!audioIndex) {
-      audioIndex = Math.round(Math.random() * (skill.audioIndex(characterName) - 1)) + 1;
+      audioIndex =
+        Math.round(Math.random() * (skill.audioIndex(characterName) - 1)) + 1;
     }
 
     if (characterName) {
-      characterName = skill.RelatedCharacters.includes(characterName) ? '.' + characterName : '';
+      characterName = skill.RelatedCharacters.includes(characterName)
+        ? "." + characterName
+        : "";
     }
 
-    return (await import(`./audios/characters/${skillName}${characterName ? characterName : ''}${audioIndex}.mp3`))
-      .default;
+    return `/sgsFile/audios/characters/${skillName}${
+      characterName ? characterName : ""
+    }${audioIndex}.mp3`;
   }
 
   async getDeathAudio(characterName: string): Promise<string> {
-    return (await import(`./audios/characters/${characterName}.mp3`)).default;
+    return `/sgsFile/audios/characters/${characterName}.mp3`;
   }
 
   async getCharacterSkinAudio(
@@ -80,21 +92,37 @@ export class ProdAudioLoader implements AudioLoader {
     let voice: string;
     if (skinData !== undefined && skinName !== characterName) {
       const voices = skinData
-        .find(characterSkinInfo => characterSkinInfo.character === characterName)
-        ?.infos.find(imageInfo => imageInfo.images.find(images => images.name === skinName))?.voices;
-      const voiceDetail = voices?.find(skill => skill.skill === skillName)?.detail;
+        .find(
+          (characterSkinInfo) => characterSkinInfo.character === characterName,
+        )
+        ?.infos.find((imageInfo) =>
+          imageInfo.images.find((images) => images.name === skinName),
+        )?.voices;
+      const voiceDetail = voices?.find((skill) => skill.skill === skillName)
+        ?.detail;
       if (voices !== undefined && voiceDetail) {
-        const voicePath = voiceDetail[Math.floor(voiceDetail?.length * Math.random())].location;
-        voice = process.env.PUBLIC_URL + '/' + voicePath;
-      } else if (skillName === 'death') {
+        const voicePath =
+          voiceDetail[Math.floor(voiceDetail?.length * Math.random())].location;
+        voice = import.meta.env.PUBLIC_URL + "/" + voicePath;
+      } else if (skillName === "death") {
         voice = await this.getDeathAudio(characterName);
       } else {
-        voice = await this.getSkillAudio(skillName, gender!, characterName, audioIndex);
+        voice = await this.getSkillAudio(
+          skillName,
+          gender!,
+          characterName,
+          audioIndex,
+        );
       }
-    } else if (skillName === 'death') {
+    } else if (skillName === "death") {
       voice = await this.getDeathAudio(characterName);
     } else {
-      voice = await this.getSkillAudio(skillName, gender!, characterName, audioIndex);
+      voice = await this.getSkillAudio(
+        skillName,
+        gender!,
+        characterName,
+        audioIndex,
+      );
     }
 
     return voice;

@@ -1,9 +1,9 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, PlayerDyingStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { RulesBreakerSkill, TriggerSkill } from '/src/core/skills/skill';
-import { CompulsorySkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, PlayerDyingStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { RulesBreakerSkill, TriggerSkill } from 'src/core/skills/skill';
+import { CompulsorySkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'juejing', description: 'juejing_description' })
 export class JueJing extends RulesBreakerSkill {

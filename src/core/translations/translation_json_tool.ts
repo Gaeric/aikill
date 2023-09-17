@@ -1,6 +1,6 @@
-import { CardId, CardSuit } from '/src/core/cards/libs/card_props';
-import { Sanguosha } from '/src/core/game/engine';
-import { Player } from '/src/core/player/player';
+import { CardId, CardSuit } from 'src/core/cards/libs/card_props';
+import { Sanguosha } from 'src/core/game/engine';
+import { Player } from 'src/core/player/player';
 
 export const enum Languages {
   EN_US = 'en-US',

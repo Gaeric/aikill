@@ -1,9 +1,9 @@
-import { AiLibrary } from '/src/core/ai/ai_lib';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import type { CardId } from '/src/core/cards/libs/card_props';
-import type { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import type { Room } from '/src/core/room/room';
+import { AiLibrary } from 'src/core/ai/ai_lib';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import type { CardId } from 'src/core/cards/libs/card_props';
+import type { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import type { Room } from 'src/core/room/room';
 import { BaseSkillTrigger } from '../base/base_trigger';
 
 export class WuXieKeJiSkillTrigger extends BaseSkillTrigger {

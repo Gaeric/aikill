@@ -1,11 +1,11 @@
-import { VirtualCard } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { Slash } from '/src/core/cards/standard/slash';
-import { Sanguosha } from '/src/core/game/engine';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { CommonSkill, ViewAsSkill } from '/src/core/skills/skill';
+import { VirtualCard } from 'src/core/cards/card';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { Slash } from 'src/core/cards/standard/slash';
+import { Sanguosha } from 'src/core/game/engine';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { CommonSkill, ViewAsSkill } from 'src/core/skills/skill';
 
 @CommonSkill({ name: 'qixi', description: 'qixi_description' })
 export class QiXi extends ViewAsSkill {

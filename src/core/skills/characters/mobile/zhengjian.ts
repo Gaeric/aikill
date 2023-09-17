@@ -1,4 +1,4 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
 import {
   AllStage,
   CardResponseStage,
@@ -7,13 +7,13 @@ import {
   PhaseStageChangeStage,
   PlayerPhase,
   PlayerPhaseStages,
-} from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { OnDefineReleaseTiming, TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill, CompulsorySkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { OnDefineReleaseTiming, TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill, CompulsorySkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CompulsorySkill({ name: 'zhengjian', description: 'zhengjian_description' })
 export class ZhengJian extends TriggerSkill {

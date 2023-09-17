@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
-import { Picture } from '/src/ui/picture/picture';
-import { Text } from '/src/ui/text/text';
+import { Picture } from 'src/ui/picture/picture';
+import { Text } from 'src/ui/text/text';
 import styles from './armor.module.css';
 import armorImage from './images/armor.png';
 

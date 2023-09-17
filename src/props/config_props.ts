@@ -1,29 +1,30 @@
-import { Languages } from '/src/core/translations/translation_json_tool';
+import { Languages } from "src/core/translations/translation_json_tool";
 
 export type UiConfigTypes = {
   language: Languages;
 };
 
 export const enum ClientFlavor {
-  Dev = 'dev',
-  Web = 'web',
-  Desktop = 'desktop',
-  Mobile = 'mobile',
+  Dev = "dev",
+  Web = "web",
+  Desktop = "desktop",
+  Mobile = "mobile",
+  Tauri = "tauri",
 }
 
 export const enum ServerHostTag {
-  Localhost = 'localhost',
-  ShenZhen = 'shenzhen',
-  NanJing = 'nanjing',
-  HangZhou = 'hangzhou',
-  GuangZhou = 'guangzhou',
-  ShangHai = 'shanghai',
+  Localhost = "localhost",
+  ShenZhen = "shenzhen",
+  NanJing = "nanjing",
+  HangZhou = "hangzhou",
+  GuangZhou = "guangzhou",
+  ShangHai = "shanghai",
 }
 
 export type ServiceConfig = {
   port: number;
   host: string;
-  protocol: 'http' | 'https';
+  protocol: "http" | "https";
   hostTag: ServerHostTag;
 };
 

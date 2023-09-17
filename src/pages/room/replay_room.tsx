@@ -1,111 +1,84 @@
-import { AudioLoader } from 'audio_loader/audio_loader';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { ClientOfflineSocket } from '/src/core/network/socket.offline';
-import { PlayerInfo } from '/src/core/player/player_props';
-import { System } from '/src/core/shares/libs/system';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ElectronData } from '/src/electron_loader/electron_data';
-import { ElectronLoader } from '/src/electron_loader/electron_loader';
-import { ImageLoader } from '/src/image_loader/image_loader';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import { SettingsDialog } from '/src/pages/ui/settings/settings';
-import { ServerHostTag } from '/src/props/config_props';
-import * as React from 'react';
-import { ConnectionService } from '/src/services/connection_service/connection_service';
-import { CharacterSkinInfo } from 'skins/skins';
-import { PagePropsWithConfig } from '/src/types/page_props';
-import { ReplayDataType } from '/src/types/replay_props';
-import { installAudioPlayerService } from '/src/ui/audio/install';
-import { ReplayClientProcessor } from './game_processor.replay';
-import { installService, RoomBaseService } from './install_service';
-import styles from './room.module.css';
-import { RoomPresenter } from './room.presenter';
-import { RoomStore } from './room.store';
-import { Background } from './ui/background/background';
-import { Banner } from './ui/banner/banner';
-import { Dashboard } from './ui/dashboard/dashboard';
-import { GameDialog } from './ui/game_dialog/game_dialog';
-import { GameBoard } from './ui/gameboard/gameboard';
-import { SeatsLayout } from './ui/seats_layout/seats_layout';
+import { AudioLoader } from "audio_loader/audio_loader";
+import { GameEventIdentifiers, ServerEventFinder } from "src/core/event/event";
+import { EventPacker } from "src/core/event/event_packer";
+import { ClientOfflineSocket } from "src/core/network/socket.offline";
+import { PlayerInfo } from "src/core/player/player_props";
+import { System } from "src/core/shares/libs/system";
+import { TranslationPack } from "src/core/translations/translation_json_tool";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ElectronData } from "src/electron_loader/electron_data";
+import { ElectronLoader } from "src/electron_loader/electron_loader";
+import { ImageLoader } from "src/image_loader/image_loader";
+import { SettingsDialog } from "src/pages/ui/settings/settings";
+import { ServerHostTag } from "src/props/config_props";
+import * as React from "react";
+import { ConnectionService } from "src/services/connection_service/connection_service";
+import { CharacterSkinInfo } from "src/skins/skins";
+import { PagePropsWithConfig } from "src/types/page_props";
+import { ReplayDataType } from "src/types/replay_props";
+import { installAudioPlayerService } from "src/ui/audio/install";
+import { ReplayClientProcessor } from "./game_processor.replay";
+import { installService, RoomBaseService } from "./install_service";
+import styles from "./room.module.css";
+import { RoomPresenter } from "./room.presenter";
+import { Background } from "./ui/background/background";
+import { Banner } from "./ui/banner/banner";
+import { Dashboard } from "./ui/dashboard/dashboard";
+import { GameDialog } from "./ui/game_dialog/game_dialog";
+import { GameBoard } from "./ui/gameboard/gameboard";
+import { SeatsLayout } from "./ui/seats_layout/seats_layout";
 
-@mobxReact.observer
-export class ReplayRoomPage extends React.Component<
-  PagePropsWithConfig<{
-    translator: ClientTranslationModule;
-    imageLoader: ImageLoader;
-    audioLoader: AudioLoader;
-    electronLoader: ElectronLoader;
-    connectionService: ConnectionService;
-    skinData?: CharacterSkinInfo[];
-  }>
-> {
-  private presenter: RoomPresenter;
-  private store: RoomStore;
-  private gameProcessor: ReplayClientProcessor;
-  private baseService: RoomBaseService;
-  private audioService = installAudioPlayerService(this.props.audioLoader, this.props.electronLoader);
+export function ReplayRoomPage(props: PagePropsWithConfig) {
+  let presenter = RoomPresenter(props.imageLoader).newRoomPresent;
+  let store = presenter.store;
+  let gameProcessor: ReplayClientProcessor;
+  let baseService: RoomBaseService;
+  let audioService = installAudioPlayerService(
+    props.audioLoader,
+    props.electronLoader
+  );
 
-  private replayStepDelay = 2000;
-  private dumped = false;
+  let replayStepDelay = 2000;
+  let dumped = false;
 
-  @mobx.observable.ref
-  openSettings = false;
-  @mobx.observable.ref
-  private defaultMainVolume = this.props.electronLoader.getData(ElectronData.MainVolume)
-    ? Number.parseInt(this.props.electronLoader.getData(ElectronData.MainVolume), 10)
+  let [openSettings, setOpenSettings] = React.useState(false);
+  let [renderSideBoard, setRenderSideBoard] = React.useState(true);
+
+  let defaultMainVolume = props.electronLoader.getData(ElectronData.MainVolume)
+    ? Number.parseInt(props.electronLoader.getData(ElectronData.MainVolume), 10)
     : 50;
-  @mobx.observable.ref
-  private defaultGameVolume = this.props.electronLoader.getData(ElectronData.GameVolume)
-    ? Number.parseInt(this.props.electronLoader.getData(ElectronData.GameVolume), 10)
-    : 50;
-  @mobx.observable.ref
-  private renderSideBoard = true;
 
-  private readonly settings = {
-    onVolumeChange: mobx.action((volume: number) => {
-      this.props.electronLoader.setData(ElectronData.GameVolume, volume.toString());
-      this.defaultGameVolume = volume;
-      this.audioService.changeGameVolume();
-    }),
-    onMainVolumeChange: mobx.action((volume: number) => {
-      this.props.electronLoader.setData(ElectronData.MainVolume, volume.toString());
-      this.defaultMainVolume = volume;
-      this.audioService.changeBGMVolume();
-    }),
+  let defaultGameVolume = props.electronLoader.getData(ElectronData.GameVolume)
+    ? Number.parseInt(props.electronLoader.getData(ElectronData.GameVolume), 10)
+    : 50;
+
+  let settings = {
+    onVolumeChange: (volume: number) => {
+      props.electronLoader.setData(ElectronData.GameVolume, volume.toString());
+      defaultGameVolume = volume;
+      audioService.changeGameVolume();
+    },
+    onMainVolumeChange: (volume: number) => {
+      props.electronLoader.setData(ElectronData.MainVolume, volume.toString());
+      defaultMainVolume = volume;
+      audioService.changeBGMVolume();
+    },
   };
 
-  constructor(
-    props: PagePropsWithConfig<{
-      translator: ClientTranslationModule;
-      imageLoader: ImageLoader;
-      audioLoader: AudioLoader;
-      electronLoader: ElectronLoader;
-      connectionService: ConnectionService;
-      skinData?: CharacterSkinInfo[];
-    }>,
-  ) {
-    super(props);
-    const { translator } = this.props;
+  const { translator } = props;
 
-    this.presenter = new RoomPresenter(this.props.imageLoader);
-    this.store = this.presenter.createStore();
+  baseService = installService(props.translator, store, props.imageLoader);
+  gameProcessor = new ReplayClientProcessor(
+    presenter,
+    store,
+    translator,
+    props.imageLoader,
+    audioService,
+    props.electronLoader,
+    props.skinData
+  );
 
-    this.baseService = installService(this.props.translator, this.store, this.props.imageLoader);
-    this.gameProcessor = new ReplayClientProcessor(
-      this.presenter,
-      this.store,
-      translator,
-      this.props.imageLoader,
-      this.audioService,
-      this.props.electronLoader,
-      this.props.skinData,
-    );
-  }
-
-  private static readonly nonDelayedEvents: GameEventIdentifiers[] = [
+  let nonDelayedEvents: GameEventIdentifiers[] = [
     GameEventIdentifiers.PhaseChangeEvent,
     GameEventIdentifiers.PhaseStageChangeEvent,
     GameEventIdentifiers.PlayerBulkPacketEvent,
@@ -127,17 +100,17 @@ export class ReplayRoomPage extends React.Component<
     GameEventIdentifiers.UnhookSkillsEvent,
   ];
 
-  private async stepDelay(identifier: GameEventIdentifiers) {
+  async function stepDelay(identifier: GameEventIdentifiers) {
     if (ReplayRoomPage.nonDelayedEvents.includes(identifier)) {
       await System.MainThread.sleep(0);
     } else {
-      await System.MainThread.sleep(this.replayStepDelay);
+      await System.MainThread.sleep(replayStepDelay);
     }
   }
 
-  private async loadSteps(events: ServerEventFinder<GameEventIdentifiers>[]) {
+  async function loadSteps(events: ServerEventFinder<GameEventIdentifiers>[]) {
     for (const content of events) {
-      if (this.dumped) {
+      if (dumped) {
         break;
       }
       const identifier = EventPacker.getIdentifier(content)!;
@@ -147,149 +120,168 @@ export class ReplayRoomPage extends React.Component<
         continue;
       }
       if (identifier === GameEventIdentifiers.PlayerBulkPacketEvent) {
-        const { stackedLostMessages } = content as ServerEventFinder<GameEventIdentifiers.PlayerBulkPacketEvent>;
-        await this.loadSteps(stackedLostMessages);
+        const { stackedLostMessages } =
+          content as ServerEventFinder<GameEventIdentifiers.PlayerBulkPacketEvent>;
+        await loadSteps(stackedLostMessages);
       } else {
-        await this.gameProcessor.onHandleIncomingEvent(identifier, content);
-        this.showMessageFromEvent(content);
-        this.animation(identifier, content);
-        this.updateGameStatus(content);
-        await this.stepDelay(identifier);
+        await gameProcessor.onHandleIncomingEvent(identifier, content);
+        showMessageFromEvent(content);
+        animation(identifier, content);
+        updateGameStatus(content);
+        await stepDelay(identifier);
       }
     }
   }
 
-  componentDidMount() {
-    this.audioService.playRoomBGM();
-    const { replayData } = this.props.location.state as { replayData: ReplayDataType };
+  React.useEffect(() => {
+    audioService.playRoomBGM();
+    const { replayData } = props.location.state as {
+      replayData: ReplayDataType;
+    };
     if (!replayData) {
-      this.props.history.push('/lobby');
+      props.history.push("/lobby");
     }
-
-    this.presenter.setupClientPlayerId(replayData.viewerId);
-    this.presenter.createClientRoom(
+    console.log("replay room's createClientRoom");
+    presenter.setupClientPlayerId(replayData.viewerId);
+    presenter.createClientRoom(
       replayData.roomId,
       new ClientOfflineSocket(replayData.roomId.toString()),
       replayData.gameInfo,
-      replayData.playersInfo as PlayerInfo[],
+      replayData.playersInfo as PlayerInfo[]
     );
-    this.props.translator.setupPlayer(this.presenter.ClientPlayer);
-    this.store.animationPosition.insertPlayer(replayData.viewerId);
+    props.translator.setupPlayer(presenter.getClientPlayer());
+    store.animationPosition.insertPlayer(replayData.viewerId);
 
-    this.loadSteps(replayData.events);
-  }
+    loadSteps(replayData.events);
+    return () => {
+      dumped = true;
+      audioService.stop();
+    };
+  }, []);
 
-  componentWillUnmount() {
-    this.dumped = true;
-    this.audioService.stop();
-  }
-
-  private updateGameStatus(event: ServerEventFinder<GameEventIdentifiers>) {
+  function updateGameStatus(event: ServerEventFinder<GameEventIdentifiers>) {
     const info = EventPacker.getGameRunningInfo(event);
-    this.presenter.updateNumberOfDrawStack(info.numberOfDrawStack);
-    this.presenter.updateGameCircle(info.circle);
+    presenter.updateNumberOfDrawStack(info.numberOfDrawStack);
+    presenter.updateGameCircle(info.circle);
   }
 
-  private animation<T extends GameEventIdentifiers>(identifier: T, event: ServerEventFinder<T>) {
-    this.baseService.Animation.GuideLineAnimation.animate(identifier, event);
+  function animation<T extends GameEventIdentifiers>(
+    identifier: T,
+    event: ServerEventFinder<T>
+  ) {
+    baseService.Animation.GuideLineAnimation.animate(identifier, event);
   }
 
-  private showMessageFromEvent(event: ServerEventFinder<GameEventIdentifiers>) {
-    const { messages = [], translationsMessage, unengagedMessage, engagedPlayerIds } = event;
-    const { translator } = this.props;
+  function showMessageFromEvent(
+    event: ServerEventFinder<GameEventIdentifiers>
+  ) {
+    const {
+      messages = [],
+      translationsMessage,
+      unengagedMessage,
+      engagedPlayerIds,
+    } = event;
+    const { translator } = props;
 
-    if (unengagedMessage && engagedPlayerIds && !engagedPlayerIds.includes(this.store.clientPlayerId)) {
+    if (
+      unengagedMessage &&
+      engagedPlayerIds &&
+      !engagedPlayerIds.includes(store.clientPlayerId)
+    ) {
       messages.push(TranslationPack.create(unengagedMessage).toString());
     } else if (translationsMessage) {
       messages.push(TranslationPack.create(translationsMessage).toString());
     }
 
-    messages.forEach(message => {
-      this.presenter.addGameLog(translator.trx(message));
+    messages.forEach((message) => {
+      presenter.addGameLog(translator.trx(message));
     });
   }
 
-  @mobx.action
-  private readonly onClickSettings = () => {
-    this.openSettings = true;
-  };
-  @mobx.action
-  private readonly onCloseSettings = () => {
-    this.openSettings = false;
-  };
-  @mobx.action
-  private readonly onSwitchSideBoard = () => (this.renderSideBoard = !this.renderSideBoard);
-
-  render() {
-    const { replayData } = this.props.location.state as { replayData: ReplayDataType };
-    const background = this.props.imageLoader.getBackgroundImage();
-
-    return (
-      <div className={styles.room}>
-        <Background image={background} />
-        {this.store.selectorDialog}
-
-        <div className={styles.incomingConversation}>{this.store.incomingConversation}</div>
-        {this.store.room && (
-          <div className={styles.roomBoard}>
-            <Banner
-              roomIndex={replayData.roomId}
-              translator={this.props.translator}
-              roomName={this.store.room.getRoomInfo().name}
-              className={styles.roomBanner}
-              connectionService={this.props.connectionService}
-              onClickSettings={this.onClickSettings}
-              onSwitchSideBoard={this.onSwitchSideBoard}
-              host={ServerHostTag.Localhost}
-            />
-            <div className={styles.mainBoard}>
-              <SeatsLayout
-                imageLoader={this.props.imageLoader}
-                updateFlag={this.store.updateUIFlag}
-                store={this.store}
-                skinData={this.props.skinData}
-                presenter={this.presenter}
-                translator={this.props.translator}
-              />
-              {this.renderSideBoard && (
-                <div className={styles.sideBoard}>
-                  <GameBoard store={this.store} translator={this.props.translator} />
-                  <GameDialog
-                    store={this.store}
-                    presenter={this.presenter}
-                    translator={this.props.translator}
-                    replayOrObserverMode={true}
-                    connectionService={this.props.connectionService}
-                  />
-                </div>
-              )}
-            </div>
-            <Dashboard
-              updateFlag={this.store.updateUIFlag}
-              store={this.store}
-              presenter={this.presenter}
-              translator={this.props.translator}
-              skinData={this.props.skinData}
-              imageLoader={this.props.imageLoader}
-              onClick={this.store.onClickHandCardToPlay}
-              isSkillDisabled={this.store.isSkillDisabled}
-              observerMode={false}
-            />
-          </div>
-        )}
-        {this.openSettings && (
-          <SettingsDialog
-            defaultGameVolume={this.defaultGameVolume}
-            defaultMainVolume={this.defaultMainVolume}
-            imageLoader={this.props.imageLoader}
-            translator={this.props.translator}
-            onMainVolumeChange={this.settings.onMainVolumeChange}
-            onGameVolumeChange={this.settings.onVolumeChange}
-            onConfirm={this.onCloseSettings}
-            electronLoader={this.props.electronLoader}
-          />
-        )}
-      </div>
-    );
+  function onClickSettings() {
+    setOpenSettings(true);
   }
+
+  function onCloseSettings() {
+    setOpenSettings(false);
+  }
+
+  function onSwitchSideBoard() {
+    let render = !renderSideBoard;
+    setRenderSideBoard(() => render);
+    return render;
+  }
+
+  const { replayData } = props.location.state as {
+    replayData: ReplayDataType;
+  };
+  const background = props.imageLoader.getBackgroundImage();
+
+  return (
+    <div className={styles.room}>
+      <Background image={background} />
+      {store.selectorDialog}
+
+      <div className={styles.incomingConversation}>
+        {store.incomingConversation}
+      </div>
+      {store.room && (
+        <div className={styles.roomBoard}>
+          <Banner
+            roomIndex={replayData.roomId}
+            translator={props.translator}
+            roomName={store.room.getRoomInfo().name}
+            className={styles.roomBanner}
+            connectionService={props.connectionService}
+            onClickSettings={onClickSettings}
+            onSwitchSideBoard={onSwitchSideBoard}
+            host={ServerHostTag.Localhost}
+          />
+          <div className={styles.mainBoard}>
+            <SeatsLayout
+              imageLoader={props.imageLoader}
+              store={store}
+              skinData={props.skinData}
+              presenter={presenter}
+              translator={props.translator}
+            />
+            {renderSideBoard && (
+              <div className={styles.sideBoard}>
+                <GameBoard store={store} translator={props.translator} />
+                <GameDialog
+                  store={store}
+                  presenter={presenter}
+                  translator={props.translator}
+                  replayOrObserverMode={true}
+                  connectionService={props.connectionService}
+                />
+              </div>
+            )}
+          </div>
+          <Dashboard
+            store={store}
+            presenter={presenter}
+            translator={props.translator}
+            skinData={props.skinData}
+            imageLoader={props.imageLoader}
+            onClick={store.onClickHandCardToPlay}
+            isSkillDisabled={store.isSkillDisabled}
+            observerMode={false}
+          />
+        </div>
+      )}
+      {openSettings && (
+        <SettingsDialog
+          defaultGameVolume={defaultGameVolume}
+          defaultMainVolume={defaultMainVolume}
+          imageLoader={props.imageLoader}
+          translator={props.translator}
+          onMainVolumeChange={settings.onMainVolumeChange}
+          onGameVolumeChange={settings.onVolumeChange}
+          onConfirm={onCloseSettings}
+          electronLoader={props.electronLoader}
+        />
+      )}
+    </div>
+  );
 }

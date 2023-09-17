@@ -1,18 +1,19 @@
-import classNames from 'classnames';
-import { Character, getNationalityRawText } from '/src/core/characters/character';
-import { Sanguosha } from '/src/core/game/engine';
-import { Skill } from '/src/core/skills/skill';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ImageLoader } from '/src/image_loader/image_loader';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import * as React from 'react';
-import { CharacterSkinInfo } from 'skins/skins';
-import { Armor } from '/src/ui/armor/armor';
-import { AudioService } from '/src/ui/audio/install';
-import styles from './character.module.css';
-import { NationalityBadge } from '../badge/badge';
-import { CharacterHp } from '../hp/hp';
+import classNames from "classnames";
+import {
+  Character,
+  getNationalityRawText,
+} from "src/core/characters/character";
+import { Sanguosha } from "src/core/game/engine";
+import { Skill } from "src/core/skills/skill";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ImageLoader } from "src/image_loader/image_loader";
+import * as React from "react";
+import { CharacterSkinInfo } from "src/skins/skins";
+import { Armor } from "src/ui/armor/armor";
+import { AudioService } from "src/ui/audio/install";
+import styles from "./character.module.css";
+import { NationalityBadge } from "../badge/badge";
+import { CharacterHp } from "../hp/hp";
 
 export type CharacterSkinCardProps = {
   character: Character;
@@ -23,184 +24,217 @@ export type CharacterSkinCardProps = {
   onClick?(skinName: string): void;
   disabled?: boolean;
   className?: string;
-  size?: 'regular' | 'small';
+  size?: "regular" | "small";
   selected?: boolean;
 };
 
-@mobxReact.observer
-export class CharacterSkinCard extends React.Component<CharacterSkinCardProps> {
-  private skinNameList: string[] = [this.props.character.Name];
-  private skinNameLists: string[] = [];
-  @mobx.observable.ref
-  private characterImage: string | undefined;
-  @mobx.observable.ref
-  private characterSkinImageL: string | undefined;
-  @mobx.observable.ref
-  private characterSkinImageR: string | undefined;
-  private posX: number;
-  @mobx.observable.ref
-  private skinName: string;
+export function CharacterSkinCard(props: CharacterSkinCardProps) {
+  let skinNameList: string[] = [props.character.Name];
+  let skinNameLists: string[] = [];
+  const [characterImage, setCharacterImage] = React.useState<
+    string | undefined
+  >();
+  const [characterSkinImageL, setCharacterSkinImageL] = React.useState<
+    string | undefined
+  >();
+  const [characterSkinImageR, setCharacterSkinImageR] = React.useState<
+    string | undefined
+  >();
+  const [skinName, setSkinName] = React.useState<string>();
+  let posX: number;
 
-  @mobx.action
-  private onClick = (e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>) => {
-    const clientX =
+  function onClick(
+    e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>
+  ) {
+    let clientX =
       (e as React.MouseEvent<HTMLElement, MouseEvent>).clientX ||
       (e as React.TouchEvent<HTMLElement>).touches[0].clientX;
-    this.posX = clientX;
+    posX = clientX;
 
     const characterImageElement = document.getElementsByClassName(
-      classNames(styles.characterCard, this.props.className),
+      classNames(styles.characterCard, props.className)
     )[0];
-    const imagePosition = this.getOffset(characterImageElement);
+    const imagePosition = getOffset(characterImageElement);
     const position = {
       x: imagePosition.left,
       y: imagePosition.top,
     };
-    if (this.posX < position.x + characterImageElement.clientWidth / 2 && this.posX > position.x - 100) {
-      this.preSkin();
+    if (
+      posX < position.x + characterImageElement.clientWidth / 2 &&
+      posX > position.x - 100
+    ) {
+      preSkin();
     }
     if (
-      this.posX > position.x + characterImageElement.clientWidth / 2 &&
-      this.posX < position.x + characterImageElement.clientWidth + 100
+      posX > position.x + characterImageElement.clientWidth / 2 &&
+      posX < position.x + characterImageElement.clientWidth + 100
     ) {
-      this.nextSkin();
+      nextSkin();
     }
-    this.props.onClick && this.skinName && this.props.onClick(this.skinName);
-  };
-
-  private getOffset(el: Element) {
+    props.onClick && skinName && props.onClick(skinName);
+  }
+  function getOffset(el: Element) {
     const rect = el.getBoundingClientRect();
     return {
       left: rect.left + window.scrollX,
       top: rect.top + window.scrollY,
     };
   }
+  function getSkinNameList() {
+    props.skinData
+      ?.find((skinInfo) => skinInfo.character === props.character.Name)
+      ?.infos.find((skinInfo) =>
+        skinInfo.images?.forEach((imageInfo) =>
+          skinNameList.push(imageInfo.name)
+        )
+      );
 
-  getskinNameList() {
-    this.props.skinData
-      ?.find(skinInfo => skinInfo.character === this.props.character.Name)
-      ?.infos.find(skinInfo => skinInfo.images?.forEach(imageInfo => this.skinNameList.push(imageInfo.name)));
-    this.skinNameLists = this.skinNameList;
-    return this.skinNameLists;
+    return skinNameLists;
   }
-  nextSkin() {
-    const next = this.skinNameLists.shift();
+
+  function nextSkin() {
+    const next = skinNameLists.shift();
     if (next) {
-      this.skinNameLists.push(next);
+      skinNameLists.push(next);
     }
-    this.skinName = this.skinNameLists[0];
-    this.getSkinImage();
+    setSkinName(() => skinNameLists[0]);
+
+    getSkinImage();
   }
-  preSkin() {
-    const p = this.skinNameLists.pop();
+  function preSkin() {
+    const p = skinNameLists.pop();
     if (p) {
-      this.skinNameLists.unshift(p);
+      skinNameLists.unshift(p);
     }
-    this.skinName = this.skinNameLists[0];
-    this.getSkinImage();
+    setSkinName(() => skinNameLists[0]);
+
+    getSkinImage();
   }
 
-  @mobx.action
-  async getSkinImage() {
-    this.characterImage = (
-      await this.props.imageLoader.getCharacterSkinPlay(
-        this.props.character.Name,
-        this.props.skinData,
+  async function getSkinImage() {
+    let characterImageUrl = (
+      await props.imageLoader.getCharacterSkinPlay(
+        props.character.Name,
+        props.skinData,
         undefined,
-        this.skinNameLists[0],
+        skinNameLists[0]
       )
     ).src;
-    this.characterSkinImageL =
-      this.skinNameLists.length > 2
-        ? (
-            await this.props.imageLoader.getCharacterSkinPlay(
-              this.props.character.Name,
-              this.props.skinData,
-              undefined,
-              this.skinNameLists[this.skinNameLists.length - 1],
-            )
-          ).src
-        : (this.characterSkinImageL = '');
+    setCharacterImage(() => characterImageUrl);
 
-    this.characterSkinImageR =
-      this.skinNameLists.length > 1
-        ? (
-            await this.props.imageLoader.getCharacterSkinPlay(
-              this.props.character.Name,
-              this.props.skinData,
-              undefined,
-              this.skinNameLists[1],
-            )
-          ).src
-        : '';
-  }
-
-  @mobx.action
-  async componentDidMount() {
-    this.skinNameList = [this.props.character.Name];
-    this.getskinNameList();
-    this.getSkinImage();
-  }
-  @mobx.action
-  async componentDidUpdate() {
-    this.skinNameList = [this.props.character.Name];
-    if (!this.skinNameLists.includes(this.props.character.Name)) {
-      this.getskinNameList();
+    if (skinNameLists.length > 2) {
+      let characterImageL = (
+        await props.imageLoader.getCharacterSkinPlay(
+          props.character.Name,
+          props.skinData,
+          undefined,
+          skinNameLists[skinNameLists.length - 1]
+        )
+      ).src;
+      if (characterImageL) {
+        setCharacterSkinImageL(() => characterImageL);
+      }
+    } else {
+      setCharacterSkinImageL(() => "");
     }
-    this.getSkinImage();
+
+    if (skinNameLists.length > 1) {
+      let characterImageR = (
+        await props.imageLoader.getCharacterSkinPlay(
+          props.character.Name,
+          props.skinData,
+          undefined,
+          skinNameLists[1]
+        )
+      ).src;
+      if (characterImageR) {
+        setCharacterSkinImageR(() => characterImageR);
+      }
+    } else {
+      setCharacterSkinImageL(() => "");
+    }
   }
 
-  render() {
-    const { character, translator, className, size, selected } = this.props;
-    return (
-      <div className={classNames(styles.characterCard, className, styles.characterSkinArea)} onClick={this.onClick}>
-        <div
-          className={classNames(styles.characterCard, className, {
-            [styles.small]: size === 'small',
-            [styles.selected]: selected,
-          })}
-        >
-          {this.characterImage ? (
-            <>
-              <NationalityBadge size={size} nationality={character.Nationality} isLord={character.isLord()}>
-                {translator.tr(character.Name)}
-              </NationalityBadge>
-              <div className={classNames(styles.hpContainer)}>
-                <Armor className={classNames(styles.characterArmor)} amount={character.Armor} />
-                <CharacterHp
-                  character={character}
-                  className={classNames(styles.characterHp, { [styles.small]: size === 'small' })}
-                />
-              </div>
-
-              <img
-                className={classNames(styles.characterImage, { [styles.small]: size === 'small' }, styles.right)}
-                src={this.characterSkinImageR}
-                alt=""
+  React.useEffect(() => {
+    if (!skinNameLists.includes(props.character.Name)) {
+      getSkinNameList();
+    }
+    getSkinImage();
+  });
+  const { character, translator, className, size, selected } = props;
+  return (
+    <div
+      className={classNames(
+        styles.characterCard,
+        className,
+        styles.characterSkinArea
+      )}
+      onClick={onClick}
+    >
+      <div
+        className={classNames(styles.characterCard, className, {
+          [styles.small]: size === "small",
+          [styles.selected]: selected,
+        })}
+      >
+        {characterImage ? (
+          <>
+            <NationalityBadge
+              size={size}
+              nationality={character.Nationality}
+              isLord={character.isLord()}
+            >
+              {translator.tr(character.Name)}
+            </NationalityBadge>
+            <div className={classNames(styles.hpContainer)}>
+              <Armor
+                className={classNames(styles.characterArmor)}
+                amount={character.Armor}
               />
-              <img
-                className={classNames(styles.characterImage, { [styles.small]: size === 'small' }, styles.left)}
-                src={this.characterSkinImageL}
-                alt=""
-              />
-
-              <img
-                className={classNames(styles.characterImage, {
-                  [styles.small]: size === 'small',
+              <CharacterHp
+                character={character}
+                className={classNames(styles.characterHp, {
+                  [styles.small]: size === "small",
                 })}
-                src={this.characterImage}
-                alt=""
               />
-            </>
-          ) : (
-            <p>
-              {translator.tr(getNationalityRawText(character.Nationality))} {translator.tr(character.Name)}
-            </p>
-          )}
-        </div>
+            </div>
+
+            <img
+              className={classNames(
+                styles.characterImage,
+                { [styles.small]: size === "small" },
+                styles.right
+              )}
+              src={characterSkinImageR}
+              alt=""
+            />
+            <img
+              className={classNames(
+                styles.characterImage,
+                { [styles.small]: size === "small" },
+                styles.left
+              )}
+              src={characterSkinImageL}
+              alt=""
+            />
+
+            <img
+              className={classNames(styles.characterImage, {
+                [styles.small]: size === "small",
+              })}
+              src={characterImage}
+              alt=""
+            />
+          </>
+        ) : (
+          <p>
+            {translator.tr(getNationalityRawText(character.Nationality))}{" "}
+            {translator.tr(character.Name)}
+          </p>
+        )}
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export type CharacterSpecProps = {
@@ -211,116 +245,127 @@ export type CharacterSpecProps = {
   skinData?: CharacterSkinInfo[];
 };
 
-export class CharacterSpec extends React.Component<CharacterSpecProps> {
-  private currentAudioIndexMapper: { [skillName: string]: number } = {};
-
-  @mobx.observable.ref
-  private skills: Skill[] = [];
-  @mobx.observable.ref
-  skinName;
-
-  @mobx.action
-  getSkillName() {
-    this.skills = this.props.character.Skills.filter(skill => !skill.isShadowSkill());
-    return this.skills;
+export function CharacterSpec(props: CharacterSpecProps) {
+  let currentAudioIndexMapper: { [skillName: string]: number } = {};
+  const [skills, setSkills] = React.useState<Skill[]>([]);
+  function getSkillName() {
+    setSkills(props.character.Skills.filter((skill) => !skill.isShadowSkill()));
+    return skills;
   }
-  @mobx.action
-  onPlaySkillAudio = (skillName: string, skinName: string) => () => {
+  function onPlaySkillAudio(skillName: string, skinName: string) {
     let audioIndex: number | undefined;
-    if (Sanguosha.getSkillBySkillName(skillName).audioIndex(this.props.character.Name) > 0) {
-      this.currentAudioIndexMapper[skillName] = this.currentAudioIndexMapper[skillName] || 1;
-      audioIndex = this.currentAudioIndexMapper[skillName];
-      ++this.currentAudioIndexMapper[skillName] >
-        Sanguosha.getSkillBySkillName(skillName).audioIndex(this.props.character.Name) &&
-        (this.currentAudioIndexMapper[skillName] = 1);
+    if (
+      Sanguosha.getSkillBySkillName(skillName).audioIndex(
+        props.character.Name
+      ) > 0
+    ) {
+      currentAudioIndexMapper[skillName] =
+        currentAudioIndexMapper[skillName] || 1;
+      audioIndex = currentAudioIndexMapper[skillName];
+      ++currentAudioIndexMapper[skillName] >
+        Sanguosha.getSkillBySkillName(skillName).audioIndex(
+          props.character.Name
+        ) && (currentAudioIndexMapper[skillName] = 1);
     }
 
-    if (this.props.skinName && this.props.skinName !== this.props.character.Name) {
-      this.props.audioService.playSkillAudio(
+    if (props.skinName && props.skinName !== props.character.Name) {
+      props.audioService.playSkillAudio(
         skillName,
-        this.props.character.Gender,
+        props.character.Gender,
         audioIndex,
         true,
-        this.props.skinData,
-        this.props.character.Name,
-        this.props.skinName,
+        props.skinData,
+        props.character.Name,
+        props.skinName
       );
     } else {
-      this.props.audioService.playSkillAudio(
+      props.audioService.playSkillAudio(
         skillName,
-        this.props.character.Gender,
+        props.character.Gender,
         audioIndex,
         true,
         [],
-        this.props.character.Name,
+        props.character.Name
       );
     }
-  };
-  @mobx.action
-  onPlayDeathAudio = (characterName: string, skinName?: string) => () => {
-    if (this.props.skinName && this.props.skinName !== characterName) {
-      this.props.audioService.playDeathAudio(characterName, true, this.props.skinData, this.props.skinName);
+  }
+  function onPlayDeathAudio(characterName: string, skinName?: string) {
+    if (props.skinName && props.skinName !== characterName) {
+      props.audioService.playDeathAudio(
+        characterName,
+        true,
+        props.skinData,
+        props.skinName
+      );
     } else {
-      this.props.audioService.playDeathAudio(characterName, true, []);
+      props.audioService.playDeathAudio(characterName, true, []);
     }
-  };
-  @mobx.action
-  async componentDidMount() {
-    this.getSkillName();
   }
-  @mobx.action
-  componentDidUpdate() {
-    this.skills = [];
-    this.getSkillName();
-    this.currentAudioIndexMapper = {};
-  }
+  React.useEffect(() => {
+    setSkills(() => []);
+    getSkillName();
+    currentAudioIndexMapper = {};
+  }, []);
 
-  render() {
-    this.getSkillName();
-    const relatedSkills =
-      this.skills.length > 0
-        ? this.skills.reduce<Skill[]>((skills, skill) => {
-            skill.RelatedSkills.length > 0 &&
-              skills.push(...skill.RelatedSkills.map(skillName => Sanguosha.getSkillBySkillName(skillName)));
-            return skills;
-          }, [])
-        : [];
-    return (
-      <div className={styles.characterSpec}>
-        <span className={styles.deathButton} onClick={this.onPlayDeathAudio(this.props.character.Name)}>
-          {this.props.translator.trx('death audio')}
+  const relatedSkills =
+    skills.length > 0
+      ? skills.reduce<Skill[]>((skills, skill) => {
+          skill.RelatedSkills.length > 0 &&
+            skills.push(
+              ...skill.RelatedSkills.map((skillName) =>
+                Sanguosha.getSkillBySkillName(skillName)
+              )
+            );
+          return skills;
+        }, [])
+      : [];
+  return (
+    <div className={styles.characterSpec}>
+      <span
+        className={styles.deathButton}
+        onClick={() => onPlayDeathAudio(props.character.Name)}
+      >
+        {props.translator.trx("death audio")}
+      </span>
+      {skills.length > 0 &&
+        skills.map((skill) => (
+          <div className={styles.skill} key={skill.Name}>
+            <span
+              className={styles.skillName}
+              onClick={() => onPlaySkillAudio(skill.Name, props.skinName)}
+            >
+              {props.translator.tr(skill.Name)}
+            </span>
+            <span
+              className={styles.skillDescription}
+              dangerouslySetInnerHTML={{
+                __html: props.translator.tr(skill.Description),
+              }}
+            />
+          </div>
+        ))}
+      {relatedSkills.length > 0 && (
+        <span className={styles.relatedSkillTiltle}>
+          {props.translator.trx("related skill")}
         </span>
-        {this.skills.length > 0 &&
-          this.skills.map(skill => (
-            <div className={styles.skill} key={skill.Name}>
-              <span className={styles.skillName} onClick={this.onPlaySkillAudio(skill.Name, this.props.skinName)}>
-                {this.props.translator.tr(skill.Name)}
-              </span>
-              <span
-                className={styles.skillDescription}
-                dangerouslySetInnerHTML={{ __html: this.props.translator.tr(skill.Description) }}
-              />
-            </div>
-          ))}
-        {relatedSkills.length > 0 && (
-          <span className={styles.relatedSkillTiltle}>{this.props.translator.trx('related skill')}</span>
-        )}
-        {relatedSkills.length > 0 &&
-          relatedSkills.map(skill => (
-            <div className={styles.skill} key={skill.Name}>
-              <span
-                className={classNames(styles.skillName, styles.relatedSkill)}
-                onClick={this.onPlaySkillAudio(skill.Name, this.props.skinName)}
-              >
-                {this.props.translator.tr(skill.Name)}
-              </span>
-              <span
-                className={styles.skillDescription}
-                dangerouslySetInnerHTML={{ __html: this.props.translator.tr(skill.Description) }}
-              />
-            </div>
-          ))}
-      </div>
-    );
-  }
+      )}
+      {relatedSkills.length > 0 &&
+        relatedSkills.map((skill) => (
+          <div className={styles.skill} key={skill.Name}>
+            <span
+              className={classNames(styles.skillName, styles.relatedSkill)}
+              onClick={() => onPlaySkillAudio(skill.Name, props.skinName)}
+            >
+              {props.translator.tr(skill.Name)}
+            </span>
+            <span
+              className={styles.skillDescription}
+              dangerouslySetInnerHTML={{
+                __html: props.translator.tr(skill.Description),
+              }}
+            />
+          </div>
+        ))}
+    </div>
+  );
 }

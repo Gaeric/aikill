@@ -1,9 +1,9 @@
-import { VirtualCard } from '/src/core/cards/card';
-import type { CardId } from '/src/core/cards/libs/card_props';
-import type { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import type { Player } from '/src/core/player/player';
-import type { Room } from '/src/core/room/room';
-import { ActiveSkill, TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
+import { VirtualCard } from 'src/core/cards/card';
+import type { CardId } from 'src/core/cards/libs/card_props';
+import type { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import type { Player } from 'src/core/player/player';
+import type { Room } from 'src/core/room/room';
+import { ActiveSkill, TriggerSkill, ViewAsSkill } from 'src/core/skills/skill';
 
 export type ActiveSkillTrigger<T extends ActiveSkill> = ActiveCharacterSkillTrigger<T> | ActiveCardSkillTrigger<T>;
 

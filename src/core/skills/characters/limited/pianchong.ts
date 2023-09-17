@@ -1,23 +1,23 @@
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardColor, CardId, CardSuit } from '/src/core/cards/libs/card_props';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardColor, CardId, CardSuit } from 'src/core/cards/libs/card_props';
 import {
   CardDrawReason,
   CardMoveArea,
   CardMoveReason,
   GameEventIdentifiers,
   ServerEventFinder,
-} from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, CardMoveStage, DrawCardStage, PhaseChangeStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { Algorithm } from '/src/core/shares/libs/algorithm';
-import { Functional } from '/src/core/shares/libs/functional';
-import { OnDefineReleaseTiming, TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, CardMoveStage, DrawCardStage, PhaseChangeStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { Algorithm } from 'src/core/shares/libs/algorithm';
+import { Functional } from 'src/core/shares/libs/functional';
+import { OnDefineReleaseTiming, TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'pianchong', description: 'pianchong_description' })
 export class PianChong extends TriggerSkill {

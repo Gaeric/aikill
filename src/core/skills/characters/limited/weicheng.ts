@@ -1,10 +1,10 @@
-import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, CardMoveStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { CommonSkill, TriggerSkill } from '/src/core/skills/skill';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, CardMoveStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { CommonSkill, TriggerSkill } from 'src/core/skills/skill';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'weicheng', description: 'weicheng_description' })
 export class WeiCheng extends TriggerSkill {

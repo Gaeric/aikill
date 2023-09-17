@@ -1,9 +1,9 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, DamageEffectStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { CompulsorySkill, TriggerSkill } from '/src/core/skills/skill';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, DamageEffectStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { CompulsorySkill, TriggerSkill } from 'src/core/skills/skill';
 
 @CompulsorySkill({ name: 'jiaozi', description: 'jiaozi_description' })
 export class JiaoZi extends TriggerSkill {

@@ -1,13 +1,13 @@
-import { VirtualCard } from '/src/core/cards/card';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { Slash } from '/src/core/cards/standard/slash';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { ActiveSkill, CommonSkill } from '/src/core/skills/skill';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+import { VirtualCard } from 'src/core/cards/card';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { Slash } from 'src/core/cards/standard/slash';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { ActiveSkill, CommonSkill } from 'src/core/skills/skill';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'jianzhan', description: 'jianzhan_description' })
 export class JianZhan extends ActiveSkill {

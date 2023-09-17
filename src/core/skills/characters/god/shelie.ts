@@ -1,19 +1,19 @@
-import { CardId } from '/src/core/cards/libs/card_props';
+import { CardId } from 'src/core/cards/libs/card_props';
 import {
   CardDrawReason,
   CardMoveArea,
   CardMoveReason,
   GameEventIdentifiers,
   ServerEventFinder,
-} from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, DrawCardStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill } from '/src/core/skills/skill_wrappers';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, DrawCardStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill } from 'src/core/skills/skill_wrappers';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @CommonSkill({ name: 'shelie', description: 'shelie_description' })
 export class SheLie extends TriggerSkill {

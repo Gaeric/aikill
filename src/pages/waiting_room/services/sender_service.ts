@@ -1,8 +1,8 @@
-import { WaitingRoomClientEventFinder, WaitingRoomEvent, WaitingRoomServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { WaitingRoomGameSettings } from '/src/core/game/game_props';
-import { PlayerId } from '/src/core/player/player_props';
-import { ChatPacketObject } from '/src/services/connection_service/connection_service';
+import { WaitingRoomClientEventFinder, WaitingRoomEvent, WaitingRoomServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { WaitingRoomGameSettings } from 'src/core/game/game_props';
+import { PlayerId } from 'src/core/player/player_props';
+import { ChatPacketObject } from 'src/services/connection_service/connection_service';
 export class WaitingRoomSender {
   constructor(private socket: SocketIOClient.Socket) {}
 

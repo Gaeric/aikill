@@ -1,11 +1,11 @@
-import { CardChoosingOptions, CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveReason, ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { AllStage, TurnOverStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { CommonSkill, TriggerSkill } from '/src/core/skills/skill';
+import { CardChoosingOptions, CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveReason, ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { AllStage, TurnOverStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { CommonSkill, TriggerSkill } from 'src/core/skills/skill';
 
 @CommonSkill({ name: 'shebian', description: 'shebian_description' })
 export class SheBian extends TriggerSkill {

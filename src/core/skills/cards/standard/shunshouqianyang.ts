@@ -1,11 +1,11 @@
-import { ShunShouQianYangSkillTrigger } from '/src/core/ai/skills/cards/shunshouqianyang';
-import { CardChoosingOptions, CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
-import { ActiveSkill, AI, CommonSkill } from '/src/core/skills/skill';
+import { ShunShouQianYangSkillTrigger } from 'src/core/ai/skills/cards/shunshouqianyang';
+import { CardChoosingOptions, CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { Precondition } from 'src/core/shares/libs/precondition/precondition';
+import { ActiveSkill, AI, CommonSkill } from 'src/core/skills/skill';
 import { ExtralCardSkillProperty } from '../interface/extral_property';
 
 @AI(ShunShouQianYangSkillTrigger)

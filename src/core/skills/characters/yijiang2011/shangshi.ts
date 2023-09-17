@@ -1,13 +1,13 @@
-import { ShangShiSkillTrigger } from '/src/core/ai/skills/characters/yijiang2011/shangshi';
-import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { AllStage, CardMoveStage, HpChangeStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { AI, CommonSkill } from '/src/core/skills/skill_wrappers';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+import { ShangShiSkillTrigger } from 'src/core/ai/skills/characters/yijiang2011/shangshi';
+import { CardMoveArea, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { AllStage, CardMoveStage, HpChangeStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { AI, CommonSkill } from 'src/core/skills/skill_wrappers';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @AI(ShangShiSkillTrigger)
 @CommonSkill({ name: 'shangshi', description: 'shangshi_description' })

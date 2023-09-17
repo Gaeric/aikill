@@ -1,9 +1,9 @@
-import type { ActiveSkillTrigger } from '/src/core/ai/ai_skill_trigger';
-import type { CardId } from '/src/core/cards/libs/card_props';
-import { Player } from '/src/core/player/player';
-import type { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import type { ActiveSkill } from '/src/core/skills/skill';
+import type { ActiveSkillTrigger } from 'src/core/ai/ai_skill_trigger';
+import type { CardId } from 'src/core/cards/libs/card_props';
+import { Player } from 'src/core/player/player';
+import type { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import type { ActiveSkill } from 'src/core/skills/skill';
 import { BaseSkillTrigger } from './base_trigger';
 
 export class ActiveSkillTriggerClass<T extends ActiveSkill = ActiveSkill> extends BaseSkillTrigger {

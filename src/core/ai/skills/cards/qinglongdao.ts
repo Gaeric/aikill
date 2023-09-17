@@ -1,10 +1,10 @@
-import { AiLibrary } from '/src/core/ai/ai_lib';
-import { TriggerSkillTriggerClass } from '/src/core/ai/skills/base/trigger_skill_trigger';
-import type { CardId } from '/src/core/cards/libs/card_props';
-import type { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import type { Player } from '/src/core/player/player';
-import type { Room } from '/src/core/room/room';
-import type { QingLongYanYueDaoSkill } from '/src/core/skills';
+import { AiLibrary } from 'src/core/ai/ai_lib';
+import { TriggerSkillTriggerClass } from 'src/core/ai/skills/base/trigger_skill_trigger';
+import type { CardId } from 'src/core/cards/libs/card_props';
+import type { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import type { Player } from 'src/core/player/player';
+import type { Room } from 'src/core/room/room';
+import type { QingLongYanYueDaoSkill } from 'src/core/skills';
 
 export class QingLongDaoSkillTrigger extends TriggerSkillTriggerClass<
   QingLongYanYueDaoSkill,

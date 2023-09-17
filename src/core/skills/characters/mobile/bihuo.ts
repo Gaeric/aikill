@@ -1,10 +1,10 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { AllStage, CircleStartStage, PlayerDyingStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { RulesBreakerSkill, TriggerSkill } from '/src/core/skills/skill';
-import { CommonSkill, LimitSkill, PersistentSkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
-import { PatchedTranslationObject, TranslationPack } from '/src/core/translations/translation_json_tool';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { AllStage, CircleStartStage, PlayerDyingStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { RulesBreakerSkill, TriggerSkill } from 'src/core/skills/skill';
+import { CommonSkill, LimitSkill, PersistentSkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
+import { PatchedTranslationObject, TranslationPack } from 'src/core/translations/translation_json_tool';
 
 @LimitSkill({ name: 'bihuo', description: 'bihuo_description' })
 export class BiHuo extends TriggerSkill {

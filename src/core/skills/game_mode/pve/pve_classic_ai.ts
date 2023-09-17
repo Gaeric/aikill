@@ -1,15 +1,15 @@
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CardDrawReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, DamageEffectStage, DrawCardStage, LevelBeginStage, PlayerPhase } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { MarkEnum } from '/src/core/shares/types/mark_list';
-import { RulesBreakerSkill, TriggerSkill } from '/src/core/skills/skill';
-import { CompulsorySkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CardDrawReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, DamageEffectStage, DrawCardStage, LevelBeginStage, PlayerPhase } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { MarkEnum } from 'src/core/shares/types/mark_list';
+import { RulesBreakerSkill, TriggerSkill } from 'src/core/skills/skill';
+import { CompulsorySkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
 
 // 渐：摸牌阶段可以多摸一张牌
 // 制：手牌上限等于体力值

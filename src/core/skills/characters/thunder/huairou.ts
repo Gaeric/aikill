@@ -1,11 +1,11 @@
-import { CardType } from '/src/core/cards/card';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { ActiveSkill, CommonSkill } from '/src/core/skills/skill';
+import { CardType } from 'src/core/cards/card';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { ActiveSkill, CommonSkill } from 'src/core/skills/skill';
 
 @CommonSkill({ name: 'huairou', description: 'huairou_description' })
 export class HuaiRou extends ActiveSkill {

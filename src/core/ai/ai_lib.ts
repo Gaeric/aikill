@@ -1,35 +1,35 @@
-import { CardType } from "/src/core/cards/card";
-import { EquipCard } from "/src/core/cards/equip_card";
+import { CardType } from "src/core/cards/card";
+import { EquipCard } from "src/core/cards/equip_card";
 import {
   CardMatcher,
   CardMatcherSocketPassenger,
-} from "/src/core/cards/libs/card_matcher";
+} from "src/core/cards/libs/card_matcher";
 import {
   CardChoosingOptions,
   CardColor,
   CardId,
   CardValue,
-} from "/src/core/cards/libs/card_props";
+} from "src/core/cards/libs/card_props";
 import {
   ClientEventFinder,
   GameEventIdentifiers,
   ServerEventFinder,
-} from "/src/core/event/event";
-import { Sanguosha } from "/src/core/game/engine";
-import { Player } from "/src/core/player/player";
+} from "src/core/event/event";
+import { Sanguosha } from "src/core/game/engine";
+import { Player } from "src/core/player/player";
 import {
   PlayerCardsArea,
   PlayerId,
   PlayerRole,
-} from "/src/core/player/player_props";
-import { Room } from "/src/core/room/room";
-import { GameMode } from "/src/core/shares/types/room_props";
+} from "src/core/player/player_props";
+import { Room } from "src/core/room/room";
+import { GameMode } from "src/core/shares/types/room_props";
 import {
   ActiveSkill,
   FilterSkill,
   ResponsiveSkill,
   ViewAsSkill,
-} from "/src/core/skills/skill";
+} from "src/core/skills/skill";
 import { ActiveSkillTriggerClass } from "./skills/base/active_skill_trigger";
 import { ViewAsSkillTriggerClass } from "./skills/base/view_as_skill_trigger";
 

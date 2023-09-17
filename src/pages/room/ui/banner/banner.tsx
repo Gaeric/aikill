@@ -1,12 +1,12 @@
-import classNames from 'classnames';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ServerHostTag } from '/src/props/config_props';
-import * as React from 'react';
-import { useHistory } from 'react-router-dom';
-import { ConnectionService } from '/src/services/connection_service/connection_service';
-import { Button } from '/src/ui/button/button';
-import { SignalBar } from '/src/ui/signal_bar/signal_bar';
-import styles from './banner.module.css';
+import classNames from "classnames";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ServerHostTag } from "src/props/config_props";
+import * as React from "react";
+import { useNavigate } from "react-router-dom";
+import { ConnectionService } from "src/services/connection_service/connection_service";
+import { Button } from "src/ui/button/button";
+import { SignalBar } from "src/ui/signal_bar/signal_bar";
+import styles from "./banner.module.css";
 
 export type BannerProps = {
   roomName: string;
@@ -18,7 +18,7 @@ export type BannerProps = {
   onClickSettings(): void;
   onSwitchSideBoard?(): boolean;
   host?: ServerHostTag;
-  variant?: 'room' | 'waitingRoom';
+  variant?: "room" | "waitingRoom";
 };
 
 const BreadCrumb = (props: { content: string[] }) => (
@@ -26,42 +26,56 @@ const BreadCrumb = (props: { content: string[] }) => (
     {props.content.map((layer, index) => (
       <span className={styles.layer} key={index}>
         {layer}
-        {index === props.content.length - 1 ? '' : ' /\u00a0'}
+        {index === props.content.length - 1 ? "" : " /\u00a0"}
       </span>
     ))}
   </div>
 );
 
 export const Banner = (props: BannerProps) => {
-  const history = useHistory();
-  const { roomIndex, roomName, translator, host, defaultPing, variant = 'room' } = props;
+  const history = useNavigate();
+  const {
+    roomIndex,
+    roomName,
+    translator,
+    host,
+    defaultPing,
+    variant = "room",
+  } = props;
   const [isSideBarOpened, switchSideBar] = React.useState(true);
-  const breadcrumb: string[] = roomIndex ? [roomName, `${translator.tr('room id')}: ${roomIndex}`] : [roomName];
+  const breadcrumb: string[] = roomIndex
+    ? [roomName, `${translator.tr("room id")}: ${roomIndex}`]
+    : [roomName];
 
   const onClick = () => {
-    history.push('/lobby');
+    history("/lobby");
   };
 
   return (
     <div className={classNames(styles.banner, props.className)}>
       <BreadCrumb content={breadcrumb} />
       <div className={styles.controlButtons}>
-        {variant === 'room' && (
+        {variant === "room" && (
           <Button
             variant="primary"
             onClick={() => {
-              props.onSwitchSideBoard && switchSideBar(props.onSwitchSideBoard());
+              props.onSwitchSideBoard &&
+                switchSideBar(props.onSwitchSideBoard());
             }}
             className={styles.settingsButton}
           >
-            {translator.tr((isSideBarOpened ? 'close' : 'open') + ' sideboard')}
+            {translator.tr((isSideBarOpened ? "close" : "open") + " sideboard")}
           </Button>
         )}
-        <Button variant="primary" onClick={props.onClickSettings} className={styles.settingsButton}>
-          {translator.tr('settings')}
+        <Button
+          variant="primary"
+          onClick={props.onClickSettings}
+          className={styles.settingsButton}
+        >
+          {translator.tr("settings")}
         </Button>
         <Button variant="primary" onClick={onClick}>
-          {translator.tr('back to lobby')}
+          {translator.tr("back to lobby")}
         </Button>
       </div>
       {host && (

@@ -1,16 +1,15 @@
-import classNames from 'classnames';
-import { Card, VirtualCard } from '/src/core/cards/card';
-import { Sanguosha } from '/src/core/game/engine';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ImageLoader } from '/src/image_loader/image_loader';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import * as React from 'react';
-import { CardDescription } from '/src/ui/card_description/card_description';
-import { Tooltip } from '/src/ui/tooltip/tooltip';
-import styles from './card.module.css';
-import { CardNumberItem } from './card_number';
-import { CardSuitItem } from './card_suit';
+import classNames from "classnames";
+import { Card, VirtualCard } from "src/core/cards/card";
+import { Sanguosha } from "src/core/game/engine";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ImageLoader } from "src/image_loader/image_loader";
+
+import * as React from "react";
+import { CardDescription } from "src/ui/card_description/card_description";
+import { Tooltip } from "src/ui/tooltip/tooltip";
+import styles from "./card.module.css";
+import { CardNumberItem } from "./card_number";
+import { CardSuitItem } from "./card_suit";
 
 export type ClientCardProps = {
   id?: string;
@@ -32,39 +31,41 @@ export type ClientCardProps = {
   onMouseMove?(e: React.MouseEvent<HTMLDivElement, MouseEvent>): void;
   onMouseLeave?(e: React.MouseEvent<HTMLDivElement, MouseEvent>): void;
   onMouseEnter?(e: React.MouseEvent<HTMLDivElement, MouseEvent>): void;
-  cardRef?: ((instance: HTMLDivElement | null) => void) | React.RefObject<HTMLDivElement>;
+  cardRef?:
+    | ((instance: HTMLDivElement | null) => void)
+    | React.RefObject<HTMLDivElement>;
   selected?: boolean;
 };
 
-@mobxReact.observer
-export class ClientCard extends React.Component<ClientCardProps> {
-  @mobx.observable.ref
-  private cardImage: string | undefined;
-  @mobx.observable.ref
-  private realFlatCardImage: string | undefined;
-  @mobx.observable.ref
-  private originalCard: Card | undefined;
-  @mobx.observable.ref
-  onTooltipOpened: boolean = false;
+export function ClientCard(props: ClientCardProps) {
+  const [cardImage, setCardImage] = React.useState<string | undefined>("");
+  const [realFlatCardImage, setRealFlatCardImage] = React.useState<
+    string | undefined
+  >();
 
-  private onTooltipOpeningTimer: NodeJS.Timer;
+  const [originalCard, setOriginalCard] = React.useState<Card | undefined>();
 
-  private soundTracks: string[] = [];
+  const [onTooltipOpened, setOnTooltipOpened] = React.useState<boolean>(false);
 
-  readonly onClick = mobx.action(() => {
-    if (this.props.disabled === false) {
-      this.props.onSelected && this.props.onSelected(!this.props.selected);
-      this.forceUpdate();
+  let onTooltipOpeningTimer = React.useRef<null | ReturnType<
+    typeof setTimeout
+  >>();
+
+  let soundTracks: string[] = [];
+
+  function onClick() {
+    if (props.disabled === false) {
+      props.onSelected && props.onSelected(!props.selected);
     }
-  });
-
-  playAudio(): string {
-    const randomIndex = Math.round(Math.random() * this.soundTracks.length);
-    return this.soundTracks[randomIndex];
   }
 
-  getCardRatioSize(): React.CSSProperties {
-    const { width = 120, offsetLeft = 0, offsetTop = 0 } = this.props;
+  function playAudio(): string {
+    const randomIndex = Math.round(Math.random() * soundTracks.length);
+    return soundTracks[randomIndex];
+  }
+
+  function getCardRatioSize(): React.CSSProperties {
+    const { width = 120, offsetLeft = 0, offsetTop = 0 } = props;
     const height = (width * 4) / 3;
     return {
       width,
@@ -73,38 +74,56 @@ export class ClientCard extends React.Component<ClientCardProps> {
     };
   }
 
-  @mobx.action
-  private async initComponent() {
-    const { card, imageLoader } = this.props;
+  async function initComponent() {
+    const { card } = props;
     if (!card) {
       return;
     }
 
-    if (card.isVirtualCard() && (card as VirtualCard).ActualCardIds.length === 1) {
-      this.originalCard = Sanguosha.getCardById((card as VirtualCard).ActualCardIds[0]);
-      this.realFlatCardImage = (await imageLoader.getSlimCard(card.Name)).src;
-      this.cardImage = (await imageLoader.getCardImage(this.originalCard.Name)).src;
+    if (
+      card.isVirtualCard() &&
+      (card as VirtualCard).ActualCardIds.length === 1
+    ) {
+      setOriginalCard(() =>
+        Sanguosha.getCardById((card as VirtualCard).ActualCardIds[0])
+      );
+
+      let realFlatCardImageUrl = (
+        await props.imageLoader.getSlimCard(card.Name)
+      ).src;
+      if (realFlatCardImageUrl) {
+        setRealFlatCardImage(() => realFlatCardImageUrl);
+      }
+
+      let CardImageUrl = (
+        await props.imageLoader.getCardImage(originalCard.Name)
+      ).src;
+      if (CardImageUrl) {
+        setCardImage(() => CardImageUrl);
+      }
     } else {
-      this.originalCard = this.props.card;
-      this.cardImage = (await imageLoader.getCardImage(card.Name)).src;
+      setOriginalCard(() => props.card);
+      let url = (await props.imageLoader.getCardImage(card.Name)).src;
+      if (url) {
+        setCardImage(() => url);
+      }
     }
   }
+  React.useEffect(() => {
+    initComponent();
+  });
 
-  async componentDidMount() {
-    await this.initComponent();
-  }
-
-  async componentDidUpdate() {
-    await this.initComponent();
-  }
-
-  get CardComponent() {
-    const { card, translator, imageLoader, tags, highlight } = this.props;
+  function CardComponent() {
+    const { card, translator, imageLoader, tags, highlight } = props;
     if (!card) {
       const cardBack = imageLoader.getCardBack();
       return (
         <div className={styles.emptyCard}>
-          <img src={cardBack.src} className={styles.cardImage} alt={translator.tr(cardBack.alt)} />
+          <img
+            src={cardBack.src}
+            className={styles.cardImage}
+            alt={translator.tr(cardBack.alt)}
+          />
         </div>
       );
     }
@@ -112,33 +131,48 @@ export class ClientCard extends React.Component<ClientCardProps> {
     return (
       <div
         className={classNames(styles.innerCard, {
-          [styles.disabled]: highlight === undefined ? this.props.disabled : !highlight,
+          [styles.disabled]:
+            highlight === undefined ? props.disabled : !highlight,
         })}
       >
-        {this.originalCard && (
+        {originalCard && (
           <div className={styles.cornerTag}>
-            <CardNumberItem cardNumber={this.originalCard.CardNumber} isRed={this.originalCard.isRed()} />
-            <CardSuitItem suit={this.originalCard.Suit} />
+            <CardNumberItem
+              cardNumber={originalCard.CardNumber}
+              isRed={originalCard.isRed()}
+            />
+            <CardSuitItem suit={originalCard.Suit} />
           </div>
         )}
-        {this.cardImage ? (
-          <img className={styles.cardImage} src={this.cardImage} alt={card.Name} />
+        {cardImage ? (
+          <img className={styles.cardImage} src={cardImage} alt={card.Name} />
         ) : (
           <span>{translator.tr(card.Name)}</span>
         )}
-        {this.realFlatCardImage && (
+        {realFlatCardImage && (
           <>
             <div className={styles.flatCardNumber}>
               <CardSuitItem suit={card.Suit} />
-              <CardNumberItem cardNumber={card.CardNumber} isRed={card.isRed()} />
+              <CardNumberItem
+                cardNumber={card.CardNumber}
+                isRed={card.isRed()}
+              />
             </div>
-            <img className={styles.innterFlatCardImage} src={this.realFlatCardImage} alt={card.Name} />
+            <img
+              className={styles.innterFlatCardImage}
+              src={realFlatCardImage}
+              alt={card.Name}
+            />
           </>
         )}
         {tags &&
           (tags instanceof Array ? (
             <span className={styles.cardTag}>
-              {tags.map(tag => translator.tr(tag) + (tags[tags.length - 1] === tag ? '' : ' '))}
+              {tags.map(
+                (tag) =>
+                  translator.tr(tag) +
+                  (tags[tags.length - 1] === tag ? "" : " ")
+              )}
             </span>
           ) : (
             <span className={styles.cardTag}>{translator.trx(tags)}</span>
@@ -147,60 +181,58 @@ export class ClientCard extends React.Component<ClientCardProps> {
     );
   }
 
-  @mobx.action
-  private readonly openTooltip = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    this.props.onMouseEnter?.(e);
-    this.onTooltipOpeningTimer = setTimeout(() => {
-      this.onTooltipOpened = true;
+  function openTooltip(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    props.onMouseEnter?.(e);
+    onTooltipOpeningTimer.current = setTimeout(() => {
+      setOnTooltipOpened(() => true);
     }, 1000);
-  };
-  @mobx.action
-  private readonly closeTooltip = () => {
-    this.onTooltipOpeningTimer && clearTimeout(this.onTooltipOpeningTimer);
-    this.onTooltipOpened = false;
-  };
+  }
 
-  private readonly onMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (this.onTooltipOpened) {
-      this.closeTooltip();
+  function closeTooltip() {
+    onTooltipOpeningTimer.current &&
+      clearTimeout(onTooltipOpeningTimer.current);
+    setOnTooltipOpened(() => false);
+  }
+
+  function onMouseMove(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    if (onTooltipOpened) {
+      closeTooltip();
     }
 
-    this.props.onMouseMove && this.props.onMouseMove(e);
-  };
-
-  private readonly onMouseLeave = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    this.closeTooltip();
-    this.props.onMouseLeave && this.props.onMouseLeave(e);
-  };
-
-  render() {
-    const { className, style = {}, card, translator } = this.props;
-
-    return (
-      <div
-        id={this.props.id}
-        ref={this.props.cardRef}
-        className={classNames(styles.clientCard, className, {
-          [styles.selected]: this.props.selected,
-        })}
-        style={{
-          ...this.getCardRatioSize(),
-          ...style,
-        }}
-        onClick={this.onClick}
-        onMouseDown={this.props.onMouseDown}
-        onMouseUp={this.props.onMouseUp}
-        onMouseMove={this.onMouseMove}
-        onMouseLeave={this.onMouseLeave}
-        onMouseEnter={this.openTooltip}
-      >
-        {this.CardComponent}
-        {this.onTooltipOpened && card && (
-          <Tooltip position={[]} className={styles.cardDescription}>
-            <CardDescription translator={translator} card={card} />
-          </Tooltip>
-        )}
-      </div>
-    );
+    props.onMouseMove && props.onMouseMove(e);
   }
+
+  function onMouseLeave(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    closeTooltip();
+    props.onMouseLeave && props.onMouseLeave(e);
+  }
+
+  const { className, style = {}, card, translator } = props;
+
+  return (
+    <div
+      id={props.id}
+      ref={props.cardRef}
+      className={classNames(styles.clientCard, className, {
+        [styles.selected]: props.selected,
+      })}
+      style={{
+        ...getCardRatioSize(),
+        ...style,
+      }}
+      onClick={onClick}
+      onMouseDown={props.onMouseDown}
+      onMouseUp={props.onMouseUp}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      onMouseEnter={openTooltip}
+    >
+      {CardComponent()}
+      {onTooltipOpened && card && (
+        <Tooltip position={[]} className={styles.cardDescription}>
+          <CardDescription translator={translator} card={card} />
+        </Tooltip>
+      )}
+    </div>
+  );
 }

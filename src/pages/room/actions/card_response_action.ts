@@ -1,21 +1,35 @@
-import { Card } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { FilterSkill, Skill, TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
-import { UniqueSkillRule } from '/src/core/skills/skill_rule';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { BaseAction } from './base_action';
-import { RoomPresenter } from '../room.presenter';
-import { RoomStore } from '../room.store';
+import { Card } from "src/core/cards/card";
+import { CardMatcher } from "src/core/cards/libs/card_matcher";
+import {
+  ClientEventFinder,
+  GameEventIdentifiers,
+  ServerEventFinder,
+} from "src/core/event/event";
+import { EventPacker } from "src/core/event/event_packer";
+import { Sanguosha } from "src/core/game/engine";
+import { Player } from "src/core/player/player";
+import { PlayerCardsArea, PlayerId } from "src/core/player/player_props";
+import { Room } from "src/core/room/room";
+import {
+  FilterSkill,
+  Skill,
+  TriggerSkill,
+  ViewAsSkill,
+} from "src/core/skills/skill";
+import { UniqueSkillRule } from "src/core/skills/skill_rule";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { BaseAction } from "./base_action";
+import { RoomPresenter } from "../room.presenter";
+import { RoomStore } from "../room.store";
 
 export class CardResponseAction extends BaseAction {
   public static isSkillsOnCardResponseDisabled =
-    (room: Room, matcher: CardMatcher, player: Player, event: ServerEventFinder<GameEventIdentifiers>) =>
+    (
+      room: Room,
+      matcher: CardMatcher,
+      player: Player,
+      event: ServerEventFinder<GameEventIdentifiers>
+    ) =>
     (skill: Skill) => {
       if (UniqueSkillRule.isProhibited(skill, player)) {
         return true;
@@ -25,8 +39,9 @@ export class CardResponseAction extends BaseAction {
         return true;
       } else if (skill instanceof ViewAsSkill) {
         return (
-          !new CardMatcher({ name: skill.canViewAs(room, player, undefined, matcher) }).match(matcher) ||
-          !skill.canUse(room, player, event)
+          !new CardMatcher({
+            name: skill.canViewAs(room, player, undefined, matcher),
+          }).match(matcher) || !skill.canUse(room, player, event)
         );
       }
 
@@ -41,16 +56,16 @@ export class CardResponseAction extends BaseAction {
     store: RoomStore,
     presenter: RoomPresenter,
     askForEvent: ServerEventFinder<GameEventIdentifiers.AskForCardResponseEvent>,
-    translator: ClientTranslationModule,
+    translator: ClientTranslationModule
   ) {
     super(playerId, store, presenter, translator);
     this.askForEvent = askForEvent;
     this.matcher = new CardMatcher(this.askForEvent.cardMatcher);
 
     if (!EventPacker.isUncancellableEvent(this.askForEvent)) {
-      this.presenter.enableActionButton('cancel');
+      this.presenter.enableActionButton("cancel");
     } else {
-      this.presenter.disableActionButton('cancel');
+      this.presenter.disableActionButton("cancel");
     }
   }
 
@@ -61,9 +76,21 @@ export class CardResponseAction extends BaseAction {
     return false;
   }
 
-  isCardEnabledOnResponse(card: Card, fromArea: PlayerCardsArea, matcher: CardMatcher) {
-    for (const skill of this.player.getSkills<FilterSkill>('filter')) {
-      if (!skill.canUseCard(card.Id, this.store.room, this.playerId, undefined, true)) {
+  isCardEnabledOnResponse(
+    card: Card,
+    fromArea: PlayerCardsArea,
+    matcher: CardMatcher
+  ) {
+    for (const skill of this.player.getSkills<FilterSkill>("filter")) {
+      if (
+        !skill.canUseCard(
+          card.Id,
+          this.store.room,
+          this.playerId,
+          undefined,
+          true
+        )
+      ) {
         return false;
       }
     }
@@ -91,7 +118,7 @@ export class CardResponseAction extends BaseAction {
             card.Id,
             this.pendingCards,
             this.equipSkillCardId,
-            this.matcher,
+            this.matcher
           ) &&
           skill.availableCardAreas().includes(fromArea) &&
           (!skill.cardFilter(
@@ -99,23 +126,28 @@ export class CardResponseAction extends BaseAction {
             this.player,
             this.pendingCards,
             this.selectedTargets,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           ) ||
             skill.cardFilter(
               this.store.room,
               this.player,
               [...this.pendingCards, card.Id],
               this.selectedTargets,
-              this.selectedCardToPlay,
+              this.selectedCardToPlay
             ))
         );
       } else {
         return false;
       }
     }
-    this.askForEvent.fromArea = this.askForEvent.fromArea || [PlayerCardsArea.HandArea];
+    this.askForEvent.fromArea = this.askForEvent.fromArea || [
+      PlayerCardsArea.HandArea,
+    ];
     if (this.selectedCardToPlay === undefined) {
-      if (fromArea === PlayerCardsArea.HandArea && this.askForEvent.fromArea.includes(PlayerCardsArea.HandArea)) {
+      if (
+        fromArea === PlayerCardsArea.HandArea &&
+        this.askForEvent.fromArea.includes(PlayerCardsArea.HandArea)
+      ) {
         return matcher.match(card);
       } else if (
         fromArea === PlayerCardsArea.EquipArea &&
@@ -123,7 +155,12 @@ export class CardResponseAction extends BaseAction {
       ) {
         if (card.Skill instanceof ViewAsSkill) {
           return new CardMatcher({
-            name: card.Skill.canViewAs(this.store.room, this.player, this.pendingCards, this.matcher),
+            name: card.Skill.canViewAs(
+              this.store.room,
+              this.player,
+              this.pendingCards,
+              this.matcher
+            ),
           }).match(new CardMatcher(this.askForEvent.cardMatcher));
         }
       } else if (
@@ -146,7 +183,10 @@ export class CardResponseAction extends BaseAction {
   }
 
   enableToCallAction() {
-    const card = this.selectedCardToPlay === undefined ? undefined : Sanguosha.getCardById(this.selectedCardToPlay);
+    const card =
+      this.selectedCardToPlay === undefined
+        ? undefined
+        : Sanguosha.getCardById(this.selectedCardToPlay);
     if (card && CardMatcher.match(this.askForEvent.cardMatcher, card)) {
       return true;
     }
@@ -159,7 +199,7 @@ export class CardResponseAction extends BaseAction {
   }
 
   async onPlay(translator: ClientTranslationModule) {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       this.presenter.highlightCards();
       this.presenter.createIncomingConversation({
         conversation: this.askForEvent.conversation,
@@ -167,33 +207,45 @@ export class CardResponseAction extends BaseAction {
       });
 
       this.presenter.defineConfirmButtonActions(() => {
-        const event: ClientEventFinder<GameEventIdentifiers.AskForCardResponseEvent> = {
-          fromId: this.playerId,
-          cardId: this.selectedCardToPlay,
-        };
-        this.store.room.broadcast(GameEventIdentifiers.AskForCardResponseEvent, event);
-        this.presenter.disableActionButton('confirm');
+        const event: ClientEventFinder<GameEventIdentifiers.AskForCardResponseEvent> =
+          {
+            fromId: this.playerId,
+            cardId: this.selectedCardToPlay,
+          };
+        this.store.room.broadcast(
+          GameEventIdentifiers.AskForCardResponseEvent,
+          event
+        );
+        this.presenter.disableActionButton("confirm");
         this.resetActionHandlers();
         this.resetAction();
-        this.presenter.isSkillDisabled(BaseAction.disableSkills);
+        this.presenter.handleIsSkillDisabled(BaseAction.disableSkills);
         this.presenter.resetSelectedSkill();
         resolve();
       });
       this.presenter.defineCancelButtonActions(() => {
-        const event: ClientEventFinder<GameEventIdentifiers.AskForCardResponseEvent> = {
-          fromId: this.playerId,
-        };
-        this.store.room.broadcast(GameEventIdentifiers.AskForCardResponseEvent, event);
+        const event: ClientEventFinder<GameEventIdentifiers.AskForCardResponseEvent> =
+          {
+            fromId: this.playerId,
+          };
+        this.store.room.broadcast(
+          GameEventIdentifiers.AskForCardResponseEvent,
+          event
+        );
         this.resetActionHandlers();
         this.resetAction();
-        this.presenter.isSkillDisabled(BaseAction.disableSkills);
+        this.presenter.handleIsSkillDisabled(BaseAction.disableSkills);
         this.presenter.resetSelectedSkill();
         resolve();
       });
 
       this.presenter.setupPlayersSelectionMatcher(() => false);
       this.presenter.setupClientPlayerCardActionsMatcher((card: Card) =>
-        this.isCardEnabledOnResponse(card, PlayerCardsArea.HandArea, new CardMatcher(this.askForEvent.cardMatcher)),
+        this.isCardEnabledOnResponse(
+          card,
+          PlayerCardsArea.HandArea,
+          new CardMatcher(this.askForEvent.cardMatcher)
+        )
       );
       this.presenter.setupClientPlayerOutsideCardActionsMatcher(
         (card: Card) =>
@@ -201,11 +253,15 @@ export class CardResponseAction extends BaseAction {
           this.isCardEnabledOnResponse(
             card,
             PlayerCardsArea.OutsideArea,
-            new CardMatcher(this.askForEvent.cardMatcher),
-          ),
+            new CardMatcher(this.askForEvent.cardMatcher)
+          )
       );
       this.presenter.setupCardSkillSelectionMatcher((card: Card) =>
-        this.isCardEnabledOnResponse(card, PlayerCardsArea.EquipArea, new CardMatcher(this.askForEvent.cardMatcher)),
+        this.isCardEnabledOnResponse(
+          card,
+          PlayerCardsArea.EquipArea,
+          new CardMatcher(this.askForEvent.cardMatcher)
+        )
       );
     });
   }

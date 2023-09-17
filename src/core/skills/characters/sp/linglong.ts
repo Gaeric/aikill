@@ -1,16 +1,16 @@
-import { CardType } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CharacterEquipSections } from '/src/core/characters/character';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, CardMoveStage, StagePriority } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { BaGuaZhenSkill, QiCai } from '/src/core/skills';
-import { RulesBreakerSkill, TriggerSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
-import { CompulsorySkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { CardType } from 'src/core/cards/card';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CharacterEquipSections } from 'src/core/characters/character';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, CardMoveStage, StagePriority } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { BaGuaZhenSkill, QiCai } from 'src/core/skills';
+import { RulesBreakerSkill, TriggerSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
+import { CompulsorySkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
 
 @CompulsorySkill({ name: 'linglong', description: 'linglong_description' })
 export class LingLong extends BaGuaZhenSkill implements OnDefineReleaseTiming {

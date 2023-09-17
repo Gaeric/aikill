@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { CardSuit } from '/src/core/cards/libs/card_props';
+import { CardSuit } from 'src/core/cards/libs/card_props';
 import * as React from 'react';
 import styles from './card.module.css';
 

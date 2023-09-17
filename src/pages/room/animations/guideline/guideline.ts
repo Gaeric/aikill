@@ -1,12 +1,16 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { RoomStore } from '/src/pages/room/room.store';
-import { Point } from '../position';
-import { UiAnimation } from '../ui_animation';
+import { GameEventIdentifiers, ServerEventFinder } from "src/core/event/event";
+import { RoomStore } from "src/pages/room/room.store";
+import { Point } from "../position";
+import { UiAnimation } from "../ui_animation";
 
 export type Step = [Point, Point[]];
 
 export class GuideLine extends UiAnimation {
-  constructor(private store: RoomStore, private animationTime: number, private remainTime: number) {
+  constructor(
+    private store: RoomStore,
+    private animationTime: number,
+    private remainTime: number
+  ) {
     super();
   }
   private readonly includedEvents: readonly GameEventIdentifiers[] = [
@@ -14,7 +18,7 @@ export class GuideLine extends UiAnimation {
     GameEventIdentifiers.SkillUseEvent,
   ];
 
-  private readonly rooElement = document.getElementById('root')!;
+  private readonly rooElement = document.getElementById("root")!;
 
   private calculateAngle(from: Point, to: Point) {
     const xrad = Math.atan2(to.x - from.x, to.y - from.y);
@@ -26,16 +30,29 @@ export class GuideLine extends UiAnimation {
   }
 
   private calulateLength(from: Point, to: Point) {
-    return Math.sqrt(Math.pow(Math.abs(from.x - to.x), 2) + Math.pow(Math.abs(from.y - to.y), 2));
+    return Math.sqrt(
+      Math.pow(Math.abs(from.x - to.x), 2) +
+        Math.pow(Math.abs(from.y - to.y), 2)
+    );
   }
 
-  private createAnimationGuidelineSteps(event: ServerEventFinder<GameEventIdentifiers>) {
+  private createAnimationGuidelineSteps(
+    event: ServerEventFinder<GameEventIdentifiers>
+  ) {
     const steps: Step[] = [];
     const { animation } = event;
     if (animation) {
       for (const { from, tos } of animation) {
-        const fromPont = this.store.animationPosition.getPosition(from, from === this.store.clientPlayerId);
-        const toPoints = tos.map(to => this.store.animationPosition.getPosition(to, to === this.store.clientPlayerId));
+        const fromPont = this.store.animationPosition.getPosition(
+          from,
+          from === this.store.clientPlayerId
+        );
+        const toPoints = tos.map((to) =>
+          this.store.animationPosition.getPosition(
+            to,
+            to === this.store.clientPlayerId
+          )
+        );
         steps.push([fromPont, toPoints]);
       }
     }
@@ -43,7 +60,10 @@ export class GuideLine extends UiAnimation {
     return steps;
   }
 
-  async animate(identifier: GameEventIdentifiers, event: ServerEventFinder<GameEventIdentifiers>) {
+  async animate(
+    identifier: GameEventIdentifiers,
+    event: ServerEventFinder<GameEventIdentifiers>
+  ) {
     if (!this.includedEvents.includes(identifier)) {
       return;
     }
@@ -51,17 +71,22 @@ export class GuideLine extends UiAnimation {
     const steps = this.createAnimationGuidelineSteps(event);
     for (const step of steps) {
       const lines = this.render(step);
-      this.rooElement.append(...lines.map(line => line[0]));
+      this.rooElement.append(...lines.map((line) => line[0]));
       for (const [element, length] of lines) {
         UiAnimation.play(100, () => {
           element.style.transition = `width ${this.animationTime}ms, opacity ${this.defaultAnimationTime}ms`;
           element.style.width = `${length}px`;
-          element.style.opacity = '1';
+          element.style.opacity = "1";
         });
-        UiAnimation.play(this.remainTime - this.defaultAnimationTime * 2 - 10, () => {
-          element.style.transition = `opacity ${this.defaultAnimationTime * 2}ms`;
-          element.style.opacity = '0';
-        });
+        UiAnimation.play(
+          this.remainTime - this.defaultAnimationTime * 2 - 10,
+          () => {
+            element.style.transition = `opacity ${
+              this.defaultAnimationTime * 2
+            }ms`;
+            element.style.opacity = "0";
+          }
+        );
       }
 
       UiAnimation.play(this.remainTime, () => {
@@ -77,18 +102,22 @@ export class GuideLine extends UiAnimation {
   private render(step: Step) {
     const lines: [HTMLElement, number][] = [];
     for (const to of step[1]) {
-      const element = document.createElement('div');
-      element.style.height = '3px';
-      element.style.borderRadius = '1.5px';
-      element.style.width = '0';
-      element.style.background = 'linear-gradient(86deg, rgba(255,68,62,1) 0%, rgba(251,248,0,1) 80%)';
-      element.style.transform = `rotate(${this.calculateAngle(step[0], to)}deg)`;
-      element.style.transformOrigin = 'top left';
-      element.style.position = 'fixed';
+      const element = document.createElement("div");
+      element.style.height = "3px";
+      element.style.borderRadius = "1.5px";
+      element.style.width = "0";
+      element.style.background =
+        "linear-gradient(86deg, rgba(255,68,62,1) 0%, rgba(251,248,0,1) 80%)";
+      element.style.transform = `rotate(${this.calculateAngle(
+        step[0],
+        to
+      )}deg)`;
+      element.style.transformOrigin = "top left";
+      element.style.position = "fixed";
       element.style.left = `${step[0].x}px`;
       element.style.top = `${step[0].y}px`;
-      element.style.zIndex = '99';
-      element.style.opacity = '0';
+      element.style.zIndex = "99";
+      element.style.opacity = "0";
       lines.push([element, this.calulateLength(step[0], to)]);
     }
 

@@ -1,15 +1,22 @@
-import { activeWaitingRoomListeningEvents, WaitingRoomEvent, WaitingRoomServerEventFinder } from '/src/core/event/event';
-import { GameInfo, TemporaryRoomCreationInfo } from '/src/core/game/game_props';
-import { PlayerId } from '/src/core/player/player_props';
-import { RoomId } from '/src/core/room/room';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ElectronData } from '/src/electron_loader/electron_data';
-import { ElectronLoader } from '/src/electron_loader/electron_loader';
-import { createTranslationMessages } from './messages';
-import { RoomAvatarService } from './services/avatar_service';
-import { WaitingRoomPresenter } from './waiting_room.presenter';
-import { WaitingRoomSeatInfo, WaitingRoomStore } from './waiting_room.store';
+import {
+  activeWaitingRoomListeningEvents,
+  WaitingRoomEvent,
+  WaitingRoomServerEventFinder,
+} from "src/core/event/event";
+import { GameInfo, TemporaryRoomCreationInfo } from "src/core/game/game_props";
+import { PlayerId } from "src/core/player/player_props";
+import { RoomId } from "src/core/room/room";
+import { Precondition } from "src/core/shares/libs/precondition/precondition";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ElectronData } from "src/electron_loader/electron_data";
+import { ElectronLoader } from "src/electron_loader/electron_loader";
+import { createTranslationMessages } from "./messages";
+import { RoomAvatarService } from "./services/avatar_service";
+import {
+  WaitingRoomPresenter,
+  WaitingRoomStoreType,
+  WaitingRoomSeatInfo,
+} from "./waiting_room.presenter";
 
 interface WaitingRoomProcessorListenerData {
   [WaitingRoomEvent.PlayerEnter]: { roomInfo: TemporaryRoomCreationInfo };
@@ -22,28 +29,32 @@ export class WaitingRoomProcessor {
     private avatarService: RoomAvatarService,
     private translator: ClientTranslationModule,
     private electronLoader: ElectronLoader,
-    private presenter: WaitingRoomPresenter,
-    private store: WaitingRoomStore,
+    private presenter: any,
+    private store: WaitingRoomStoreType,
     private selfPlayerName: string,
     private accessRejectedHandler: () => void,
-    private joinIntoTheGame: (roomId: RoomId, roomInfo: GameInfo) => void,
+    private joinIntoTheGame: (roomId: RoomId, roomInfo: GameInfo) => void
   ) {}
 
   private messages = createTranslationMessages(this.translator);
 
-  private playerEnterListener: (content: WaitingRoomProcessorListenerData[WaitingRoomEvent.PlayerEnter]) => void;
-  private hostChangedListener: (content: WaitingRoomProcessorListenerData['hostChange']) => void;
+  private playerEnterListener: (
+    content: WaitingRoomProcessorListenerData[WaitingRoomEvent.PlayerEnter]
+  ) => void;
+  private hostChangedListener: (
+    content: WaitingRoomProcessorListenerData["hostChange"]
+  ) => void;
 
-  public on<Event extends WaitingRoomEvent.PlayerEnter | 'hostChange'>(
+  public on<Event extends WaitingRoomEvent.PlayerEnter | "hostChange">(
     event: Event,
-    listener: (content: WaitingRoomProcessorListenerData[Event]) => void,
+    listener: (content: WaitingRoomProcessorListenerData[Event]) => void
   ) {
     switch (event) {
       case WaitingRoomEvent.PlayerEnter: {
         this.playerEnterListener = listener as any;
         break;
       }
-      case 'hostChange': {
+      case "hostChange": {
         this.hostChangedListener = listener as any;
         break;
       }
@@ -54,64 +65,102 @@ export class WaitingRoomProcessor {
   }
 
   initWaitingRoomConnectionListeners() {
-    activeWaitingRoomListeningEvents.forEach(identifier => {
-      this.socket.on(identifier, (evt: WaitingRoomServerEventFinder<WaitingRoomEvent>) => {
-        switch (identifier) {
-          case WaitingRoomEvent.GameInfoUpdate:
-            this.onGameInfoUpdate(evt as WaitingRoomServerEventFinder<WaitingRoomEvent.GameInfoUpdate>);
-            return;
-          case WaitingRoomEvent.GameStart:
-            this.onGameStart(evt as WaitingRoomServerEventFinder<WaitingRoomEvent.GameStart>);
-            return;
-          case WaitingRoomEvent.PlayerChatMessage:
-            this.onPlayerChat(evt as WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerChatMessage>);
-            return;
-          case WaitingRoomEvent.PlayerEnter:
-            this.onPlayerEnter(evt as WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerEnter>);
-            return;
-          case WaitingRoomEvent.PlayerLeave:
-            this.onPlayerLeave(evt as WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerLeave>);
-            return;
-          case WaitingRoomEvent.PlayerReady:
-            this.onPlayerReady(evt as WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerReady>);
-            return;
-          case WaitingRoomEvent.RoomCreated:
-            this.onRoomCreated(evt as WaitingRoomServerEventFinder<WaitingRoomEvent.RoomCreated>);
-            return;
-          case WaitingRoomEvent.SeatDisabled:
-            this.onSeatDisabled(evt as WaitingRoomServerEventFinder<WaitingRoomEvent.SeatDisabled>);
-            return;
-          case WaitingRoomEvent.ChangeHost:
-            this.onHostChanged(evt as WaitingRoomServerEventFinder<WaitingRoomEvent.ChangeHost>);
-            return;
-          default:
-            throw Precondition.UnreachableError(identifier);
+    activeWaitingRoomListeningEvents.forEach((identifier) => {
+      this.socket.on(
+        identifier,
+        (evt: WaitingRoomServerEventFinder<WaitingRoomEvent>) => {
+          switch (identifier) {
+            case WaitingRoomEvent.GameInfoUpdate:
+              this.onGameInfoUpdate(
+                evt as WaitingRoomServerEventFinder<WaitingRoomEvent.GameInfoUpdate>
+              );
+              return;
+            case WaitingRoomEvent.GameStart:
+              this.onGameStart(
+                evt as WaitingRoomServerEventFinder<WaitingRoomEvent.GameStart>
+              );
+              return;
+            case WaitingRoomEvent.PlayerChatMessage:
+              this.onPlayerChat(
+                evt as WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerChatMessage>
+              );
+              return;
+            case WaitingRoomEvent.PlayerEnter:
+              this.onPlayerEnter(
+                evt as WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerEnter>
+              );
+              return;
+            case WaitingRoomEvent.PlayerLeave:
+              this.onPlayerLeave(
+                evt as WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerLeave>
+              );
+              return;
+            case WaitingRoomEvent.PlayerReady:
+              this.onPlayerReady(
+                evt as WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerReady>
+              );
+              return;
+            case WaitingRoomEvent.RoomCreated:
+              this.onRoomCreated(
+                evt as WaitingRoomServerEventFinder<WaitingRoomEvent.RoomCreated>
+              );
+              return;
+            case WaitingRoomEvent.SeatDisabled:
+              this.onSeatDisabled(
+                evt as WaitingRoomServerEventFinder<WaitingRoomEvent.SeatDisabled>
+              );
+              return;
+            case WaitingRoomEvent.ChangeHost:
+              this.onHostChanged(
+                evt as WaitingRoomServerEventFinder<WaitingRoomEvent.ChangeHost>
+              );
+              return;
+            default:
+              throw Precondition.UnreachableError(identifier);
+          }
         }
-      });
+      );
     });
   }
 
   public saveSettingsLocally() {
-    this.electronLoader.setData(ElectronData.RoomSettingsAllowObserver, this.store.gameSettings.allowObserver || false);
-    this.electronLoader.setData(ElectronData.RoomSettingsCardExtensions, this.store.gameSettings.cardExtensions);
+    this.electronLoader.setData(
+      ElectronData.RoomSettingsAllowObserver,
+      this.store.gameSettings.allowObserver || false
+    );
+    this.electronLoader.setData(
+      ElectronData.RoomSettingsCardExtensions,
+      this.store.gameSettings.cardExtensions
+    );
     this.electronLoader.setData(
       ElectronData.RoomSettingsCharacterExtensions,
-      this.store.gameSettings.characterExtensions,
+      this.store.gameSettings.characterExtensions
     );
-    this.electronLoader.setData(ElectronData.RoomSettingsGameMode, this.store.gameSettings.gameMode);
-    this.electronLoader.setData(ElectronData.RoomSettingsPlayTime, this.store.gameSettings.playingTimeLimit);
-    this.electronLoader.setData(ElectronData.RoomSettingsWuxiekejiTime, this.store.gameSettings.wuxiekejiTimeLimit);
+    this.electronLoader.setData(
+      ElectronData.RoomSettingsGameMode,
+      this.store.gameSettings.gameMode
+    );
+    this.electronLoader.setData(
+      ElectronData.RoomSettingsPlayTime,
+      this.store.gameSettings.playingTimeLimit
+    );
+    this.electronLoader.setData(
+      ElectronData.RoomSettingsWuxiekejiTime,
+      this.store.gameSettings.wuxiekejiTimeLimit
+    );
     this.electronLoader.setData(
       ElectronData.RoomSettingsFortuneCardsExchangeTime,
-      this.store.gameSettings.fortuneCardsExchangeLimit,
+      this.store.gameSettings.fortuneCardsExchangeLimit
     );
     this.electronLoader.setData(
       ElectronData.RoomSettingsDisabledCharacters,
-      this.store.gameSettings.excludedCharacters,
+      this.store.gameSettings.excludedCharacters
     );
   }
 
-  private onPlayerEnter(evt: WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerEnter>) {
+  private onPlayerEnter(
+    evt: WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerEnter>
+  ) {
     const seatsInfo: WaitingRoomSeatInfo[] = [];
     if (evt.playerInfo.playerId === this.store.selfPlayerId) {
       const playersInfo: {
@@ -121,7 +170,7 @@ export class WaitingRoomProcessor {
         seatId: number;
         playerReady?: boolean;
       }[] = [evt.playerInfo, ...evt.otherPlayersInfo];
-      for (let i = 0; i < WaitingRoomPresenter.defaultNumberOfPlayers; i++) {
+      for (let i = 0; i < this.presenter.defaultNumberOfPlayers; i++) {
         if (!evt.disableSeats.includes(i)) {
           const seatInfo = playersInfo.shift();
           if (seatInfo) {
@@ -163,16 +212,22 @@ export class WaitingRoomProcessor {
     }
   }
 
-  private onGameInfoUpdate(evt: WaitingRoomServerEventFinder<WaitingRoomEvent.GameInfoUpdate>) {
+  private onGameInfoUpdate(
+    evt: WaitingRoomServerEventFinder<WaitingRoomEvent.GameInfoUpdate>
+  ) {
     this.presenter.updateGameSettings(this.store, evt.roomInfo);
     this.saveSettingsLocally();
   }
 
-  private onGameStart(evt: WaitingRoomServerEventFinder<WaitingRoomEvent.GameStart>) {
+  private onGameStart(
+    evt: WaitingRoomServerEventFinder<WaitingRoomEvent.GameStart>
+  ) {
     this.joinIntoTheGame(evt.roomId, evt.roomInfo);
   }
 
-  private onPlayerChat(evt: WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerChatMessage>) {
+  private onPlayerChat(
+    evt: WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerChatMessage>
+  ) {
     this.presenter.sendChatMessage(this.store, {
       from: evt.from,
       message: evt.messageContent,
@@ -180,12 +235,16 @@ export class WaitingRoomProcessor {
     });
   }
 
-  private onPlayerLeave(evt: WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerLeave>) {
+  private onPlayerLeave(
+    evt: WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerLeave>
+  ) {
     if (evt.leftPlayerId === this.store.selfPlayerId) {
       return this.accessRejectedHandler();
     }
 
-    const existingSeat = this.store.seats.find(seat => !seat.seatDisabled && seat.playerId === evt.leftPlayerId);
+    const existingSeat = this.store.seats.find(
+      (seat) => !seat.seatDisabled && seat.playerId === evt.leftPlayerId
+    );
     if (!existingSeat) {
       return;
     }
@@ -209,20 +268,30 @@ export class WaitingRoomProcessor {
     }
   }
 
-  private onPlayerReady(evt: WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerReady>) {
-    const playerSeat = this.store.seats.find(seat => !seat.seatDisabled && seat.playerId === evt.readyPlayerId);
+  private onPlayerReady(
+    evt: WaitingRoomServerEventFinder<WaitingRoomEvent.PlayerReady>
+  ) {
+    const playerSeat = this.store.seats.find(
+      (seat) => !seat.seatDisabled && seat.playerId === evt.readyPlayerId
+    );
     if (!playerSeat || playerSeat.seatDisabled) {
       return;
     }
 
-    this.presenter.updateSeatInfo(this.store, { ...playerSeat, playerReady: evt.isReady });
+    this.presenter.updateSeatInfo(this.store, {
+      ...playerSeat,
+      playerReady: evt.isReady,
+    });
   }
 
-  private async onRoomCreated(evt: WaitingRoomServerEventFinder<WaitingRoomEvent.RoomCreated>) {
+  private async onRoomCreated(
+    evt: WaitingRoomServerEventFinder<WaitingRoomEvent.RoomCreated>
+  ) {
     if (evt.error != null) {
       this.accessRejectedHandler();
     } else {
-      const { roomName, campaignMode, coreVersion, hostPlayerId, ...settings } = evt.roomInfo;
+      const { roomName, campaignMode, coreVersion, hostPlayerId, ...settings } =
+        evt.roomInfo;
 
       this.presenter.updateGameSettings(this.store, settings);
       this.saveSettingsLocally();
@@ -231,24 +300,37 @@ export class WaitingRoomProcessor {
 
       const avatarIndex = await this.avatarService.getRandomAvatarIndex();
       this.socket.emit(WaitingRoomEvent.PlayerEnter, {
-        playerInfo: { playerId: this.store.selfPlayerId, avatarId: avatarIndex, playerName: this.selfPlayerName },
+        playerInfo: {
+          playerId: this.store.selfPlayerId,
+          avatarId: avatarIndex,
+          playerName: this.selfPlayerName,
+        },
         isHost: true,
         coreVersion,
       });
     }
   }
 
-  private onSeatDisabled(evt: WaitingRoomServerEventFinder<WaitingRoomEvent.SeatDisabled>) {
-    const playerSeat = this.store.seats.find(seat => seat.seatId === evt.seatId);
+  private onSeatDisabled(
+    evt: WaitingRoomServerEventFinder<WaitingRoomEvent.SeatDisabled>
+  ) {
+    const playerSeat = this.store.seats.find(
+      (seat) => seat.seatId === evt.seatId
+    );
     if (!playerSeat) {
       return;
     }
 
-    this.presenter.updateSeatInfo(this.store, { ...playerSeat, seatDisabled: evt.disabled });
+    this.presenter.updateSeatInfo(this.store, {
+      ...playerSeat,
+      seatDisabled: evt.disabled,
+    });
     this.presenter.updateRoomPlayers(this.store, evt.disabled ? -1 : 1);
   }
 
-  private onHostChanged(evt: WaitingRoomServerEventFinder<WaitingRoomEvent.ChangeHost>) {
+  private onHostChanged(
+    evt: WaitingRoomServerEventFinder<WaitingRoomEvent.ChangeHost>
+  ) {
     this.hostChangedListener?.({ newHostPlayerId: evt.newHostPlayerId });
     this.presenter.sendChatMessage(this.store, {
       from: this.messages.systemNotification(),

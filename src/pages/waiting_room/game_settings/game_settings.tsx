@@ -1,363 +1,392 @@
-import classNames from 'classnames';
-import { Character } from '/src/core/characters/character';
-import { Sanguosha } from '/src/core/game/engine';
-import { GameCharacterExtensions, WaitingRoomGameSettings } from '/src/core/game/game_props';
-import { GameMode } from '/src/core/shares/types/room_props';
-import { WuXieKeJiSkill } from '/src/core/skills';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ImageLoader } from '/src/image_loader/image_loader';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import * as React from 'react';
-import { CharacterCard } from '/src/ui/character/character';
-import { CheckBox } from '/src/ui/check_box/check_box';
-import { CheckBoxGroup } from '/src/ui/check_box/check_box_group';
-import { Input } from '/src/ui/input/input';
-import { Spacing } from '/src/ui/layout/spacing';
-import { Text } from '/src/ui/text/text';
-import { Tooltip } from '/src/ui/tooltip/tooltip';
-import styles from './game_settings.module.css';
-import { createTranslationMessages } from './messages';
-import { WaitingRoomPresenter } from '../waiting_room.presenter';
-import { WaitingRoomStore } from '../waiting_room.store';
+import classNames from "classnames";
+import { Character } from "src/core/characters/character";
+import { Sanguosha } from "src/core/game/engine";
+import {
+  GameCharacterExtensions,
+  WaitingRoomGameSettings,
+} from "src/core/game/game_props";
+import { GameMode } from "src/core/shares/types/room_props";
+import { WuXieKeJiSkill } from "src/core/skills";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ImageLoader } from "src/image_loader/image_loader";
+import * as React from "react";
+import { CharacterCard } from "src/ui/character/character";
+import { CheckBox } from "src/ui/check_box/check_box";
+import { CheckBoxGroup } from "src/ui/check_box/check_box_group";
+import { Input } from "src/ui/input/input";
+import { Spacing } from "src/ui/layout/spacing";
+import { Text } from "src/ui/text/text";
+import { Tooltip } from "src/ui/tooltip/tooltip";
+import styles from "./game_settings.module.css";
+import { createTranslationMessages } from "./messages";
+import {
+  WaitingRoomPresenter,
+  WaitingRoomStoreType,
+} from "../waiting_room.presenter";
 
 export type GameSettingsProps = {
   controlable: boolean;
   translator: ClientTranslationModule;
   imageLoader: ImageLoader;
-  presenter: WaitingRoomPresenter;
-  store: WaitingRoomStore;
+  presenter: typeof WaitingRoomPresenter;
+  store: WaitingRoomStoreType;
   className?: string;
   campaignSettings?: boolean;
   onSave(): void;
 };
 
-@mobxReact.observer
-export class GameSettings extends React.Component<GameSettingsProps> {
-  private translationMessage = createTranslationMessages(this.props.translator);
-  private inputDebounceTimer: NodeJS.Timer | undefined;
-  private passwordInputDebounceTimer: NodeJS.Timer | undefined;
-  private searchContentElementRef = React.createRef<HTMLDivElement>();
+export function GameSettings(props: GameSettingsProps) {
+  let translationMessage = createTranslationMessages(props.translator);
+  let inputDebounceTimer: NodeJS.Timer | undefined;
+  let passwordInputDebounceTimer: NodeJS.Timer | undefined;
+  let searchContentElementRef = React.useRef<HTMLDivElement>();
 
-  @mobx.observable.ref
-  private searchCharacterInput: string = '';
-  @mobx.observable.ref
-  private searchTooltipPosition: [number, number] | undefined;
+  const [searchCharacterInput, setSearchCharacterInput] =
+    React.useState<string>("");
 
-  @mobx.observable.shallow
-  private searchResultList: Character[] = [];
+  const [searchTooltipPosition, setSearchTooltipPosition] = React.useState<
+    [number, number] | undefined
+  >();
 
-  @mobx.computed
-  private get pvePlayersOptions() {
+  const [searchResultList, setSearchResultList] = React.useState<Character[]>(
+    []
+  );
+
+  //  原get
+  function pvePlayersOptions() {
     return [
       {
-        label: this.translationMessage.pveDragon(),
+        label: translationMessage.pveDragon(),
         id: 3,
-        checked: this.props.store.gameSettings.pveNumberOfPlayers === 3,
-        disabled: !this.props.controlable,
+        checked: props.store.gameSettings.pveNumberOfPlayers === 3,
+        disabled: !props.controlable,
       },
       {
-        label: this.translationMessage.pveClassic(),
+        label: translationMessage.pveClassic(),
         id: 5,
-        checked: this.props.store.gameSettings.pveNumberOfPlayers === 5,
-        disabled: !this.props.controlable,
+        checked: props.store.gameSettings.pveNumberOfPlayers === 5,
+        disabled: !props.controlable,
       },
     ];
   }
 
-  @mobx.computed
-  private get getGameModeOptions() {
+  // 原get
+  function getGameModeOptions() {
     return [
       {
-        label: this.props.translator.tr(GameMode.Standard),
+        label: props.translator.tr(GameMode.Standard),
         id: GameMode.Standard,
-        checked: this.props.store.gameSettings.gameMode === GameMode.Standard,
-        disabled: !this.props.controlable,
+        checked: props.store.gameSettings.gameMode === GameMode.Standard,
+        disabled: !props.controlable,
       },
       {
-        label: this.props.translator.tr(GameMode.OneVersusTwo),
+        label: props.translator.tr(GameMode.OneVersusTwo),
         id: GameMode.OneVersusTwo,
-        checked: this.props.store.gameSettings.gameMode === GameMode.OneVersusTwo,
-        disabled: !this.props.controlable,
+        checked: props.store.gameSettings.gameMode === GameMode.OneVersusTwo,
+        disabled: !props.controlable,
       },
       {
-        label: this.props.translator.tr(GameMode.TwoVersusTwo),
+        label: props.translator.tr(GameMode.TwoVersusTwo),
         id: GameMode.TwoVersusTwo,
-        checked: this.props.store.gameSettings.gameMode === GameMode.TwoVersusTwo,
-        disabled: !this.props.controlable,
+        checked: props.store.gameSettings.gameMode === GameMode.TwoVersusTwo,
+        disabled: !props.controlable,
       },
       {
-        label: this.props.translator.tr(GameMode.Pve),
+        label: props.translator.tr(GameMode.Pve),
         id: GameMode.Pve,
-        checked: this.props.store.gameSettings.gameMode === GameMode.Pve,
-        disabled: !this.props.controlable,
+        checked: props.store.gameSettings.gameMode === GameMode.Pve,
+        disabled: !props.controlable,
       },
       {
-        label: this.props.translator.tr(GameMode.Hegemony),
+        label: props.translator.tr(GameMode.Hegemony),
         id: GameMode.Hegemony,
-        checked: this.props.store.gameSettings.gameMode === GameMode.Hegemony,
+        checked: props.store.gameSettings.gameMode === GameMode.Hegemony,
         disabled: true,
       },
     ];
   }
 
-  @mobx.computed
-  private get gameCharacterExtensions() {
-    return Sanguosha.getGameCharacterExtensions().map(extension => ({
+  // 原get
+  function gameCharacterExtensions() {
+    return Sanguosha.getGameCharacterExtensions().map((extension) => ({
       id: extension,
-      label: this.props.translator.tr(extension),
-      checked: this.props.store.gameSettings.characterExtensions.includes(extension),
-      disabled: extension === GameCharacterExtensions.Standard || !this.props.controlable,
+      label: props.translator.tr(extension),
+      checked: props.store.gameSettings.characterExtensions.includes(extension),
+      disabled:
+        extension === GameCharacterExtensions.Standard || !props.controlable,
     }));
   }
 
-  private onChangeGameSettings<T>(property: keyof WaitingRoomGameSettings) {
+  function onChangeGameSettings<T>(property: keyof WaitingRoomGameSettings) {
     return (value: T) => {
-      this.props.presenter.updateGameSettings(this.props.store, {
-        ...this.props.store.gameSettings,
+      props.presenter.updateGameSettings({
+        ...props.store.gameSettings,
         [property]: value,
       });
-      this.props.onSave();
+      props.onSave();
     };
   }
 
-  private readonly onChangePassword = (password: string) => {
-    this.props.presenter.updateGameSettings(this.props.store, {
-      ...this.props.store.gameSettings,
-      passcode: password || '',
+  let onChangePassword = (password: string) => {
+    props.presenter.updateGameSettings({
+      ...props.store.gameSettings,
+      passcode: password || "",
     });
 
-    this.passwordInputDebounceTimer = setTimeout(() => {
-      this.props.onSave();
+    passwordInputDebounceTimer = setTimeout(() => {
+      props.onSave();
 
-      this.passwordInputDebounceTimer = undefined;
+      passwordInputDebounceTimer = undefined;
     }, 1000);
   };
 
-  private readonly onCheckedGameMode = (checkedIds: GameMode[]) => {
-    this.props.presenter.updateGameSettings(this.props.store, {
-      ...this.props.store.gameSettings,
+  let onCheckedGameMode = (checkedIds: GameMode[]) => {
+    props.presenter.updateGameSettings({
+      ...props.store.gameSettings,
       gameMode: checkedIds[0],
     });
-    this.props.onSave();
+    props.onSave();
   };
 
-  @mobx.action
-  private readonly onCheckedPveSpecifiedGameMode = (playerNumbers: number[]) => {
-    this.props.presenter.updateGameSettings(this.props.store, {
-      ...this.props.store.gameSettings,
+  let onCheckedPveSpecifiedGameMode = (playerNumbers: number[]) => {
+    props.presenter.updateGameSettings({
+      ...props.store.gameSettings,
       pveNumberOfPlayers: playerNumbers[0],
     });
-    this.props.onSave();
+    props.onSave();
   };
 
-  @mobx.action
-  private readonly onSearchCharacterInputChange = (value?: string) => {
-    this.searchCharacterInput = value ?? '';
-
-    if (this.inputDebounceTimer) {
-      clearTimeout(this.inputDebounceTimer);
+  let onSearchCharacterInputChange = (value?: string) => {
+    setSearchCharacterInput(value ?? "");
+    if (inputDebounceTimer) {
+      clearTimeout(inputDebounceTimer);
     }
 
-    this.inputDebounceTimer = setTimeout(
-      mobx.action(() => {
-        if (!this.searchCharacterInput) {
-          this.searchResultList = [];
-          this.inputDebounceTimer = undefined;
-          return;
-        }
-
-        this.searchResultList = Sanguosha.getCharacterByExtensions(
-          this.props.store.gameSettings.characterExtensions,
+    inputDebounceTimer = setTimeout(() => {
+      if (!searchCharacterInput) {
+        setSearchResultList([]);
+        inputDebounceTimer = undefined;
+        return;
+      }
+      setSearchResultList(
+        Sanguosha.getCharacterByExtensions(
+          props.store.gameSettings.characterExtensions
         ).filter(
-          character =>
-            character.Name.includes(this.searchCharacterInput) ||
-            this.props.translator.tr(character.Name).includes(this.searchCharacterInput),
-        );
+          (character) =>
+            character.Name.includes(searchCharacterInput) ||
+            props.translator.tr(character.Name).includes(searchCharacterInput)
+        )
+      );
 
-        if (this.searchContentElementRef.current) {
-          const { left } = this.searchContentElementRef.current.getBoundingClientRect();
-          this.searchTooltipPosition = [window.screen.width - left, window.screen.height / 2];
-        }
+      if (searchContentElementRef.current) {
+        const { left } =
+          searchContentElementRef.current.getBoundingClientRect();
 
-        this.inputDebounceTimer = undefined;
-      }),
-      1000,
-    );
+        setSearchTooltipPosition([
+          window.screen.width - left,
+          window.screen.height / 2,
+        ]);
+      }
+
+      inputDebounceTimer = undefined;
+    }, 1000);
   };
 
-  private readonly addOrRemoveForbiddenCharactersById = (character: Character) => {
-    if (!this.props.controlable) {
+  let addOrRemoveForbiddenCharactersById = (character: Character) => {
+    if (!props.controlable) {
       return;
     }
 
-    this.props.presenter.updateGameSettings(this.props.store, {
-      ...this.props.store.gameSettings,
-      excludedCharacters: this.props.store.gameSettings.excludedCharacters.includes(character.Id)
-        ? this.props.store.gameSettings.excludedCharacters.filter(characterId => characterId !== character.Id)
-        : [...this.props.store.gameSettings.excludedCharacters, character.Id],
+    props.presenter.updateGameSettings(props.store, {
+      ...props.store.gameSettings,
+      excludedCharacters: props.store.gameSettings.excludedCharacters.includes(
+        character.Id
+      )
+        ? props.store.gameSettings.excludedCharacters.filter(
+            (characterId) => characterId !== character.Id
+          )
+        : [...props.store.gameSettings.excludedCharacters, character.Id],
     });
-    this.props.onSave();
+    props.onSave();
 
-    mobx.runInAction(() => {
-      this.searchCharacterInput = '';
-      this.searchResultList = [];
-    });
+    setSearchCharacterInput("");
+    setSearchResultList([]);
   };
 
-  render() {
-    return (
-      <div className={classNames(styles.container, this.props.className)}>
-        {!this.props.campaignSettings && (
-          <>
+  return (
+    <div className={classNames(styles.container, props.className)}>
+      {!props.campaignSettings && (
+        <>
+          <div className={styles.settingsLabel}>
+            <CheckBoxGroup
+              head={translationMessage.gameMode()}
+              options={getGameModeOptions}
+              onChecked={onCheckedGameMode}
+              excludeSelection={true}
+            />
+          </div>
+          {props.store.gameSettings.gameMode === GameMode.Pve && (
             <div className={styles.settingsLabel}>
               <CheckBoxGroup
-                head={this.translationMessage.gameMode()}
-                options={this.getGameModeOptions}
-                onChecked={this.onCheckedGameMode}
+                head={translationMessage.pveModeSelection()}
+                options={pvePlayersOptions}
+                onChecked={onCheckedPveSpecifiedGameMode}
                 excludeSelection={true}
               />
             </div>
-            {this.props.store.gameSettings.gameMode === GameMode.Pve && (
-              <div className={styles.settingsLabel}>
-                <CheckBoxGroup
-                  head={this.translationMessage.pveModeSelection()}
-                  options={this.pvePlayersOptions}
-                  onChecked={this.onCheckedPveSpecifiedGameMode}
-                  excludeSelection={true}
-                />
-              </div>
-            )}
-          </>
-        )}
-        <div className={styles.settingsLabel}>
-          <CheckBoxGroup
-            head={this.translationMessage.characterPackageSettings()}
-            options={this.gameCharacterExtensions}
-            onChecked={this.onChangeGameSettings('characterExtensions')}
-            excludeSelection={false}
-          />
-        </div>
-        <div className={styles.settingsLabel}>
-          <CheckBox
-            id="enableObserver"
-            className={styles.observerCheckbox}
-            checked={this.props.store.gameSettings.allowObserver || false}
-            disabled={!this.props.controlable}
-            onChecked={this.onChangeGameSettings('allowObserver')}
-            label={this.translationMessage.enableObserver()}
-          />
-          <div className={styles.inputLabel}>
-            <Text className={styles.inputTitle} color="white" variant="semiBold" bottomSpacing={Spacing.Spacing_8}>
-              {this.translationMessage.passcode()}
-            </Text>
-            <Input
-              value={this.props.store.gameSettings.passcode}
-              onChange={this.onChangePassword}
-              disabled={!this.props.controlable}
-              transparency={0.3}
-              min={5}
-              max={60}
-            />
-          </div>
-          <div className={classNames(styles.inputLabel, styles.horizontalInput)}>
-            <div>
-              <Text className={styles.inputTitle} color="white" variant="semiBold" bottomSpacing={Spacing.Spacing_8}>
-                {this.translationMessage.getTimeLimit('play stage')}
-              </Text>
-              <Input
-                type="number"
-                value={this.props.store.gameSettings.playingTimeLimit?.toString()}
-                onChange={this.onChangeGameSettings('playingTimeLimit')}
-                disabled={!this.props.controlable}
-                transparency={0.3}
-                min={15}
-                max={300}
-                suffix={this.translationMessage.second()}
-              />
-            </div>
-            <div>
-              <Text className={styles.inputTitle} color="white" variant="semiBold" bottomSpacing={Spacing.Spacing_8}>
-                {this.translationMessage.getTimeLimit(WuXieKeJiSkill.Name)}
-              </Text>
-              <Input
-                type="number"
-                value={this.props.store.gameSettings.wuxiekejiTimeLimit?.toString()}
-                onChange={this.onChangeGameSettings('wuxiekejiTimeLimit')}
-                disabled={!this.props.controlable}
-                transparency={0.3}
-                min={5}
-                max={60}
-                suffix={this.translationMessage.second()}
-              />
-            </div>
-          </div>
-          <div>
-            <Text className={styles.inputTitle} color="white" variant="semiBold" bottomSpacing={Spacing.Spacing_8}>
-              {this.translationMessage.fortuneCardExchangeLimit()}
-            </Text>
-            <Input
-              type="number"
-              value={this.props.store.gameSettings.fortuneCardsExchangeLimit?.toString()}
-              onChange={this.onChangeGameSettings('fortuneCardsExchangeLimit')}
-              disabled={!this.props.controlable}
-              transparency={0.3}
-              min={0}
-              max={3}
-              suffix={this.translationMessage.times()}
-            />
-          </div>
-        </div>
-        <div className={styles.settingsLabel} ref={this.searchContentElementRef}>
+          )}
+        </>
+      )}
+      <div className={styles.settingsLabel}>
+        <CheckBoxGroup
+          head={translationMessage.characterPackageSettings()}
+          options={gameCharacterExtensions}
+          onChecked={onChangeGameSettings("characterExtensions")}
+          excludeSelection={false}
+        />
+      </div>
+      <div className={styles.settingsLabel}>
+        <CheckBox
+          id="enableObserver"
+          className={styles.observerCheckbox}
+          checked={props.store.gameSettings.allowObserver || false}
+          disabled={!props.controlable}
+          onChecked={onChangeGameSettings("allowObserver")}
+          label={translationMessage.enableObserver()}
+        />
+        <div className={styles.inputLabel}>
           <Text
             className={styles.inputTitle}
             color="white"
             variant="semiBold"
-            bottomSpacing={Spacing.Spacing_16}
-            topSpacing={Spacing.Spacing_16}
+            bottomSpacing={Spacing.Spacing_8}
           >
-            {this.translationMessage.forbiddenCharacters()}
+            {translationMessage.passcode()}
           </Text>
           <Input
-            value={this.searchCharacterInput}
-            onChange={this.onSearchCharacterInputChange}
-            disabled={!this.props.controlable}
+            value={props.store.gameSettings.passcode}
+            onChange={onChangePassword}
+            disabled={!props.controlable}
             transparency={0.3}
-            placeholder={this.translationMessage.searchCharacterByName()}
+            min={5}
+            max={60}
           />
-
-          {this.searchResultList.length > 0 && this.searchTooltipPosition && (
-            <Tooltip
-              position={{ bottom: this.searchTooltipPosition[1], right: this.searchTooltipPosition[0] }}
-              className={styles.searchResultsList}
+        </div>
+        <div className={classNames(styles.inputLabel, styles.horizontalInput)}>
+          <div>
+            <Text
+              className={styles.inputTitle}
+              color="white"
+              variant="semiBold"
+              bottomSpacing={Spacing.Spacing_8}
             >
-              {this.searchResultList.map(character => (
-                <CharacterCard
-                  key={character.Id}
-                  character={character}
-                  size="tiny"
-                  imageLoader={this.props.imageLoader}
-                  translator={this.props.translator}
-                  onClick={this.addOrRemoveForbiddenCharactersById}
-                />
-              ))}
-            </Tooltip>
-          )}
-
-          <div className={styles.searchResultsList}>
-            {this.props.store.gameSettings.excludedCharacters.map(characterId => (
-              <CharacterCard
-                key={characterId}
-                character={Sanguosha.getCharacterById(characterId)}
-                size="tiny"
-                imageLoader={this.props.imageLoader}
-                translator={this.props.translator}
-                onClick={this.addOrRemoveForbiddenCharactersById}
-              />
-            ))}
+              {translationMessage.getTimeLimit("play stage")}
+            </Text>
+            <Input
+              type="number"
+              value={props.store.gameSettings.playingTimeLimit?.toString()}
+              onChange={onChangeGameSettings("playingTimeLimit")}
+              disabled={!props.controlable}
+              transparency={0.3}
+              min={15}
+              max={300}
+              suffix={translationMessage.second()}
+            />
+          </div>
+          <div>
+            <Text
+              className={styles.inputTitle}
+              color="white"
+              variant="semiBold"
+              bottomSpacing={Spacing.Spacing_8}
+            >
+              {translationMessage.getTimeLimit(WuXieKeJiSkill.Name)}
+            </Text>
+            <Input
+              type="number"
+              value={props.store.gameSettings.wuxiekejiTimeLimit?.toString()}
+              onChange={onChangeGameSettings("wuxiekejiTimeLimit")}
+              disabled={!props.controlable}
+              transparency={0.3}
+              min={5}
+              max={60}
+              suffix={translationMessage.second()}
+            />
           </div>
         </div>
+        <div>
+          <Text
+            className={styles.inputTitle}
+            color="white"
+            variant="semiBold"
+            bottomSpacing={Spacing.Spacing_8}
+          >
+            {translationMessage.fortuneCardExchangeLimit()}
+          </Text>
+          <Input
+            type="number"
+            value={props.store.gameSettings.fortuneCardsExchangeLimit?.toString()}
+            onChange={onChangeGameSettings("fortuneCardsExchangeLimit")}
+            disabled={!props.controlable}
+            transparency={0.3}
+            min={0}
+            max={3}
+            suffix={translationMessage.times()}
+          />
+        </div>
       </div>
-    );
-  }
+      <div className={styles.settingsLabel} ref={searchContentElementRef}>
+        <Text
+          className={styles.inputTitle}
+          color="white"
+          variant="semiBold"
+          bottomSpacing={Spacing.Spacing_16}
+          topSpacing={Spacing.Spacing_16}
+        >
+          {translationMessage.forbiddenCharacters()}
+        </Text>
+        <Input
+          value={searchCharacterInput}
+          onChange={onSearchCharacterInputChange}
+          disabled={!props.controlable}
+          transparency={0.3}
+          placeholder={translationMessage.searchCharacterByName()}
+        />
+
+        {searchResultList.length > 0 && searchTooltipPosition && (
+          <Tooltip
+            position={{
+              bottom: searchTooltipPosition[1],
+              right: searchTooltipPosition[0],
+            }}
+            className={styles.searchResultsList}
+          >
+            {searchResultList.map((character) => (
+              <CharacterCard
+                key={character.Id}
+                character={character}
+                size="tiny"
+                imageLoader={props.imageLoader}
+                translator={props.translator}
+                onClick={addOrRemoveForbiddenCharactersById}
+              />
+            ))}
+          </Tooltip>
+        )}
+
+        <div className={styles.searchResultsList}>
+          {props.store.gameSettings.excludedCharacters.map((characterId) => (
+            <CharacterCard
+              key={characterId}
+              character={Sanguosha.getCharacterById(characterId)}
+              size="tiny"
+              imageLoader={props.imageLoader}
+              translator={props.translator}
+              onClick={addOrRemoveForbiddenCharactersById}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }

@@ -1,10 +1,10 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { AllStage, PhaseStageChangeStage, PlayerDiedStage, PlayerPhaseStages } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { TriggerSkill } from '/src/core/skills/skill';
-import { LimitSkill } from '/src/core/skills/skill_wrappers';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { AllStage, PhaseStageChangeStage, PlayerDiedStage, PlayerPhaseStages } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { TriggerSkill } from 'src/core/skills/skill';
+import { LimitSkill } from 'src/core/skills/skill_wrappers';
 import { ChaoFeng } from './chaofeng';
 import { ChuanYun } from './chuanyun';
 import { StdLongDan } from '../sp/std_longdan';

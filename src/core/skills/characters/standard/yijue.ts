@@ -1,18 +1,18 @@
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId, CardSuit } from '/src/core/cards/libs/card_props';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId, CardSuit } from 'src/core/cards/libs/card_props';
 import {
   CardMoveArea,
   CardMoveReason,
   ClientEventFinder,
   GameEventIdentifiers,
   ServerEventFinder,
-} from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { AllStage, DamageEffectStage, PhaseChangeStage, PlayerPhase, StagePriority } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
+} from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
+import { AllStage, DamageEffectStage, PhaseChangeStage, PlayerPhase, StagePriority } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
 import {
   ActiveSkill,
   CommonSkill,
@@ -21,9 +21,9 @@ import {
   PersistentSkill,
   ShadowSkill,
   TriggerSkill,
-} from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
+} from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
+import { TranslationPack } from 'src/core/translations/translation_json_tool';
 import { UncompulsoryBlocker } from './uncompulsory_blocker';
 
 @CommonSkill({ name: 'yijue', description: 'yijue_description' })

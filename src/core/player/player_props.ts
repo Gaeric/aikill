@@ -1,5 +1,5 @@
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CharacterEquipSections, CharacterId, CharacterNationality } from '/src/core/characters/character';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CharacterEquipSections, CharacterId, CharacterNationality } from 'src/core/characters/character';
 
 export type PlayerId = string;
 

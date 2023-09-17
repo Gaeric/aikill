@@ -1,18 +1,18 @@
-import { PlayerAI } from '/src/core/ai/ai';
-import { TrustAI } from '/src/core/ai/trust_ai';
-import { Card, CardType, VirtualCard } from '/src/core/cards/card';
-import { ArmorCard, EquipCard, WeaponCard } from '/src/core/cards/equip_card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId } from '/src/core/cards/libs/card_props';
+import { PlayerAI } from 'src/core/ai/ai';
+import { TrustAI } from 'src/core/ai/trust_ai';
+import { Card, CardType, VirtualCard } from 'src/core/cards/card';
+import { ArmorCard, EquipCard, WeaponCard } from 'src/core/cards/equip_card';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId } from 'src/core/cards/libs/card_props';
 import {
   Character,
   CharacterEquipSections,
   CharacterGender,
   CharacterId,
   CharacterNationality,
-} from '/src/core/characters/character';
-import { Sanguosha } from '/src/core/game/engine';
-import { UPPER_LIMIT_OF_ARMOR } from '/src/core/game/game_props';
+} from 'src/core/characters/character';
+import { Sanguosha } from 'src/core/game/engine';
+import { UPPER_LIMIT_OF_ARMOR } from 'src/core/game/game_props';
 import {
   PlayerCards,
   PlayerCardsArea,
@@ -22,10 +22,10 @@ import {
   PlayerRole,
   PlayerShortcutInfo,
   PlayerStatus,
-} from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { Algorithm } from '/src/core/shares/libs/algorithm';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
+} from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { Algorithm } from 'src/core/shares/libs/algorithm';
+import { Precondition } from 'src/core/shares/libs/precondition/precondition';
 import {
   ActiveSkill,
   FilterSkill,
@@ -40,8 +40,8 @@ import {
   TransformSkill,
   TriggerSkill,
   ViewAsSkill,
-} from '/src/core/skills/skill';
-import { UniqueSkillRule } from '/src/core/skills/skill_rule';
+} from 'src/core/skills/skill';
+import { UniqueSkillRule } from 'src/core/skills/skill_rule';
 
 type SkillStringType =
   | 'trigger'

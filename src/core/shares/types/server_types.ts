@@ -1,7 +1,7 @@
-import { GameCharacterExtensions, GameInfo, TemporaryRoomCreationInfo } from '/src/core/game/game_props';
-import { PlayerPhase, PlayerPhaseStages } from '/src/core/game/stage_processor';
-import { PlayerId } from '/src/core/player/player_props';
-import { RoomId } from '/src/core/room/room';
+import { GameCharacterExtensions, GameInfo, TemporaryRoomCreationInfo } from 'src/core/game/game_props';
+import { PlayerPhase, PlayerPhaseStages } from 'src/core/game/stage_processor';
+import { PlayerId } from 'src/core/player/player_props';
+import { RoomId } from 'src/core/room/room';
 import { GameMode } from './room_props';
 
 export const enum LobbySocketEvent {

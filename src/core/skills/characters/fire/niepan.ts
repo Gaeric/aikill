@@ -1,9 +1,9 @@
-import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { AllStage, PlayerDyingStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { LimitSkill, TriggerSkill } from '/src/core/skills/skill';
+import { CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { AllStage, PlayerDyingStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { LimitSkill, TriggerSkill } from 'src/core/skills/skill';
 
 @LimitSkill({ name: 'niepan', description: 'niepan_description' })
 export class NiePan extends TriggerSkill {

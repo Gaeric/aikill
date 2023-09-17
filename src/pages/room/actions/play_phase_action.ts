@@ -1,17 +1,36 @@
-import { Card } from '/src/core/cards/card';
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { ActiveSkill, ResponsiveSkill, Skill, TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
-import { UniqueSkillRule } from '/src/core/skills/skill_rule';
-import { BaseAction } from './base_action';
+import { Card } from "src/core/cards/card";
+import {
+  ClientEventFinder,
+  GameEventIdentifiers,
+  ServerEventFinder,
+} from "src/core/event/event";
+import { Sanguosha } from "src/core/game/engine";
+import { Player } from "src/core/player/player";
+import { PlayerCardsArea, PlayerId } from "src/core/player/player_props";
+import { Room } from "src/core/room/room";
+import {
+  ActiveSkill,
+  ResponsiveSkill,
+  Skill,
+  TriggerSkill,
+  ViewAsSkill,
+} from "src/core/skills/skill";
+import { UniqueSkillRule } from "src/core/skills/skill_rule";
+import { BaseAction } from "./base_action";
 
 export class PlayPhaseAction extends BaseAction {
   public static isPlayPhaseSkillsDisabled =
-    (room: Room, player: Player, event: ServerEventFinder<GameEventIdentifiers>) => (skill: Skill) => {
-      if (!room.isPlaying() || room.isGameOver() || UniqueSkillRule.isProhibited(skill, player)) {
+    (
+      room: Room,
+      player: Player,
+      event: ServerEventFinder<GameEventIdentifiers>
+    ) =>
+    (skill: Skill) => {
+      if (
+        !room.isPlaying() ||
+        room.isGameOver() ||
+        UniqueSkillRule.isProhibited(skill, player)
+      ) {
         return true;
       }
 
@@ -26,7 +45,13 @@ export class PlayPhaseAction extends BaseAction {
 
         const canViewAs = skill
           .canViewAs(room, player)
-          .filter(cardName => !(Sanguosha.getCardByName(cardName).Skill instanceof ResponsiveSkill));
+          .filter(
+            (cardName) =>
+              !(
+                Sanguosha.getCardByName(cardName).Skill instanceof
+                ResponsiveSkill
+              )
+          );
 
         return canViewAs.length <= 0;
       }
@@ -35,9 +60,13 @@ export class PlayPhaseAction extends BaseAction {
     };
 
   private createPlayOrSkillUseEvent(
-    player: PlayerId,
+    player: PlayerId
   ): ClientEventFinder<GameEventIdentifiers.AskForPlayCardsOrSkillsEvent> {
-    let useEvent: ClientEventFinder<GameEventIdentifiers.CardUseEvent | GameEventIdentifiers.SkillUseEvent> | undefined;
+    let useEvent:
+      | ClientEventFinder<
+          GameEventIdentifiers.CardUseEvent | GameEventIdentifiers.SkillUseEvent
+        >
+      | undefined;
     if (this.selectedCardToPlay !== undefined) {
       const card = Sanguosha.getCardById(this.selectedCardToPlay);
       if (card.Reforgeable && this.selectedTargets.length === 0) {
@@ -54,8 +83,10 @@ export class PlayPhaseAction extends BaseAction {
       useEvent = {
         fromId: player,
         cardId: this.selectedCardToPlay!,
-        toIds: this.selectedTargets.length > 0 ? this.selectedTargets : undefined,
-        toCardIds: this.selectedCards.length > 0 ? this.selectedCards : undefined,
+        toIds:
+          this.selectedTargets.length > 0 ? this.selectedTargets : undefined,
+        toCardIds:
+          this.selectedCards.length > 0 ? this.selectedCards : undefined,
       };
 
       return {
@@ -69,7 +100,8 @@ export class PlayPhaseAction extends BaseAction {
         fromId: player,
         skillName: this.selectedSkillToPlay!.Name,
         cardIds: this.selectedCards.length > 0 ? this.selectedCards : undefined,
-        toIds: this.selectedTargets.length > 0 ? this.selectedTargets : undefined,
+        toIds:
+          this.selectedTargets.length > 0 ? this.selectedTargets : undefined,
       };
       return {
         fromId: player,
@@ -81,14 +113,15 @@ export class PlayPhaseAction extends BaseAction {
   }
 
   onResetAction() {
-    this.presenter.disableActionButton('cancel');
+    this.presenter.disableActionButton("cancel");
   }
 
   private reforgeableCheck() {
-    const card = this.selectedCardToPlay && Sanguosha.getCardById(this.selectedCardToPlay);
+    const card =
+      this.selectedCardToPlay && Sanguosha.getCardById(this.selectedCardToPlay);
     if (card && card.Reforgeable && this.selectedTargets.length === 0) {
       this.presenter.enableCardReforgeStatus();
-      this.presenter.enableActionButton('confirm');
+      this.presenter.enableActionButton("confirm");
     } else {
       this.presenter.disableCardReforgeStatus();
     }
@@ -110,25 +143,29 @@ export class PlayPhaseAction extends BaseAction {
   }
 
   async onPlay() {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       this.delightItems();
       this.presenter.highlightCards();
       if (this.selectedSkillToPlay || this.selectedCardToPlay) {
-        this.presenter.enableActionButton('cancel');
+        this.presenter.enableActionButton("cancel");
       } else {
-        this.presenter.disableActionButton('cancel');
+        this.presenter.disableActionButton("cancel");
       }
       this.presenter.defineCancelButtonActions(() => this.resetAction());
 
       this.presenter.defineFinishButtonActions(() => {
         this.presenter.closeDialog();
-        const event: ClientEventFinder<GameEventIdentifiers.AskForPlayCardsOrSkillsEvent> = {
-          fromId: this.playerId,
-          end: true,
-        };
+        const event: ClientEventFinder<GameEventIdentifiers.AskForPlayCardsOrSkillsEvent> =
+          {
+            fromId: this.playerId,
+            end: true,
+          };
 
-        this.store.room.broadcast(GameEventIdentifiers.AskForPlayCardsOrSkillsEvent, event);
-        this.presenter.disableActionButton('finish');
+        this.store.room.broadcast(
+          GameEventIdentifiers.AskForPlayCardsOrSkillsEvent,
+          event
+        );
+        this.presenter.disableActionButton("finish");
         this.resetActionHandlers();
         this.resetAction();
         this.presenter.resetSelectedSkill();
@@ -138,25 +175,26 @@ export class PlayPhaseAction extends BaseAction {
       this.presenter.defineConfirmButtonActions(() => {
         this.store.room.broadcast(
           GameEventIdentifiers.AskForPlayCardsOrSkillsEvent,
-          this.createPlayOrSkillUseEvent(this.playerId),
+          this.createPlayOrSkillUseEvent(this.playerId)
         );
-
-        this.presenter.disableActionButton('finish');
+        this.presenter.disableActionButton("finish");
         this.resetActionHandlers();
         this.resetAction();
         this.presenter.resetSelectedSkill();
         resolve();
       });
 
-      this.presenter.setupPlayersSelectionMatcher((player: Player) => this.isPlayerEnabled(player));
+      this.presenter.setupPlayersSelectionMatcher((player: Player) =>
+        this.isPlayerEnabled(player)
+      );
       this.presenter.setupClientPlayerCardActionsMatcher((card: Card) =>
-        this.isCardEnabled(card, this.player, PlayerCardsArea.HandArea),
+        this.isCardEnabled(card, this.player, PlayerCardsArea.HandArea)
       );
       this.presenter.setupClientPlayerOutsideCardActionsMatcher((card: Card) =>
-        this.isCardEnabled(card, this.player, PlayerCardsArea.OutsideArea),
+        this.isCardEnabled(card, this.player, PlayerCardsArea.OutsideArea)
       );
       this.presenter.setupCardSkillSelectionMatcher((card: Card) =>
-        this.isCardEnabled(card, this.player, PlayerCardsArea.EquipArea),
+        this.isCardEnabled(card, this.player, PlayerCardsArea.EquipArea)
       );
     });
   }

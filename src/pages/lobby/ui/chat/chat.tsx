@@ -1,9 +1,9 @@
-import classNames from 'classnames';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import * as React from 'react';
-import { ConnectionService } from '/src/services/connection_service/connection_service';
-import { Button } from '/src/ui/button/button';
-import styles from './chat.module.css';
+import classNames from "classnames";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import * as React from "react";
+import { ConnectionService } from "src/services/connection_service/connection_service";
+import { Button } from "src/ui/button/button";
+import styles from "./chat.module.css";
 
 export const Chat = ({
   connectionService,
@@ -16,13 +16,15 @@ export const Chat = ({
   username: string;
   className?: string;
 }) => {
-  const [messages, setMessages] = React.useState([...connectionService.Chat.chatHistory()]);
-  const [typing, setTypings] = React.useState<string>('');
+  const [messages, setMessages] = React.useState([
+    ...connectionService.Chat.chatHistory(),
+  ]);
+  const [typing, setTypings] = React.useState<string>("");
   const [hide, hideChat] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    connectionService.Chat.received(message => {
-      setMessages(prevMessages => [...prevMessages, message]);
+    connectionService.Chat.received((message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
     });
 
     return () => {
@@ -37,7 +39,7 @@ export const Chat = ({
   const onSend = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     connectionService.Chat.send(typing, username);
-    setTypings('');
+    setTypings("");
   };
 
   const onHide = () => {
@@ -51,7 +53,7 @@ export const Chat = ({
       })}
     >
       <span className={styles.hideArrow} onClick={onHide}>
-        {'⬅'}
+        {"⬅"}
       </span>
       <div className={styles.messages}>
         {messages.map((message, index) => {
@@ -59,15 +61,21 @@ export const Chat = ({
           return (
             <span className={styles.message} key={index}>
               <b>{message.from}</b>
-              {` [${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}]: ${message.message}`}
+              {` [${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}]: ${
+                message.message
+              }`}
             </span>
           );
         })}
       </div>
       <form className={styles.inputBox} onSubmit={onSend}>
-        <input className={styles.input} value={typing} onChange={onInputChange} />
+        <input
+          className={styles.input}
+          value={typing}
+          onChange={onInputChange}
+        />
         <Button variant="primary" type="submit" disabled={!typing}>
-          {translator.tr('send')}
+          {translator.tr("send")}
         </Button>
       </form>
     </div>

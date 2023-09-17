@@ -1,7 +1,7 @@
-import { BaseSkillTrigger } from '/src/core/ai/skills/base/base_trigger';
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
+import { BaseSkillTrigger } from 'src/core/ai/skills/base/base_trigger';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
 import { Skill, SkillType } from './skill';
 
 type SKillConstructor<T extends Skill> = new () => T;

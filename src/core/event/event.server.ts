@@ -1,6 +1,6 @@
-import { CardMatcherSocketPassenger } from '/src/core/cards/libs/card_matcher';
-import { CardChoosingOptions, CardId } from '/src/core/cards/libs/card_props';
-import { CharacterEquipSections, CharacterGender, CharacterId, CharacterNationality } from '/src/core/characters/character';
+import { CardMatcherSocketPassenger } from 'src/core/cards/libs/card_matcher';
+import { CardChoosingOptions, CardId } from 'src/core/cards/libs/card_props';
+import { CharacterEquipSections, CharacterGender, CharacterId, CharacterNationality } from 'src/core/characters/character';
 import {
   DamageType,
   GameCommonRuleObject,
@@ -8,16 +8,16 @@ import {
   GameRunningInfo,
   TemporaryRoomCreationInfo,
   WaitingRoomGameSettings,
-} from '/src/core/game/game_props';
-import { PlayerPhase, PlayerPhaseStages } from '/src/core/game/stage_processor';
-import { PlayerCardsArea, PlayerId, PlayerInfo, PlayerShortcutInfo } from '/src/core/player/player_props';
-import { RoomId } from '/src/core/room/room';
-import { JudgeMatcherEnum } from '/src/core/shares/libs/judge_matchers';
-import { System } from '/src/core/shares/libs/system';
-import { AimGroup } from '/src/core/shares/libs/utils/aim_group';
-import { TargetGroup } from '/src/core/shares/libs/utils/target_group';
-import { RoomInfo, RoomShortcutInfo } from '/src/core/shares/types/server_types';
-import { PatchedTranslationObject } from '/src/core/translations/translation_json_tool';
+} from 'src/core/game/game_props';
+import { PlayerPhase, PlayerPhaseStages } from 'src/core/game/stage_processor';
+import { PlayerCardsArea, PlayerId, PlayerInfo, PlayerShortcutInfo } from 'src/core/player/player_props';
+import { RoomId } from 'src/core/room/room';
+import { JudgeMatcherEnum } from 'src/core/shares/libs/judge_matchers';
+import { System } from 'src/core/shares/libs/system';
+import { AimGroup } from 'src/core/shares/libs/utils/aim_group';
+import { TargetGroup } from 'src/core/shares/libs/utils/target_group';
+import { RoomInfo, RoomShortcutInfo } from 'src/core/shares/types/server_types';
+import { PatchedTranslationObject } from 'src/core/translations/translation_json_tool';
 import {
   BaseGameEvent,
   CardDrawReason,

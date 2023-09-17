@@ -1,15 +1,15 @@
-import { VirtualCard } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardChoosingOptions, CardId } from '/src/core/cards/libs/card_props';
-import { WuXieKeJi } from '/src/core/cards/standard/wuxiekeji';
-import { CardMoveReason, ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { AllStage, TurnOverStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { CommonSkill, TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
-import { ShadowSkill } from '/src/core/skills/skill_wrappers';
+import { VirtualCard } from 'src/core/cards/card';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardChoosingOptions, CardId } from 'src/core/cards/libs/card_props';
+import { WuXieKeJi } from 'src/core/cards/standard/wuxiekeji';
+import { CardMoveReason, ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { AllStage, TurnOverStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { CommonSkill, TriggerSkill, ViewAsSkill } from 'src/core/skills/skill';
+import { ShadowSkill } from 'src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'jiewei', description: 'jiewei_description' })
 export class JieWei extends ViewAsSkill {

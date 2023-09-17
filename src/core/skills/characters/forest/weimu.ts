@@ -1,10 +1,10 @@
-import { CardType } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId, CardSuit } from '/src/core/cards/libs/card_props';
-import { Sanguosha } from '/src/core/game/engine';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { CompulsorySkill, FilterSkill } from '/src/core/skills/skill';
+import { CardType } from 'src/core/cards/card';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId, CardSuit } from 'src/core/cards/libs/card_props';
+import { Sanguosha } from 'src/core/game/engine';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { CompulsorySkill, FilterSkill } from 'src/core/skills/skill';
 
 @CompulsorySkill({ name: 'weimu', description: 'weimu_description' })
 export class WeiMu extends FilterSkill {

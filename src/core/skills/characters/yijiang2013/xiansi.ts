@@ -1,9 +1,9 @@
-import { Card, VirtualCard } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardChoosingOptions, CardId, CardSuit } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
+import { Card, VirtualCard } from 'src/core/cards/card';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardChoosingOptions, CardId, CardSuit } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { Sanguosha } from 'src/core/game/engine';
 import {
   AllStage,
   CardResponseStage,
@@ -11,15 +11,15 @@ import {
   GameStartStage,
   PhaseStageChangeStage,
   PlayerPhaseStages,
-} from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { System } from '/src/core/shares/libs/system';
-import { TargetGroupUtil } from '/src/core/shares/libs/utils/target_group';
-import { TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
-import { CommonSkill, PersistentSkill, ShadowSkill, SideEffectSkill } from '/src/core/skills/skill_wrappers';
+} from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { System } from 'src/core/shares/libs/system';
+import { TargetGroupUtil } from 'src/core/shares/libs/utils/target_group';
+import { TriggerSkill, ViewAsSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
+import { CommonSkill, PersistentSkill, ShadowSkill, SideEffectSkill } from 'src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'xiansi', description: 'xiansi_description' })
 export class XianSi extends TriggerSkill {

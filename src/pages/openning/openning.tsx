@@ -1,34 +1,32 @@
-import descriptionImage from '/src/assets/images/lobby/description.png';
-import logoImage from '/src/assets/images/lobby/logo.png';
-import * as React from 'react';
-import { PagePropsWithConfig } from '/src/types/page_props';
-import styles from './openning.module.css';
+import descriptionImage from "src/assets/images/lobby/description.png";
+import logoImage from "src/assets/images/lobby/logo.png";
+import { useEffect } from "react";
+import styles from "./openning.module.css";
+import { useNavigate } from "react-router-dom";
 
-export class OpenningPage extends React.PureComponent<PagePropsWithConfig> {
-  private timeoutId: NodeJS.Timeout;
+export function OpenningPage() {
+  const navigate = useNavigate();
 
-  private readonly jumpToLobby = () => {
-    this.props.history.push('/lobby');
-  };
+  function jumpToLobby() {
+    navigate("/lobby");
+  }
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.jumpToLobby);
-    this.timeoutId = setTimeout(() => {
-      this.jumpToLobby();
+  useEffect(() => {
+    document.addEventListener("keydown", jumpToLobby);
+    let timeoutId = setTimeout(() => {
+      jumpToLobby();
+      clearTimeout(timeoutId);
     }, 6000);
-  }
+  }, []);
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.jumpToLobby);
-    clearTimeout(this.timeoutId);
-  }
-
-  render() {
-    return (
-      <div className={styles.scene} onClick={this.jumpToLobby}>
-        <img className={styles.logo} src={logoImage} alt="logo" />
-        <img className={styles.description} src={descriptionImage} alt="description" />
-      </div>
-    );
-  }
+  return (
+    <div className={styles.scene} onClick={jumpToLobby}>
+      <img className={styles.logo} src={logoImage} alt="logo" />
+      <img
+        className={styles.description}
+        src={descriptionImage}
+        alt="description"
+      />
+    </div>
+  );
 }

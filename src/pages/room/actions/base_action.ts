@@ -1,14 +1,21 @@
-import { Card, CardType, VirtualCard } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { Sanguosha } from '/src/core/game/engine';
-import { Player } from '/src/core/player/player';
-import { ClientPlayer } from '/src/core/player/player.client';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { ActiveSkill, GlobalFilterSkill, ResponsiveSkill, Skill, TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { RoomPresenter } from '../room.presenter';
-import { RoomStore } from '../room.store';
+import { Card, CardType, VirtualCard } from "src/core/cards/card";
+import { CardMatcher } from "src/core/cards/libs/card_matcher";
+import { CardId } from "src/core/cards/libs/card_props";
+import { Sanguosha } from "src/core/game/engine";
+import { Player } from "src/core/player/player";
+import { ClientPlayer } from "src/core/player/player.client";
+import { PlayerCardsArea, PlayerId } from "src/core/player/player_props";
+import {
+  ActiveSkill,
+  GlobalFilterSkill,
+  ResponsiveSkill,
+  Skill,
+  TriggerSkill,
+  ViewAsSkill,
+} from "src/core/skills/skill";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { RoomPresenter } from "../room.presenter";
+import { RoomStore } from "../room.store";
 
 export abstract class BaseAction {
   public static disableSkills = (skill: Skill) => {
@@ -34,10 +41,10 @@ export abstract class BaseAction {
     protected store: RoomStore,
     protected presenter: RoomPresenter,
     protected translator: ClientTranslationModule,
-    protected scopedTargets?: PlayerId[],
+    protected scopedTargets?: PlayerId[]
   ) {
     this.player = this.store.room.getPlayerById(this.playerId);
-    this.presenter.onClickPlayer((player: Player, selected: boolean) => {
+    this.presenter.handleOnClickPlayer((player: Player, selected: boolean) => {
       if (this.inProcessDialog) {
         this.presenter.closeDialog();
       }
@@ -66,8 +73,14 @@ export abstract class BaseAction {
         this.presenter.closeDialog();
       }
 
-      if (this.selectedCardToPlay === undefined && this.selectedSkillToPlay === undefined) {
-        if (card.Skill instanceof ActiveSkill || card.Skill instanceof ViewAsSkill) {
+      if (
+        this.selectedCardToPlay === undefined &&
+        this.selectedSkillToPlay === undefined
+      ) {
+        if (
+          card.Skill instanceof ActiveSkill ||
+          card.Skill instanceof ViewAsSkill
+        ) {
           if (selected) {
             this.selectSkill(card.Skill);
           } else {
@@ -84,7 +97,7 @@ export abstract class BaseAction {
       }
       this.onClickCard(card, selected);
     });
-    this.presenter.onClickSkill((skill: Skill, selected: boolean) => {
+    this.presenter.handleOnClickSkill((skill: Skill, selected: boolean) => {
       if (this.inProcessDialog) {
         this.presenter.closeDialog();
       }
@@ -99,7 +112,7 @@ export abstract class BaseAction {
   }
 
   public readonly resetAction = () => {
-    this.store.selectedCards = [];
+    this.presenter.clearSelectedCards();
     this.selectedCardToPlay = undefined;
     this.selectedSkillToPlay = undefined;
     this.equipSkillCardId = undefined;
@@ -107,8 +120,8 @@ export abstract class BaseAction {
     this.selectedTargets = [];
     this.pendingCards = [];
 
-    this.presenter.disableActionButton('confirm');
-    this.presenter.disableActionButton('cancel');
+    this.presenter.disableActionButton("confirm");
+    this.presenter.disableActionButton("cancel");
     this.presenter.disableCardReforgeStatus();
     this.delightItems();
     this.presenter.highlightCards();
@@ -119,7 +132,9 @@ export abstract class BaseAction {
   public readonly resetActionHandlers = () => {
     this.presenter.setupPlayersSelectionMatcher(() => false);
     this.presenter.setupClientPlayerCardActionsMatcher(() => false);
-    this.presenter.setupClientPlayerOutsideCardActionsMatcher((card: Card) => this.isOutsideCardShow(card));
+    this.presenter.setupClientPlayerOutsideCardActionsMatcher((card: Card) =>
+      this.isOutsideCardShow(card)
+    );
     this.presenter.setupCardSkillSelectionMatcher(() => false);
     this.presenter.setupClientPlayerHandardsActionsMatcher(() => false);
     this.presenter.clearSelectedCards();
@@ -142,8 +157,18 @@ export abstract class BaseAction {
 
     if (this.selectedCardToPlay !== undefined) {
       for (const skillOwner of this.store.room.getAlivePlayersFrom()) {
-        for (const skill of skillOwner.getSkills<GlobalFilterSkill>('globalFilter')) {
-          if (!skill.canUseCardTo(this.selectedCardToPlay, this.store.room, skillOwner, this.player, player)) {
+        for (const skill of skillOwner.getSkills<GlobalFilterSkill>(
+          "globalFilter"
+        )) {
+          if (
+            !skill.canUseCardTo(
+              this.selectedCardToPlay,
+              this.store.room,
+              skillOwner,
+              this.player,
+              player
+            )
+          ) {
             return false;
           }
         }
@@ -165,10 +190,19 @@ export abstract class BaseAction {
       let isAvailableInRoom =
         this.selectedCardToPlay === undefined
           ? true
-          : this.store.room.isAvailableTarget(this.selectedCardToPlay, this.playerId, player.Id);
+          : this.store.room.isAvailableTarget(
+              this.selectedCardToPlay,
+              this.playerId,
+              player.Id
+            );
       if (this.selectedCardToPlay !== undefined) {
         isAvailableInRoom =
-          isAvailableInRoom && this.player.canUseCardTo(this.store.room, this.selectedCardToPlay, player.Id);
+          isAvailableInRoom &&
+          this.player.canUseCardTo(
+            this.store.room,
+            this.selectedCardToPlay,
+            player.Id
+          );
       }
 
       return (
@@ -178,7 +212,7 @@ export abstract class BaseAction {
           player.Id,
           this.selectedCards,
           this.selectedTargets,
-          this.selectedCardToPlay,
+          this.selectedCardToPlay
         ) &&
         isAvailableInRoom &&
         (!skill.targetFilter(
@@ -186,14 +220,14 @@ export abstract class BaseAction {
           this.player,
           this.selectedTargets,
           this.selectedCards,
-          this.selectedCardToPlay,
+          this.selectedCardToPlay
         ) ||
           skill.targetFilter(
             this.store.room,
             this.player,
             [...this.selectedTargets, player.Id],
             this.selectedCards,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           ))
       );
     } else {
@@ -203,8 +237,10 @@ export abstract class BaseAction {
 
   protected isCardFromParticularArea(card: Card) {
     return (
-      this.store.room.GameParticularAreas.find(cardName =>
-        this.player.getCardIds(PlayerCardsArea.OutsideArea, cardName).includes(card.Id),
+      this.store.room.GameParticularAreas.find((cardName) =>
+        this.player
+          .getCardIds(PlayerCardsArea.OutsideArea, cardName)
+          .includes(card.Id)
       ) !== undefined
     );
   }
@@ -227,7 +263,7 @@ export abstract class BaseAction {
     card: Card,
     player: Player,
     fromArea: PlayerCardsArea = PlayerCardsArea.HandArea,
-    ignoreCanUseCondition: boolean = false,
+    ignoreCanUseCondition: boolean = false
   ): boolean {
     if (!this.store.room.isPlaying() || this.store.room.isGameOver()) {
       return false;
@@ -246,10 +282,13 @@ export abstract class BaseAction {
       if (skill instanceof ActiveSkill) {
         const selectedCardsRange = skill.numberOfCards();
         const usableCardNumbers = selectedCardsRange.findIndex(
-          cardNumbers => cardNumbers === this.selectedCards.length,
+          (cardNumbers) => cardNumbers === this.selectedCards.length
         );
 
-        if (usableCardNumbers >= 0 && usableCardNumbers !== selectedCardsRange.length - 1) {
+        if (
+          usableCardNumbers >= 0 &&
+          usableCardNumbers !== selectedCardsRange.length - 1
+        ) {
           return true;
         }
 
@@ -260,7 +299,7 @@ export abstract class BaseAction {
             card.Id,
             this.selectedCards,
             this.selectedTargets,
-            this.equipSkillCardId,
+            this.equipSkillCardId
           ) &&
           skill.availableCardAreas().includes(fromArea) &&
           (!skill.cardFilter(
@@ -268,33 +307,39 @@ export abstract class BaseAction {
             player,
             this.selectedCards,
             this.selectedTargets,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           ) ||
             skill.cardFilter(
               this.store.room,
               player,
               [...this.selectedCards, card.Id],
               this.selectedTargets,
-              this.selectedCardToPlay,
+              this.selectedCardToPlay
             ))
         );
       } else if (skill instanceof ViewAsSkill) {
         return (
-          skill.isAvailableCard(this.store.room, player, card.Id, this.pendingCards, this.equipSkillCardId) &&
+          skill.isAvailableCard(
+            this.store.room,
+            player,
+            card.Id,
+            this.pendingCards,
+            this.equipSkillCardId
+          ) &&
           skill.availableCardAreas().includes(fromArea) &&
           (!skill.cardFilter(
             this.store.room,
             player,
             this.pendingCards,
             this.selectedTargets,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           ) ||
             skill.cardFilter(
               this.store.room,
               player,
               [...this.pendingCards, card.Id],
               this.selectedTargets,
-              this.selectedCardToPlay,
+              this.selectedCardToPlay
             ))
         );
       } else if (skill instanceof ResponsiveSkill) {
@@ -305,8 +350,9 @@ export abstract class BaseAction {
     }
 
     const canUseOnPlayers =
-      this.store.room.AlivePlayers.find(target => player.canUseCardTo(this.store.room, card.Id, target.Id)) !==
-      undefined;
+      this.store.room.AlivePlayers.find((target) =>
+        player.canUseCardTo(this.store.room, card.Id, target.Id)
+      ) !== undefined;
     if (this.selectedCardToPlay === undefined) {
       if (fromArea === PlayerCardsArea.HandArea) {
         if (card.is(CardType.Equip)) {
@@ -315,7 +361,9 @@ export abstract class BaseAction {
 
         if (
           card.Skill instanceof ResponsiveSkill ||
-          (!ignoreCanUseCondition && !player.canUseCard(this.store.room, card.Id) && !canUseOnPlayers)
+          (!ignoreCanUseCondition &&
+            !player.canUseCard(this.store.room, card.Id) &&
+            !canUseOnPlayers)
         ) {
           return false;
         }
@@ -327,14 +375,24 @@ export abstract class BaseAction {
           return (
             player.canUseCard(
               this.store.room,
-              new CardMatcher({ name: card.Skill.canViewAs(this.store.room, player, this.pendingCards) }),
+              new CardMatcher({
+                name: card.Skill.canViewAs(
+                  this.store.room,
+                  player,
+                  this.pendingCards
+                ),
+              })
             ) && card.Skill.canUse(this.store.room, player)
           );
         } else if (card.Skill instanceof ActiveSkill) {
           let canSelfUse = true;
 
           if (card.Skill.isSelfTargetSkill()) {
-            canSelfUse = player.canUseCardTo(this.store.room, card.Id, player.Id);
+            canSelfUse = player.canUseCardTo(
+              this.store.room,
+              card.Id,
+              player.Id
+            );
           }
 
           return canSelfUse && player.canUseCard(this.store.room, card.Id);
@@ -343,10 +401,12 @@ export abstract class BaseAction {
         if (this.store.room.GameParticularAreas.includes(card.Skill.Name)) {
           const hasParticularOutsideCards =
             this.store.room.GameParticularAreas.find(
-              cardName =>
-                this.selectedCards.find(cardId =>
-                  player.getCardIds(PlayerCardsArea.OutsideArea, cardName).includes(cardId),
-                ) !== undefined,
+              (cardName) =>
+                this.selectedCards.find((cardId) =>
+                  player
+                    .getCardIds(PlayerCardsArea.OutsideArea, cardName)
+                    .includes(cardId)
+                ) !== undefined
             ) !== undefined;
           if (hasParticularOutsideCards) {
             return false;
@@ -357,22 +417,36 @@ export abstract class BaseAction {
           return (
             player.canUseCard(
               this.store.room,
-              new CardMatcher({ name: card.Skill.canViewAs(this.store.room, player, this.pendingCards) }),
+              new CardMatcher({
+                name: card.Skill.canViewAs(
+                  this.store.room,
+                  player,
+                  this.pendingCards
+                ),
+              })
             ) && card.Skill.canUse(this.store.room, player)
           );
         } else if (card.Skill instanceof ActiveSkill) {
           let canSelfUse = true;
           if (card.Skill.isSelfTargetSkill()) {
-            canSelfUse = player.canUseCardTo(this.store.room, card.Id, player.Id);
+            canSelfUse = player.canUseCardTo(
+              this.store.room,
+              card.Id,
+              player.Id
+            );
           }
-          return canSelfUse && card.Skill.canUse(this.store.room, player, card.Id);
+          return (
+            canSelfUse && card.Skill.canUse(this.store.room, player, card.Id)
+          );
         }
 
         return false;
       } else if (fromArea === PlayerCardsArea.OutsideArea) {
         if (this.isCardFromParticularArea(card)) {
-          const hasParticularOutsideCards = this.selectedCards.find(cardId =>
-            this.store.room.GameParticularAreas.includes(Sanguosha.getCardById(cardId).Name),
+          const hasParticularOutsideCards = this.selectedCards.find((cardId) =>
+            this.store.room.GameParticularAreas.includes(
+              Sanguosha.getCardById(cardId).Name
+            )
           );
           if (hasParticularOutsideCards) {
             return false;
@@ -380,7 +454,9 @@ export abstract class BaseAction {
 
           if (
             card.Skill instanceof ResponsiveSkill ||
-            (!ignoreCanUseCondition && !player.canUseCard(this.store.room, card.Id) && !canUseOnPlayers)
+            (!ignoreCanUseCondition &&
+              !player.canUseCard(this.store.room, card.Id) &&
+              !canUseOnPlayers)
           ) {
             return false;
           }
@@ -398,10 +474,13 @@ export abstract class BaseAction {
       if (skill instanceof ActiveSkill) {
         const selectedCardsRange = skill.numberOfCards();
         const usableCardNumbers = selectedCardsRange.findIndex(
-          cardNumbers => cardNumbers === this.selectedCards.length,
+          (cardNumbers) => cardNumbers === this.selectedCards.length
         );
 
-        if (usableCardNumbers >= 0 && usableCardNumbers !== selectedCardsRange.length - 1) {
+        if (
+          usableCardNumbers >= 0 &&
+          usableCardNumbers !== selectedCardsRange.length - 1
+        ) {
           return true;
         }
 
@@ -412,47 +491,47 @@ export abstract class BaseAction {
             card.Id,
             this.selectedCards,
             this.selectedTargets,
-            card.Id,
+            card.Id
           ) &&
           skill.availableCardAreas().includes(fromArea) &&
           (!skill.cardFilter(
             this.store.room,
-            this.presenter.ClientPlayer!,
+            this.presenter.getClientPlayer(),
             this.selectedCards,
             this.selectedTargets,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           ) ||
             skill.cardFilter(
               this.store.room,
-              this.presenter.ClientPlayer!,
+              this.presenter.getClientPlayer(),
               [...this.selectedCards, card.Id],
               this.selectedTargets,
-              this.selectedCardToPlay,
+              this.selectedCardToPlay
             ))
         );
       } else if (skill instanceof ViewAsSkill) {
         return (
           skill.isAvailableCard(
             this.store.room,
-            this.presenter.ClientPlayer!,
+            this.presenter.getClientPlayer(),
             card.Id,
             this.pendingCards,
-            this.equipSkillCardId,
+            this.equipSkillCardId
           ) &&
           skill.availableCardAreas().includes(fromArea) &&
           (!skill.cardFilter(
             this.store.room,
-            this.presenter.ClientPlayer!,
+            this.presenter.getClientPlayer(),
             this.pendingCards,
             this.selectedTargets,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           ) ||
             skill.cardFilter(
               this.store.room,
-              this.presenter.ClientPlayer!,
+              this.presenter.getClientPlayer(),
               [...this.pendingCards, card.Id],
               this.selectedTargets,
-              this.selectedCardToPlay,
+              this.selectedCardToPlay
             ))
         );
       } else {
@@ -465,7 +544,9 @@ export abstract class BaseAction {
 
   protected unselectePlayer(player: Player) {
     if (this.selectedTargets.includes(player.Id)) {
-      const index = this.selectedTargets.findIndex(target => target === player.Id);
+      const index = this.selectedTargets.findIndex(
+        (target) => target === player.Id
+      );
       if (index >= 0) {
         this.selectedTargets.splice(index, 1);
       }
@@ -498,7 +579,7 @@ export abstract class BaseAction {
 
   protected unselectCard(cardId: CardId) {
     if (this.equipSkillCardId === cardId) {
-      this.store.selectedSkill = undefined;
+      this.presenter.resetSelectedSkill();
       this.resetAction();
       return;
     }
@@ -509,11 +590,15 @@ export abstract class BaseAction {
     if (this.selectedCardToPlay === cardId) {
       this.selectedCardToPlay = undefined;
     } else {
-      let index = this.selectedCards.findIndex(selectedCard => selectedCard === cardId);
+      let index = this.selectedCards.findIndex(
+        (selectedCard) => selectedCard === cardId
+      );
       if (index >= 0) {
         this.selectedCards.splice(index, 1);
       }
-      index = this.pendingCards.findIndex(pendingCard => pendingCard === cardId);
+      index = this.pendingCards.findIndex(
+        (pendingCard) => pendingCard === cardId
+      );
       if (index >= 0) {
         this.pendingCards.splice(index, 1);
       }
@@ -521,22 +606,26 @@ export abstract class BaseAction {
   }
 
   protected selectSkill(skill: Skill) {
+    console.log("选中技能");
     if (this.selectedCardToPlay !== undefined) {
       return;
     }
 
     this.selectedSkillToPlay = skill;
-    this.store.selectedSkill = skill;
+    // this.store.selectedSkill = skill;
+    this.presenter.handleSelectedSkill(skill);
     this.equipSkillCardId = this.player
       .getCardIds(PlayerCardsArea.EquipArea)
-      .find(cardId => Sanguosha.getCardById(cardId).Skill === skill);
+      .find((cardId) => Sanguosha.getCardById(cardId).Skill === skill);
 
     this.getTarget();
   }
   protected unselectSkill(skill: Skill) {
+    console.log("取消选中");
     if (this.selectedSkillToPlay === skill) {
       this.selectedSkillToPlay = undefined;
-      this.store.selectedSkill = undefined;
+      // this.store.selectedSkill = undefined;
+      this.presenter.handleSelectedSkill(undefined);
     }
   }
 
@@ -550,9 +639,9 @@ export abstract class BaseAction {
 
   private callToActionCheck() {
     if (this.enableToCallAction()) {
-      this.presenter.enableActionButton('confirm');
+      this.presenter.enableActionButton("confirm");
     } else {
-      this.presenter.disableActionButton('confirm');
+      this.presenter.disableActionButton("confirm");
     }
     this.presenter.broadcastUIUpdate();
   }
@@ -564,9 +653,13 @@ export abstract class BaseAction {
         return true;
       }
 
-      if (card.Skill instanceof ActiveSkill || card.Skill instanceof TriggerSkill) {
+      if (
+        card.Skill instanceof ActiveSkill ||
+        card.Skill instanceof TriggerSkill
+      ) {
         const canUse =
-          card.Skill.numberOfCards().length === 0 || card.Skill.numberOfCards().includes(this.selectedCards.length);
+          card.Skill.numberOfCards().length === 0 ||
+          card.Skill.numberOfCards().includes(this.selectedCards.length);
 
         return (
           canUse &&
@@ -575,14 +668,14 @@ export abstract class BaseAction {
             this.player,
             this.selectedCards,
             this.selectedTargets,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           ) &&
           card.Skill.targetFilter(
             this.store.room,
             this.player,
             this.selectedTargets,
             this.selectedCards,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           )
         );
       } else if (card.Skill instanceof ResponsiveSkill) {
@@ -594,7 +687,9 @@ export abstract class BaseAction {
       const skill = this.selectedSkillToPlay;
 
       if (skill instanceof ActiveSkill || skill instanceof TriggerSkill) {
-        const canUse = skill.numberOfCards().length === 0 || skill.numberOfCards().includes(this.selectedCards.length);
+        const canUse =
+          skill.numberOfCards().length === 0 ||
+          skill.numberOfCards().includes(this.selectedCards.length);
         return (
           canUse &&
           skill.cardFilter(
@@ -602,14 +697,14 @@ export abstract class BaseAction {
             this.player,
             this.selectedCards,
             this.selectedTargets,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           ) &&
           skill.targetFilter(
             this.store.room,
             this.player,
             this.selectedTargets,
             this.selectedCards,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           )
         );
       } else if (skill instanceof ResponsiveSkill) {
@@ -625,17 +720,27 @@ export abstract class BaseAction {
   public abstract onPlay(...args: any): Promise<void>;
 
   private getTarget() {
-    const target = this.store.room.getAlivePlayersFrom().filter(player => this.isPlayerEnabled(player));
+    const target = this.store.room
+      .getAlivePlayersFrom()
+      .filter((player) => this.isPlayerEnabled(player));
     if (target.length === 1) {
       if (!this.selectedTargets.includes(target[0].Id)) {
         this.selectedTargets.push(target[0].Id);
-        this.presenter.selectPlayer(this.store.room.getPlayerById(target[0].Id));
+        this.presenter.selectPlayer(
+          this.store.room.getPlayerById(target[0].Id)
+        );
       }
     }
   }
 
-  protected onClickCard(card: Card, selected: boolean, matcher?: CardMatcher): void {
-    const target = this.store.room.getAlivePlayersFrom().filter(player => this.isPlayerEnabled(player));
+  protected onClickCard(
+    card: Card,
+    selected: boolean,
+    matcher?: CardMatcher
+  ): void {
+    const target = this.store.room
+      .getAlivePlayersFrom()
+      .filter((player) => this.isPlayerEnabled(player));
     if (selected) {
       this.presenter.selectCard(card);
       this.getTarget();
@@ -645,12 +750,16 @@ export abstract class BaseAction {
       if (this.selectedCards.length > 0 && target.length === 1) {
         if (!this.selectedTargets.includes(target[0].Id)) {
           this.selectedTargets.push(target[0].Id);
-          this.presenter.selectPlayer(this.store.room.getPlayerById(target[0].Id));
+          this.presenter.selectPlayer(
+            this.store.room.getPlayerById(target[0].Id)
+          );
         }
         this.callToActionCheck();
       } else {
         for (const player of target) {
-          this.presenter.unselectPlayer(this.store.room.getPlayerById(player.Id));
+          this.presenter.unselectPlayer(
+            this.store.room.getPlayerById(player.Id)
+          );
         }
         this.scopedTargets?.length !== 1 && (this.selectedTargets = []);
       }
@@ -664,18 +773,24 @@ export abstract class BaseAction {
           this.player,
           this.pendingCards,
           this.selectedTargets,
-          this.selectedCardToPlay,
+          this.selectedCardToPlay
         )
       ) {
         const canViewAs = this.selectedSkillToPlay
           .canViewAs(this.store.room, this.player, this.pendingCards)
-          .filter(cardName => {
+          .filter((cardName) => {
             if (!matcher) {
               return (
-                !(Sanguosha.getCardByName(cardName).Skill instanceof ResponsiveSkill) &&
+                !(
+                  Sanguosha.getCardByName(cardName).Skill instanceof
+                  ResponsiveSkill
+                ) &&
                 this.player.canUseCard(
                   this.store.room,
-                  VirtualCard.create({ cardName, bySkill: this.selectedSkillToPlay!.Name }).Id,
+                  VirtualCard.create({
+                    cardName,
+                    bySkill: this.selectedSkillToPlay!.Name,
+                  }).Id
                 )
               );
             } else {
@@ -689,7 +804,11 @@ export abstract class BaseAction {
           const onClickDemoCard = (selectedCardName: string) => {
             this.inProcessDialog = false;
             this.presenter.closeDialog();
-            this.selectedCardToPlay = skill.viewAs(this.pendingCards, this.player, selectedCardName).Id;
+            this.selectedCardToPlay = skill.viewAs(
+              this.pendingCards,
+              this.player,
+              selectedCardName
+            ).Id;
             this.callToActionCheck();
           };
 
@@ -699,7 +818,11 @@ export abstract class BaseAction {
             onClick: onClickDemoCard,
           });
         } else {
-          this.selectedCardToPlay = this.selectedSkillToPlay.viewAs(this.pendingCards, this.player, canViewAs[0]).Id;
+          this.selectedCardToPlay = this.selectedSkillToPlay.viewAs(
+            this.pendingCards,
+            this.player,
+            canViewAs[0]
+          ).Id;
           this.getTarget();
           this.callToActionCheck();
         }
@@ -711,7 +834,11 @@ export abstract class BaseAction {
     this.callToActionCheck();
   }
 
-  protected onClickSkill(skill: Skill, selected: boolean, matcher?: CardMatcher): void {
+  protected onClickSkill(
+    skill: Skill,
+    selected: boolean,
+    matcher?: CardMatcher
+  ): void {
     if (
       this.selectedSkillToPlay &&
       this.selectedSkillToPlay instanceof ViewAsSkill &&
@@ -720,18 +847,24 @@ export abstract class BaseAction {
         this.player,
         this.pendingCards,
         this.selectedTargets,
-        this.selectedCardToPlay,
+        this.selectedCardToPlay
       )
     ) {
       const canViewAs = this.selectedSkillToPlay
         .canViewAs(this.store.room, this.player, this.pendingCards)
-        .filter(cardName => {
+        .filter((cardName) => {
           if (!matcher) {
             return (
-              !(Sanguosha.getCardByName(cardName).Skill instanceof ResponsiveSkill) &&
+              !(
+                Sanguosha.getCardByName(cardName).Skill instanceof
+                ResponsiveSkill
+              ) &&
               this.player.canUseCard(
                 this.store.room,
-                VirtualCard.create({ cardName, bySkill: this.selectedSkillToPlay!.Name }).Id,
+                VirtualCard.create({
+                  cardName,
+                  bySkill: this.selectedSkillToPlay!.Name,
+                }).Id
               )
             );
           } else {
@@ -745,7 +878,11 @@ export abstract class BaseAction {
         const onClickDemoCard = (selectedCardName: string) => {
           this.inProcessDialog = false;
           this.presenter.closeDialog();
-          this.selectedCardToPlay = skill.viewAs(this.pendingCards, this.player, selectedCardName).Id;
+          this.selectedCardToPlay = skill.viewAs(
+            this.pendingCards,
+            this.player,
+            selectedCardName
+          ).Id;
           this.callToActionCheck();
         };
 
@@ -755,15 +892,19 @@ export abstract class BaseAction {
           onClick: onClickDemoCard,
         });
       } else {
-        this.selectedCardToPlay = this.selectedSkillToPlay.viewAs(this.pendingCards, this.player, canViewAs[0]).Id;
+        this.selectedCardToPlay = this.selectedSkillToPlay.viewAs(
+          this.pendingCards,
+          this.player,
+          canViewAs[0]
+        ).Id;
       }
     }
     if (!selected) {
       this.resetAction();
       if (this.selectedSkillToPlay || this.selectedCardToPlay) {
-        this.presenter.enableActionButton('cancel');
+        this.presenter.enableActionButton("cancel");
       } else {
-        this.presenter.disableActionButton('cancel');
+        this.presenter.disableActionButton("cancel");
       }
     }
     this.delightItems();

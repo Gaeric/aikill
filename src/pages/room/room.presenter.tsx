@@ -1,113 +1,218 @@
-import { Card } from '/src/core/cards/card';
-import { CardId } from '/src/core/cards/libs/card_props';
-import { GameEventIdentifiers } from '/src/core/event/event';
-import type { ServerEventFinder } from '/src/core/event/event';
-import type { GameInfo } from '/src/core/game/game_props';
-import { GameCommonRules } from '/src/core/game/game_rules';
-import { RecordAnalytics } from '/src/core/game/record_analytics';
-import { ClientSocket } from '/src/core/network/socket.client';
-import { Player } from '/src/core/player/player';
-import { ClientPlayer } from '/src/core/player/player.client';
-import type { PlayerId, PlayerInfo, PlayerShortcutInfo } from '/src/core/player/player_props';
-import type { RoomId } from '/src/core/room/room';
-import { ClientRoom } from '/src/core/room/room.client';
-import { RoomEventStacker } from '/src/core/room/utils/room_event_stack';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
-import { Skill } from '/src/core/skills/skill';
-import { ImageLoader } from '/src/image_loader/image_loader';
-import * as mobx from 'mobx';
-import * as React from 'react';
-import { Point } from './animations/position';
-import { ClientRoomInfo, DisplayCardProp, RoomStore } from './room.store';
-import { Conversation, ConversationProps } from './ui/conversation/conversation';
-import { CardCategoryDialog, CardCategoryDialogProps } from './ui/dialog/card_category_dialog/card_category_dialog';
+import { Card } from "src/core/cards/card";
+import { CardId } from "src/core/cards/libs/card_props";
+import { GameEventIdentifiers } from "src/core/event/event";
+import type { ServerEventFinder } from "src/core/event/event";
+import type { GameInfo } from "src/core/game/game_props";
+import { GameCommonRules } from "src/core/game/game_rules";
+import { RecordAnalytics } from "src/core/game/record_analytics";
+import { ClientSocket } from "src/core/network/socket.client";
+import { Player } from "src/core/player/player";
+import { ClientPlayer } from "src/core/player/player.client";
+import type {
+  PlayerId,
+  PlayerInfo,
+  PlayerShortcutInfo,
+} from "src/core/player/player_props";
+import type { RoomId } from "src/core/room/room";
+import { ClientRoom } from "src/core/room/room.client";
+import { RoomEventStacker } from "src/core/room/utils/room_event_stack";
+import { Precondition } from "src/core/shares/libs/precondition/precondition";
+import { Skill } from "src/core/skills/skill";
+import * as React from "react";
+import { Point } from "./animations/position";
+// import { ClientRoomInfo, DisplayCardProp, RoomStore } from "./room.store";
+import {
+  Conversation,
+  ConversationProps,
+} from "./ui/conversation/conversation";
+import {
+  CardCategoryDialog,
+  CardCategoryDialogProps,
+} from "./ui/dialog/card_category_dialog/card_category_dialog";
+import { AnimationPosition } from "./animations/position";
 
-export class RoomPresenter {
-  constructor(private imageLoader: ImageLoader) {}
+export type ClientRoomInfo = {
+  roomId: number;
+  playerName: string;
+  socket: ClientSocket;
+  timestamp: number;
+  playerId: PlayerId;
+};
+export type DisplayCardProp = {
+  card: Card;
+  tag?: string;
+  buried?: boolean;
+  from: Player | undefined;
+  to: Player | undefined;
+  hiddenMove?: boolean;
+  animationPlayed?: boolean;
+};
+export function RoomPresenter(imageLoader: any) {
+  const [clientRoomInfo, setClientRoomInfo] = React.useState<ClientRoomInfo>();
+  const [room, setRoom] = React.useState<ClientRoom>();
+  const [clientPlayerId, setClientPlayerId] = React.useState<PlayerId>();
+  const [selectorDialog, setSelectorDialog] = React.useState<
+    JSX.Element | undefined
+  >();
+  const [selectorViewDialog, setSelectorViewDialog] = React.useState<
+    JSX.Element | undefined
+  >();
+  const [incomingConversation, setIncomingConversation] = React.useState<
+    JSX.Element | undefined
+  >();
+  const [gameLog, setGameLog] = React.useState<(string | JSX.Element)[]>([]);
+  const [messageLog, setMessageLog] = React.useState<(string | JSX.Element)[]>(
+    []
+  );
+  const [displayedCards, setDisplayedCards] = React.useState<DisplayCardProp[]>(
+    []
+  );
+  const [displayedCardsAnimationStyles, setDisplayedCardsAnimationStyles] =
+    React.useState<{
+      [K in CardId]: React.CSSProperties;
+    }>({});
+  const [canReforge, setCanReforge] = React.useState(false);
+  let animationPosition = new AnimationPosition();
+  const [actionButtonStatus, setActionButtonStatus] = React.useState<{
+    confirm: boolean;
+    cancel: boolean;
+    finish: boolean;
+  }>({ confirm: false, cancel: false, finish: false });
+  const [selectedSkill, setSelectedSkill] = React.useState<Skill | undefined>();
+  const [awaitingResponseEvent, setAwaitingResponseEvent] = React.useState<{
+    identifier?: GameEventIdentifiers;
+    event?: ServerEventFinder<GameEventIdentifiers>;
+  }>({});
+  const [inAction, setInAction] = React.useState<boolean>();
+  const [notifiedPlayers, setNotifiedPlayers] = React.useState<PlayerId[]>([]);
+  const [numberOfDrawStack, setNumberOfDrawStack] = React.useState<number>();
+  const [currentCircle, setCurrentCircle] = React.useState<number>(0);
+  const [notificationTime, setNotificationTime] = React.useState<number>(60);
+  const [delightedPlayers, setDelightedPlayers] = React.useState<
+    boolean | undefined
+  >(false);
+  const [highlightedCards, setHighlightedCards] = React.useState<
+    boolean | undefined
+  >(true);
+  const [selectedCards, setSelectedCards] = React.useState<CardId[]>([]);
+  const [selectedPlayers, setSelectedPlayers] = React.useState<ClientPlayer[]>(
+    []
+  );
+  const [incomingUserMessages, setIncomingUserMessages] = React.useState<{
+    [K in PlayerId]: string;
+  }>({});
+  const [onceSkillUsedHistory, setOnceSkillUsedHistory] = React.useState<{
+    [K in PlayerId]: string[];
+  }>({});
+  const [switchSkillState, setSwitchSkillState] = React.useState<{
+    [K in PlayerId]: string[];
+  }>({});
+  const [clientPlayerHandcardShowMatcher, setClientPlayerHandcardShowMatcher] =
+    React.useState<(card: Card) => boolean>();
+  const [clientPlayerCardActionsMatcher, setClientPlayerCardActionsMatcher] =
+    React.useState<(card: Card) => boolean>();
+  const [
+    clientPlayerOutsideCardActionsMatcher,
+    setClientPlayerOutsideCardActionsMatcher,
+  ] = React.useState<(card: Card) => boolean>();
+  const [onClickHandCardToPlay, setOnClickHandCardToPlay] = React.useState<
+    (card: Card, selected: boolean) => void
+  >(() => {});
+  const [onClickEquipmentToDoAction, setOnClickEquipmentToDoAction] =
+    React.useState<(card: Card, selected: boolean) => void>(() => {});
+  const [playersHighlightedMatcher, setPlayersHighlightedMatcher] =
+    React.useState<(player: Player) => boolean>();
+  const [playersSelectionMatcher, setPlayersSelectionMatcher] =
+    React.useState<(player: Player) => boolean>();
+  const [cardSkillsSelectionMatcher, setCardSkillsSelectionMatcher] =
+    React.useState<(card: Card) => boolean>();
+  const [onClickPlayer, setOnClickPlayer] =
+    React.useState<(player: Player, selected: boolean) => void>();
+  const [onClickSkill, setOnClickSkill] =
+    React.useState<(skill: Skill, selected: boolean) => void>();
+  const [isSkillDisabled, setIsSkillDisabled] = React.useState<
+    (skill: Skill) => boolean
+  >(() => () => false);
 
-  private store: RoomStore;
-  public createStore() {
-    this.store = new RoomStore();
-    return this.store;
+  const [validSelectionAction, setValidSelectionAction] = React.useState<
+    undefined | (() => void)
+  >(() => {});
+  const [confirmButtonAction, setConfirmButtonAction] = React.useState<
+    (() => void) | undefined
+  >();
+  const [cancelButtonAction, setCancelButtonAction] = React.useState<
+    (() => void) | undefined
+  >();
+  const [finishButtonAction, setFinishButtonAction] = React.useState<
+    (() => void) | undefined
+  >();
+
+  function getClientPlayer() {
+    return room?.getPlayerById(clientPlayerId);
   }
 
-  private tryToThrowUninitializedError() {
-    Precondition.assert(this.store !== undefined, 'Uninitialized room store');
+  function broadcastUIUpdate() {}
+
+  function setupRoomStatus(info: ClientRoomInfo) {
+    setClientRoomInfo(() => info);
   }
 
-  @mobx.computed
-  get ClientPlayer(): ClientPlayer | undefined {
-    return this.store.room?.getPlayerById(this.store.clientPlayerId);
+  function setupClientPlayerId(playerId: PlayerId) {
+    setClientPlayerId(() => playerId);
   }
 
-  @mobx.action
-  broadcastUIUpdate() {
-    this.store.updateUIFlag = !this.store.updateUIFlag;
+  function enableActionButton(...buttons: ("confirm" | "cancel" | "finish")[]) {
+    setActionButtonStatus((actionButtonStatus) => {
+      buttons.forEach((btn) => (actionButtonStatus[btn] = true));
+      return actionButtonStatus;
+    });
   }
 
-  @mobx.action
-  setupRoomStatus(info: ClientRoomInfo) {
-    this.store.clientRoomInfo = info;
+  function disableActionButton(
+    ...buttons: ("confirm" | "cancel" | "finish")[]
+  ) {
+    setActionButtonStatus((actionButtonStatus) => {
+      buttons.forEach((btn) => (actionButtonStatus[btn] = false));
+      return actionButtonStatus;
+    });
   }
 
-  @mobx.action
-  setupClientPlayerId(playerId: PlayerId) {
-    this.store.clientPlayerId = playerId;
-  }
-
-  @mobx.action
-  enableActionButton(...buttons: ('confirm' | 'cancel' | 'finish')[]) {
-    buttons.forEach(btn => (this.store.actionButtonStatus[btn] = true));
-  }
-  @mobx.action
-  disableActionButton(...buttons: ('confirm' | 'cancel' | 'finish')[]) {
-    buttons.forEach(btn => (this.store.actionButtonStatus[btn] = false));
-  }
-
-  @mobx.action
-  playerEnter(playerInfo: PlayerInfo) {
-    this.tryToThrowUninitializedError();
+  function playerEnter(playerInfo: PlayerInfo) {
     const player = new ClientPlayer(
       playerInfo.Id,
       playerInfo.Name,
       playerInfo.Position,
       playerInfo.CharacterId,
       undefined,
-      playerInfo.Status,
+      playerInfo.Status
     );
-    this.store.room.addPlayer(player);
-    this.broadcastUIUpdate();
+    room!.addPlayer(player);
   }
 
-  @mobx.action
-  playerLeave(playerId: PlayerId, quit?: boolean) {
-    this.tryToThrowUninitializedError();
-    if (this.store.room.isPlaying()) {
-      this.store.room.getPlayerById(playerId).setOffline(quit);
+  function playerLeave(playerId: PlayerId, quit?: boolean) {
+    if (room!.isPlaying()) {
+      room!.getPlayerById(playerId).setOffline(quit);
     } else {
-      this.store.room.removePlayer(playerId);
-      this.broadcastUIUpdate();
+      room!.removePlayer(playerId);
+      broadcastUIUpdate();
     }
   }
 
-  @mobx.action
-  createClientRoom(
+  function createClientRoom(
     roomId: RoomId,
     socket: ClientSocket,
     gameInfo: GameInfo,
-    playersInfo: (PlayerShortcutInfo | PlayerInfo)[],
+    playersInfo: (PlayerShortcutInfo | PlayerInfo)[]
   ) {
-    this.tryToThrowUninitializedError();
-    const players = playersInfo.map(playerInfo => {
+    const players = playersInfo.map((playerInfo) => {
       const player = new ClientPlayer(
         playerInfo.Id,
         playerInfo.Name,
         playerInfo.Position,
         playerInfo.CharacterId,
         undefined,
-        playerInfo.Status,
+        playerInfo.Status
       );
-
       for (const [key, properties] of Object.entries(playerInfo.Flags)) {
         player.setFlag(key, properties.value, key, properties.visiblePlayers);
       }
@@ -115,375 +220,539 @@ export class RoomPresenter {
         player.setMark(mark, value);
       }
 
-      if ('equipSectionsStatus' in playerInfo) {
+      if ("equipSectionsStatus" in playerInfo) {
         const info = playerInfo as PlayerShortcutInfo;
         player.syncUpPlayer(info);
       }
 
       return player;
     });
-
-    this.store.room = new ClientRoom(
+    let newRoom = new ClientRoom(
       roomId,
       socket,
       gameInfo,
       players,
       new RecordAnalytics(),
       new GameCommonRules(),
-      new RoomEventStacker(),
+      new RoomEventStacker()
     );
-    this.broadcastUIUpdate();
+    setRoom(() => newRoom);
+    return newRoom;
   }
 
-  @mobx.action
-  addGameLog(log: string | JSX.Element) {
-    this.store.gameLog.push(log);
-  }
-  @mobx.action
-  addUserMessage(text: string | JSX.Element) {
-    this.store.messageLog.push(text);
+  function addGameLog(log: string | JSX.Element) {
+    setGameLog(() => [...gameLog, log]);
   }
 
-  @mobx.action
-  showCards(...cards: DisplayCardProp[]) {
-    if (this.store.displayedCards.length > 7) {
+  function addUserMessage(text: string | JSX.Element) {
+    setMessageLog(() => [...messageLog, text]);
+  }
+
+  function showCards(...cards: DisplayCardProp[]) {
+    if (displayedCards.length > 7) {
       const deletedCards: DisplayCardProp[] = [];
-      for (let i = 0; i < 7; i++) {
-        const cardInfo = this.store.displayedCards[i];
-        this.store.displayedCardsAnimationStyles[cardInfo.card.Id] =
-          this.store.displayedCardsAnimationStyles[cardInfo.card.Id] || {};
-        this.store.displayedCardsAnimationStyles[cardInfo.card.Id].opacity = 0;
-        deletedCards.push(cardInfo);
-      }
-      setTimeout(
-        mobx.action(() => {
-          for (const cardInfo of deletedCards) {
-            this.store.displayedCardsAnimationStyles[cardInfo.card.Id] = {};
+
+      setTimeout(() => {
+        setDisplayedCardsAnimationStyles((displayedCardsAnimationStyles) => {
+          for (let i = 0; i < 7; i++) {
+            const cardInfo = displayedCards[i];
+            displayedCardsAnimationStyles[cardInfo.card.Id] =
+              displayedCardsAnimationStyles[cardInfo.card.Id] || {};
+            displayedCardsAnimationStyles[cardInfo.card.Id].opacity = 0;
+            deletedCards.push(cardInfo);
           }
-          this.store.displayedCards = this.store.displayedCards.filter(card => !deletedCards.includes(card));
-        }),
-        600,
-      );
+
+          for (const cardInfo of deletedCards) {
+            displayedCardsAnimationStyles[cardInfo.card.Id] = {};
+          }
+          return displayedCardsAnimationStyles;
+        });
+        setDisplayedCards((displayedCards) =>
+          displayedCards.filter((card) => !deletedCards.includes(card))
+        );
+      }, 600);
     }
 
-    for (const card of cards) {
-      this.store.displayedCards.push(card);
-    }
+    setDisplayedCards((displayedCards) => [...displayedCards, ...cards]);
   }
 
-  @mobx.action
-  buryCards(...cards: CardId[]) {
-    for (const cardId of cards) {
-      const exist = this.store.displayedCards.find(_card => cardId === _card.card.Id);
-      if (exist) {
-        exist.buried = true;
+  function buryCards(...cards: CardId[]) {
+    setDisplayedCards((displayedCards) => {
+      for (const cardId of cards) {
+        const exist = displayedCards.find((_card) => cardId === _card.card.Id);
+        if (exist) {
+          exist.buried = true;
+        }
       }
-    }
+      return displayedCards;
+    });
   }
 
-  private getCardElementPosition(cardId: CardId): Point {
+  function getCardElementPosition(cardId: CardId): Point {
     const cardElement = document.getElementById(cardId.toString());
     if (!cardElement) {
       return { x: 0, y: 0 };
     }
 
-    const offset = this.store.displayedCards.length * 120 > 600 ? 300 : this.store.displayedCards.length * 60;
+    const offset =
+      displayedCards.length * 120 > 600 ? 300 : displayedCards.length * 60;
     return {
       x: cardElement.getBoundingClientRect().x + offset,
       y: cardElement.getBoundingClientRect().y,
     };
   }
 
-  @mobx.action
-  playCardAnimation(cardInfo: DisplayCardProp, from?: Point) {
-    if (cardInfo.animationPlayed || !document.getElementById(cardInfo.card.Id.toString())) {
+  function playCardAnimation(cardInfo: DisplayCardProp, from?: Point) {
+    if (
+      cardInfo.animationPlayed ||
+      !document.getElementById(cardInfo.card.Id.toString())
+    ) {
       return;
     }
+    setDisplayedCardsAnimationStyles((displayedCardsAnimationStyles) => {
+      displayedCardsAnimationStyles[cardInfo.card.Id] =
+        displayedCardsAnimationStyles[cardInfo.card.Id] || {};
 
-    this.store.displayedCardsAnimationStyles[cardInfo.card.Id] =
-      this.store.displayedCardsAnimationStyles[cardInfo.card.Id] || {};
+      const cardStyle = displayedCardsAnimationStyles[cardInfo.card.Id];
+      const originalPosition = getCardElementPosition(cardInfo.card.Id);
 
-    const cardStyle = this.store.displayedCardsAnimationStyles[cardInfo.card.Id];
-    const originalPosition = this.getCardElementPosition(cardInfo.card.Id);
+      if (from) {
+        cardStyle.transition = "unset";
+        cardStyle.opacity = 0;
+        cardStyle.transform = `translate(${from.x - originalPosition.x}px, ${
+          from.y - originalPosition.y
+        }px)`;
 
-    if (from) {
-      cardStyle.transition = 'unset';
-      cardStyle.opacity = 0;
-      cardStyle.transform = `translate(${from.x - originalPosition.x}px, ${from.y - originalPosition.y}px)`;
-    } else {
-      delete this.store.displayedCardsAnimationStyles[cardInfo.card.Id];
-      cardInfo.animationPlayed = true;
-      return;
-    }
-
-    setTimeout(
-      mobx.action(() => {
-        delete this.store.displayedCardsAnimationStyles[cardInfo.card.Id];
+        setTimeout(() => {
+          delete displayedCardsAnimationStyles[cardInfo.card.Id];
+          cardInfo.animationPlayed = true;
+        }, 100);
+      } else {
+        delete displayedCardsAnimationStyles[cardInfo.card.Id];
         cardInfo.animationPlayed = true;
-        this.broadcastUIUpdate();
-      }),
-      100,
-    );
+      }
+
+      return displayedCardsAnimationStyles;
+    });
   }
 
-  @mobx.action
-  createViewDialog = (dialog: JSX.Element) => {
-    this.store.selectorViewDialog = dialog;
-  };
-  @mobx.action
-  closeViewDialog() {
-    this.store.selectorViewDialog = undefined;
+  function createViewDialog(dialog: JSX.Element) {
+    setSelectorViewDialog(() => dialog);
   }
 
-  @mobx.action
-  createDialog = (dialog: JSX.Element) => {
-    this.store.selectorDialog = dialog;
-  };
-
-  @mobx.action
-  createCardCategoryDialog = (
-    props: Pick<CardCategoryDialogProps, Exclude<keyof CardCategoryDialogProps, 'imageLoader'>>,
-  ) => {
-    this.store.selectorDialog = <CardCategoryDialog imageLoader={this.imageLoader} {...props} />;
-  };
-
-  @mobx.action
-  closeDialog() {
-    this.disableActionButton('cancel');
-    this.store.selectorDialog = undefined;
+  function closeViewDialog() {
+    setSelectorViewDialog(() => undefined);
   }
 
-  @mobx.action
-  createIncomingConversation = (props: ConversationProps) => {
+  function createDialog(dialog: JSX.Element) {
+    setSelectorDialog(() => dialog);
+  }
+
+  function createCardCategoryDialog(
+    props: Pick<
+      CardCategoryDialogProps,
+      Exclude<keyof CardCategoryDialogProps, "imageLoader">
+    >
+  ) {
+    setSelectorDialog(() => (
+      <CardCategoryDialog imageLoader={imageLoader} {...props} />
+    ));
+  }
+
+  function closeDialog() {
+    if (selectorDialog) {
+      disableActionButton("cancel");
+      setSelectorDialog(() => undefined);
+    }
+  }
+
+  function createIncomingConversation(props: ConversationProps) {
     if (props.optionsActionHanlder) {
-      for (const [option, action] of Object.entries(props.optionsActionHanlder)) {
+      for (const [option, action] of Object.entries(
+        props.optionsActionHanlder
+      )) {
         props.optionsActionHanlder[option] = () => {
-          this.closeIncomingConversation();
+          closeIncomingConversation();
           action();
         };
       }
     }
-    this.store.incomingConversation = <Conversation {...props} />;
-  };
-
-  @mobx.action
-  enableCardReforgeStatus() {
-    this.store.canReforge = true;
-  }
-  @mobx.action
-  disableCardReforgeStatus() {
-    this.store.canReforge = false;
+    setIncomingConversation(() => <Conversation {...props} />);
   }
 
-  @mobx.action
-  closeIncomingConversation() {
-    this.store.incomingConversation = undefined;
+  function enableCardReforgeStatus() {
+    setCanReforge(() => true);
   }
 
-  @mobx.action
-  setupClientPlayerCardActionsMatcher(matcher: (card: Card) => boolean) {
-    this.store.clientPlayerCardActionsMatcher = matcher;
-  }
-  @mobx.action
-  setupClientPlayerHandardsActionsMatcher(matcher: (card: Card) => boolean) {
-    this.store.clientPlayerHandcardShowMatcher = matcher;
-  }
-  @mobx.action
-  setupClientPlayerOutsideCardActionsMatcher(matcher: (card: Card) => boolean) {
-    this.store.clientPlayerOutsideCardActionsMatcher = matcher;
-  }
-  @mobx.action
-  onClickPlayerCard(handler: (card: Card, selected: boolean) => void) {
-    this.store.onClickHandCardToPlay = handler;
-  }
-  @mobx.action
-  onClickEquipment(handler: (card: Card, selected: boolean) => void) {
-    this.store.onClickEquipmentToDoAction = handler;
+  function disableCardReforgeStatus() {
+    setCanReforge(() => false);
   }
 
-  @mobx.action
-  setupPlayersHighlightedStatus(matcher: (player: Player) => boolean) {
-    this.store.playersHighlightedMatcher = matcher;
-  }
-  @mobx.action
-  setupPlayersSelectionMatcher(matcher: (player: Player) => boolean) {
-    this.store.playersSelectionMatcher = matcher;
-  }
-  @mobx.action
-  setupCardSkillSelectionMatcher(matcher: (card: Card) => boolean) {
-    this.store.cardSkillsSelectionMatcher = matcher;
-  }
-  @mobx.action
-  onClickPlayer(handler: (player: Player, selected: boolean) => void) {
-    this.store.onClickPlayer = handler;
-  }
-  @mobx.action
-  onClickSkill(handler: (skill: Skill, selected: boolean) => void) {
-    this.store.onClickSkill = handler;
+  function closeIncomingConversation() {
+    setIncomingConversation(() => undefined);
   }
 
-  @mobx.action
-  isSkillDisabled(handler: (skill: Skill) => boolean) {
-    this.store.isSkillDisabled = handler;
+  function setupClientPlayerCardActionsMatcher(
+    matcher: (card: Card) => boolean
+  ) {
+    setClientPlayerCardActionsMatcher(() => matcher);
   }
 
-  @mobx.action
-  resetSelectedSkill() {
-    this.store.selectedSkill = undefined;
+  function setupClientPlayerHandardsActionsMatcher(
+    matcher: (card: Card) => boolean
+  ) {
+    setClientPlayerHandcardShowMatcher(() => matcher);
   }
 
-  @mobx.action
-  defineConfirmButtonActions(handler: () => void) {
-    this.store.confirmButtonAction = mobx.action(() => {
-      this.store.actionButtonStatus.confirm = false;
-      this.store.actionButtonStatus.cancel = false;
-      this.store.confirmButtonAction = undefined;
+  function setupClientPlayerOutsideCardActionsMatcher(
+    matcher: (card: Card) => boolean
+  ) {
+    setClientPlayerOutsideCardActionsMatcher(() => matcher);
+  }
+
+  function onClickPlayerCard(handler: (card: Card, selected: boolean) => void) {
+    setOnClickHandCardToPlay(() => handler);
+  }
+
+  function onClickEquipment(handler: (card: Card, selected: boolean) => void) {
+    setOnClickEquipmentToDoAction(() => handler);
+  }
+
+  function setupPlayersHighlightedStatus(matcher: (player: Player) => boolean) {
+    setPlayersHighlightedMatcher(() => matcher);
+  }
+
+  function setupPlayersSelectionMatcher(matcher: (player: Player) => boolean) {
+    setPlayersSelectionMatcher(() => matcher);
+  }
+
+  function setupCardSkillSelectionMatcher(matcher: (card: Card) => boolean) {
+    setCardSkillsSelectionMatcher(() => matcher);
+  }
+
+  function handleOnClickPlayer(
+    handler: (player: Player, selected: boolean) => void
+  ) {
+    setOnClickPlayer(() => handler);
+  }
+
+  function handleOnClickSkill(
+    handler: (skill: Skill, selected: boolean) => void
+  ) {
+    setOnClickSkill(() => handler);
+  }
+
+  function handleIsSkillDisabled(handler: (skill: Skill) => boolean) {
+    setIsSkillDisabled(() => handler);
+  }
+
+  function resetSelectedSkill() {
+    setSelectedSkill(undefined);
+  }
+  function handleSelectedSkill(skill: Skill) {
+    setSelectedSkill(() => skill);
+  }
+
+  function defineConfirmButtonActions(handler: () => void) {
+    setConfirmButtonAction(() => () => {
+      setActionButtonStatus((data) => ({
+        ...data,
+        confirm: false,
+        cancel: false,
+      }));
+      setConfirmButtonAction(undefined);
       handler();
     });
   }
 
-  @mobx.action
-  defineFinishButtonActions(handler: () => void) {
-    this.store.actionButtonStatus.finish = true;
-    this.store.finishButtonAction = mobx.action(() => {
-      this.store.actionButtonStatus.finish = false;
-      this.store.actionButtonStatus.confirm = false;
-      this.store.actionButtonStatus.cancel = false;
-      this.store.finishButtonAction = undefined;
-      handler();
-    });
-  }
-  @mobx.action
-  defineCancelButtonActions(handler: () => void) {
-    this.store.cancelButtonAction = mobx.action(() => {
-      this.store.actionButtonStatus.cancel = false;
-      this.store.actionButtonStatus.confirm = false;
-      this.store.cancelButtonAction = undefined;
+  function defineFinishButtonActions(handler: () => void) {
+    setActionButtonStatus((data) => ({ ...data, finish: true }));
+
+    setFinishButtonAction(() => () => {
+      setActionButtonStatus({
+        finish: false,
+        confirm: false,
+        cancel: false,
+      });
+      setFinishButtonAction(undefined);
       handler();
     });
   }
 
-  @mobx.action
-  endAction() {
-    this.store.inAction = false;
-    delete this.store.awaitingResponseEvent.identifier;
-    delete this.store.awaitingResponseEvent.event;
+  function defineCancelButtonActions(handler: () => void) {
+    setCancelButtonAction(() => () => {
+      setActionButtonStatus((data) => ({
+        ...data,
+        confirm: false,
+        cancel: false,
+      }));
+      setCancelButtonAction(undefined);
+
+      handler();
+    });
   }
-  @mobx.action
-  startAction(identifier: GameEventIdentifiers, event: ServerEventFinder<GameEventIdentifiers>) {
-    this.store.inAction = true;
-    this.store.awaitingResponseEvent = {
+
+  function endAction() {
+    setInAction(() => false);
+    setAwaitingResponseEvent({
+      identifier: undefined,
+      event: undefined,
+    });
+  }
+
+  function startAction(
+    identifier: GameEventIdentifiers,
+    event: ServerEventFinder<GameEventIdentifiers>
+  ) {
+    setInAction(() => true);
+    setAwaitingResponseEvent({
       identifier,
       event,
-    };
+    });
   }
 
-  @mobx.action
-  clearSelectedCards() {
-    this.store.selectedCards = [];
-  }
-  @mobx.action
-  selectCard(card: Card) {
-    this.store.selectedCards.push(card.Id);
-  }
-  @mobx.action
-  unselectCard(card: Card) {
-    const index = this.store.selectedCards.findIndex(selected => selected === card.Id);
-    index >= 0 && this.store.selectedCards.splice(index, 1);
+  function clearSelectedCards() {
+    setSelectedCards([]);
   }
 
-  @mobx.action
-  clearSelectedPlayers() {
-    this.store.selectedPlayers = [];
-  }
-  @mobx.action
-  selectPlayer(player: ClientPlayer) {
-    this.store.selectedPlayers.push(player);
-  }
-  @mobx.action
-  unselectPlayer(player: ClientPlayer) {
-    const index = this.store.selectedPlayers.findIndex(selected => selected === player);
-    index >= 0 && this.store.selectedPlayers.splice(index, 1);
+  function selectCard(card: Card) {
+    setSelectedCards((selectedCards) => [...selectedCards, card.Id]);
+    return [...selectedCards, card.Id];
   }
 
-  @mobx.action
-  setValidSelectionReflectAction(handler: () => void) {
-    this.store.validSelectionAction = handler;
-  }
-  @mobx.action
-  clearSelectionReflectAction() {
-    this.store.validSelectionAction = undefined;
-  }
-
-  @mobx.action
-  notify(toIds: PlayerId[], notificationTime: number) {
-    this.store.notifiedPlayers.push(...toIds);
-    this.store.notificationTime = notificationTime;
-  }
-  @mobx.action
-  clearNotifiers() {
-    this.store.notifiedPlayers.splice(0, this.store.notifiedPlayers.length);
+  function unselectCard(card: Card) {
+    setSelectedCards((selectedCards) =>
+      selectedCards.filter((s) => {
+        return s !== card.Id;
+      })
+    );
   }
 
-  @mobx.action
-  updateNumberOfDrawStack(numberOfDrawStack: number) {
-    if (numberOfDrawStack !== undefined) {
-      this.store.numberOfDrawStack = numberOfDrawStack;
+  function clearSelectedPlayers() {
+    setSelectedPlayers([]);
+  }
+
+  function selectPlayer(player: ClientPlayer) {
+    setSelectedPlayers((selectedPlayers) => [...selectedPlayers, player]);
+  }
+
+  function unselectPlayer(player: ClientPlayer) {
+    setSelectedPlayers((selectedPlayers) =>
+      selectedPlayers.filter((s) => {
+        return s !== player;
+      })
+    );
+  }
+
+  function setValidSelectionReflectAction(handler: () => void) {
+    setValidSelectionAction(() => handler);
+  }
+
+  function clearSelectionReflectAction() {
+    setValidSelectionAction(() => undefined);
+  }
+
+  function notify(toIds: PlayerId[], notificationTime: number) {
+    setNotifiedPlayers((notifiedPlayers) => [...notifiedPlayers, ...toIds]);
+    setNotificationTime(() => notificationTime);
+  }
+
+  function clearNotifiers() {
+    if (notifiedPlayers.length > 0) {
+      setNotifiedPlayers([]);
     }
   }
 
-  @mobx.action
-  updateGameCircle(circle: number) {
-    if (circle !== undefined) {
-      this.store.currentCircle = circle;
+  function updateNumberOfDrawStack(newNumberOfDrawStack: number) {
+    if (numberOfDrawStack !== newNumberOfDrawStack || newNumberOfDrawStack) {
+      setNumberOfDrawStack(() => newNumberOfDrawStack);
     }
   }
 
-  @mobx.action
-  delightPlayers(delight?: boolean) {
-    this.store.delightedPlayers = delight;
-  }
-  @mobx.action
-  highlightCards(highlight?: boolean) {
-    this.store.highlightedCards = highlight;
+  function updateGameCircle(circle: number) {
+    if (circle && circle !== currentCircle) {
+      setCurrentCircle(() => circle);
+    }
   }
 
-  @mobx.action
-  onIncomingMessage(player: PlayerId, message?: string) {
+  function delightPlayers(delight?: boolean) {
+    setDelightedPlayers(() => delight);
+  }
+
+  function highlightCards(highlight?: boolean) {
+    setHighlightedCards(() => highlight);
+  }
+
+  function onIncomingMessage(player: PlayerId, message?: string) {
     if (message === undefined) {
-      delete this.store.incomingUserMessages[player];
+      setIncomingUserMessages((incomingUserMessages) => {
+        delete incomingUserMessages[player];
+        return incomingUserMessages;
+      });
     } else {
-      this.store.incomingUserMessages[player] = message;
+      setIncomingUserMessages((incomingUserMessages) => {
+        incomingUserMessages[player] = message;
+        return incomingUserMessages;
+      });
     }
   }
 
-  @mobx.action
-  onceSkillUsed(player: PlayerId, skillName: string) {
-    if (!this.store.onceSkillUsedHistory[player]) {
-      this.store.onceSkillUsedHistory[player] = [skillName];
-    } else {
-      this.store.onceSkillUsedHistory[player].push(skillName);
+  function onceSkillUsed(player: PlayerId, skillName: string) {
+    setOnceSkillUsedHistory((onceSkillUsedHistory) => {
+      if (!onceSkillUsedHistory[player]) {
+        onceSkillUsedHistory[player] = [skillName];
+      } else {
+        onceSkillUsedHistory[player].push(skillName);
+      }
+      return onceSkillUsedHistory;
+    });
+  }
+
+  function refreshOnceSkillUsed(player: PlayerId, skillName: string) {
+    if (
+      onceSkillUsedHistory[player] &&
+      onceSkillUsedHistory[player].includes(skillName)
+    ) {
+      setOnceSkillUsedHistory((onceSkillUsedHistory) => {
+        onceSkillUsedHistory[player].filter((o) => {
+          return o !== skillName;
+        });
+        return onceSkillUsedHistory;
+      });
     }
   }
 
-  @mobx.action
-  refreshOnceSkillUsed(player: PlayerId, skillName: string) {
-    const history = this.store.onceSkillUsedHistory[player];
-    if (history && history.includes(skillName)) {
-      const index = history.findIndex(name => name === skillName);
-      index !== -1 && history.splice(index, 1);
-    }
+  function switchSkillStateChanged(
+    player: PlayerId,
+    skillName: string,
+    initState: boolean = false
+  ) {
+    setSwitchSkillState((switchSkillState) => {
+      if (!switchSkillState[player]) {
+        switchSkillState[player] = [skillName];
+      } else if (!switchSkillState[player].includes(skillName)) {
+        initState || switchSkillState[player].push(skillName);
+      } else {
+        const index = switchSkillState[player].findIndex(
+          (name) => name === skillName
+        );
+        index !== -1 && switchSkillState[player].splice(index, 1);
+      }
+      return switchSkillState;
+    });
   }
 
-  @mobx.action
-  switchSkillStateChanged(player: PlayerId, skillName: string, initState: boolean = false) {
-    if (!this.store.switchSkillState[player]) {
-      this.store.switchSkillState[player] = [skillName];
-    } else if (!this.store.switchSkillState[player].includes(skillName)) {
-      initState || this.store.switchSkillState[player].push(skillName);
-    } else {
-      const index = this.store.switchSkillState[player].findIndex(name => name === skillName);
-      index !== -1 && this.store.switchSkillState[player].splice(index, 1);
-    }
+  const store = {
+    clientRoomInfo,
+    room,
+    clientPlayerId,
+    selectorDialog,
+    selectorViewDialog,
+    incomingConversation,
+    gameLog,
+    messageLog,
+    displayedCards,
+    displayedCardsAnimationStyles,
+    canReforge,
+    animationPosition,
+    actionButtonStatus,
+    selectedSkill,
+    awaitingResponseEvent,
+    inAction,
+    notifiedPlayers,
+    numberOfDrawStack,
+    currentCircle,
+    notificationTime,
+    delightedPlayers,
+    highlightedCards,
+    selectedCards,
+    selectedPlayers,
+    incomingUserMessages,
+    onceSkillUsedHistory,
+    switchSkillState,
+    clientPlayerCardActionsMatcher,
+    clientPlayerOutsideCardActionsMatcher,
+    clientPlayerHandcardShowMatcher,
+    onClickHandCardToPlay,
+    onClickEquipmentToDoAction,
+    playersHighlightedMatcher,
+    playersSelectionMatcher,
+    cardSkillsSelectionMatcher,
+    onClickPlayer,
+    onClickSkill,
+    isSkillDisabled,
+    validSelectionAction,
+    confirmButtonAction,
+    cancelButtonAction,
+    finishButtonAction,
+  };
+  function getStore() {
+    return store;
   }
+  const newRoomPresent = {
+    store,
+    getStore,
+    getClientPlayer,
+    broadcastUIUpdate,
+    setupRoomStatus,
+    setupClientPlayerId,
+    enableActionButton,
+    disableActionButton,
+    playerEnter,
+    playerLeave,
+    createClientRoom,
+    addGameLog,
+    addUserMessage: addUserMessage,
+    showCards: showCards,
+    buryCards: buryCards,
+    getCardElementPosition,
+    playCardAnimation,
+    createViewDialog,
+    closeViewDialog,
+    createDialog,
+    createCardCategoryDialog,
+    closeDialog,
+    createIncomingConversation,
+    enableCardReforgeStatus,
+    disableCardReforgeStatus,
+    closeIncomingConversation,
+    setupClientPlayerCardActionsMatcher,
+    setupClientPlayerHandardsActionsMatcher,
+    setupClientPlayerOutsideCardActionsMatcher,
+    onClickPlayerCard,
+    onClickEquipment,
+    setupPlayersHighlightedStatus,
+    setupPlayersSelectionMatcher,
+    setupCardSkillSelectionMatcher,
+    handleOnClickPlayer,
+    handleOnClickSkill,
+    handleIsSkillDisabled,
+    resetSelectedSkill,
+    handleSelectedSkill,
+    defineConfirmButtonActions,
+    defineFinishButtonActions,
+    defineCancelButtonActions,
+    endAction: endAction,
+    startAction: startAction,
+    clearSelectedCards,
+    selectCard,
+    unselectCard,
+    clearSelectedPlayers,
+    selectPlayer,
+    unselectPlayer,
+    setValidSelectionReflectAction,
+    clearSelectionReflectAction,
+    notify,
+    clearNotifiers,
+    updateNumberOfDrawStack,
+    updateGameCircle,
+    delightPlayers,
+    highlightCards,
+    onIncomingMessage,
+    onceSkillUsed,
+    refreshOnceSkillUsed,
+    switchSkillStateChanged,
+  };
+
+  return { newRoomPresent };
 }

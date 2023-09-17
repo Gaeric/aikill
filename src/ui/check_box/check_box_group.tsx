@@ -1,11 +1,10 @@
-import classNames from 'classnames';
-import * as mobxReact from 'mobx-react';
-import * as React from 'react';
-import { CheckBox, CheckBoxProps } from './check_box';
-import styles from './check_box.module.css';
+import classNames from "classnames";
+import * as React from "react";
+import { CheckBox, CheckBoxProps } from "./check_box";
+import styles from "./check_box.module.css";
 
 export type CheckBoxGroupProps = {
-  options: Omit<CheckBoxProps, 'onChecked'>[];
+  options: Omit<CheckBoxProps, "onChecked">[];
   excludeSelection?: boolean;
   onChecked?(checkedIds: (string | number)[]): void;
   itemsPerLine?: 4 | 5 | 6;
@@ -14,46 +13,48 @@ export type CheckBoxGroupProps = {
   disabled?: boolean;
 };
 
-@mobxReact.observer
-export class CheckBoxGroup extends React.Component<CheckBoxGroupProps> {
-  private checkedIds = this.props.options.filter(o => o.checked).map(o => o.id);
-
-  private readonly onCheck = (id: string | number) => (checked: boolean) => {
-    if (this.props.excludeSelection) {
+export function CheckBoxGroup(props: CheckBoxGroupProps) {
+  const [checkedIds, setCheckedIds] = React.useState(
+    props.options.filter((o) => o.checked).map((o) => o.id)
+  );
+  let onCheck = (id: string | number) => (checked: boolean) => {
+    if (props.excludeSelection) {
       if (checked) {
-        this.checkedIds = [id];
-        this.props.onChecked?.(this.checkedIds);
+        setCheckedIds([id]);
+        props.onChecked?.(checkedIds);
       }
     } else {
       if (checked) {
-        this.checkedIds = [...this.checkedIds, id];
-        this.props.onChecked?.(this.checkedIds);
+        setCheckedIds([...checkedIds, id]);
+        props.onChecked?.(checkedIds);
       } else {
-        this.checkedIds = this.checkedIds.filter(checkedId => checkedId !== id);
-        this.props.onChecked?.(this.checkedIds);
+        setCheckedIds(checkedIds.filter((checkedId) => checkedId !== id));
+        props.onChecked?.(checkedIds);
       }
     }
   };
+  const { className, options, itemsPerLine = 4, head, disabled } = props;
 
-  render() {
-    const { className, options, itemsPerLine = 4, head, disabled } = this.props;
-    return (
-      <div className={classNames(styles.checkboxGroup, className)}>
-        {typeof head === 'string' ? <h3 className={styles.checkboxGroupHead}>{head}</h3> : head}
-        {options.map((option, index) => (
-          <CheckBox
-            {...option}
-            key={index}
-            className={classNames({
-              [styles.regularCheckBox]: itemsPerLine === 4,
-              [styles.squashCheckBox]: itemsPerLine === 5,
-              [styles.smashCheckBox]: itemsPerLine === 6,
-            })}
-            disabled={disabled || option.disabled}
-            onChecked={this.onCheck(option.id)}
-          />
-        ))}
-      </div>
-    );
-  }
+  return (
+    <div className={classNames(styles.checkboxGroup, className)}>
+      {typeof head === "string" ? (
+        <h3 className={styles.checkboxGroupHead}>{head}</h3>
+      ) : (
+        head
+      )}
+      {options.map((option, index) => (
+        <CheckBox
+          {...option}
+          key={index}
+          className={classNames({
+            [styles.regularCheckBox]: itemsPerLine === 4,
+            [styles.squashCheckBox]: itemsPerLine === 5,
+            [styles.smashCheckBox]: itemsPerLine === 6,
+          })}
+          disabled={disabled || option.disabled}
+          onChecked={onCheck(option.id)}
+        />
+      ))}
+    </div>
+  );
 }

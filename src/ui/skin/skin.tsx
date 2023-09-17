@@ -1,11 +1,9 @@
-import classNames from 'classnames';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ImageLoader } from '/src/image_loader/image_loader';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import * as React from 'react';
-import { CharacterSkinInfo } from 'skins/skins';
-import styles from './skin.module.css';
+import classNames from "classnames";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ImageLoader } from "src/image_loader/image_loader";
+import * as React from "react";
+import { CharacterSkinInfo } from "src/skins/skins";
+import styles from "./skin.module.css";
 
 export type SkinCardProps = {
   character: string;
@@ -17,67 +15,52 @@ export type SkinCardProps = {
   onClick?(skinName: string): void;
   disabled?: boolean;
   className?: string;
-  size?: 'regular' | 'small';
+  size?: "regular" | "small";
   selected?: boolean;
 };
 
-@mobxReact.observer
-export class SkinCard extends React.Component<SkinCardProps> {
-  @mobx.observable.ref
-  private skinImage: string | undefined;
-
-  private readonly onClick = () => {
-    if (!this.props.disabled) {
-      this.props.onClick && this.props.onClick(this.props.skinName);
+export function SkinCard(props: SkinCardProps) {
+  const [skinImage, setSkinImage] = React.useState<string | undefined>();
+  function onClick() {
+    if (props.disabled) {
+      props.onClick && props.onClick(props.skinName);
     }
-  };
-
-  @mobx.action
-  async componentDidMount() {
-    this.skinImage = (
-      await this.props.imageLoader.getCharacterSkinPlay(
-        this.props.character,
-        this.props.skinData,
-        this.props.playerId,
-        this.props.skinName,
-      )
-    ).src;
   }
 
-  @mobx.action
-  async componentDidUpdate() {
-    this.skinImage = (
-      await this.props.imageLoader.getCharacterSkinPlay(
-        this.props.character,
-        this.props.skinData,
-        this.props.playerId,
-        this.props.skinName,
-      )
-    ).src;
-  }
-
-  render() {
-    const { translator, className, size, selected } = this.props;
-    return (
-      <div
-        className={classNames(styles.characterCard, className, {
-          [styles.small]: size === 'small',
-          [styles.selected]: selected,
-        })}
-        onClick={this.onClick}
-      >
-        {this.skinImage ? (
-          <>
-            <img
-              className={classNames(styles.characterImage, { [styles.small]: size === 'small' })}
-              src={this.skinImage}
-              alt=""
-            />
-          </>
-        ) : (
-          <p>{translator.tr(this.props.skinName)}</p>
-        )}
-      </div>
+  React.useState(async () => {
+    setSkinImage(
+      (
+        await props.imageLoader.getCharacterSkinPlay(
+          props.character,
+          props.skinData,
+          props.playerId,
+          props.skinName
+        )
+      ).src
     );
-  }
+  });
+
+  return (
+    <div
+      className={classNames(styles.characterCard, props.className, {
+        [styles.small]: props.size === "small",
+        [styles.selected]: props.selected,
+      })}
+      onClick={onClick}
+    >
+      {skinImage ? (
+        <>
+          <img
+            className={classNames(styles.characterImage, {
+              [styles.small]: props.size === "small",
+            })}
+            src={skinImage}
+            alt=""
+          />
+        </>
+      ) : (
+        <p>{props.translator.tr(props.skinName)}</p>
+      )}
+    </div>
+  );
 }

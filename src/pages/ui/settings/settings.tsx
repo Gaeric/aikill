@@ -1,13 +1,13 @@
-import { getAllLanguages, Languages } from '/src/core/translations/translation_json_tool';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ElectronData } from '/src/electron_loader/electron_data';
-import { ElectronLoader } from '/src/electron_loader/electron_loader';
-import { ImageLoader } from '/src/image_loader/image_loader';
+import { getAllLanguages, Languages } from 'src/core/translations/translation_json_tool';
+import { ClientTranslationModule } from 'src/core/translations/translation_module.client';
+import { ElectronData } from 'src/electron_loader/electron_data';
+import { ElectronLoader } from 'src/electron_loader/electron_loader';
+import { ImageLoader } from 'src/image_loader/image_loader';
 import * as React from 'react';
-import { Button } from '/src/ui/button/button';
-import { Dialog } from '/src/ui/dialog/dialog';
-import { Picture } from '/src/ui/picture/picture';
-import { Slider } from '/src/ui/slider/slider';
+import { Button } from 'src/ui/button/button';
+import { Dialog } from 'src/ui/dialog/dialog';
+import { Picture } from 'src/ui/picture/picture';
+import { Slider } from 'src/ui/slider/slider';
 import styles from './settings.module.css';
 
 export type SettingsProps = {

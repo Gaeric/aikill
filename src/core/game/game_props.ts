@@ -1,8 +1,8 @@
-import { CardMatcherSocketPassenger } from '/src/core/cards/libs/card_matcher';
-import { CharacterId } from '/src/core/characters/character';
-import { PlayerId, PlayerRole } from '/src/core/player/player_props';
-import { Flavor } from '/src/core/shares/types/host_config';
-import { GameMode } from '/src/core/shares/types/room_props';
+import { CardMatcherSocketPassenger } from 'src/core/cards/libs/card_matcher';
+import { CharacterId } from 'src/core/characters/character';
+import { PlayerId, PlayerRole } from 'src/core/player/player_props';
+import { Flavor } from 'src/core/shares/types/host_config';
+import { GameMode } from 'src/core/shares/types/room_props';
 
 export const INFINITE_TRIGGERING_TIMES = 1000;
 export const NONE_TRIGGERING_TIMES = -9999;

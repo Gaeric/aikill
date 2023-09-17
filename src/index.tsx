@@ -1,28 +1,29 @@
-import { getClientConfig } from 'client.config';
-import { Sanguosha } from '/src/core/game/engine';
-import { createLogger } from '/src/core/shares/libs/logger/create';
-import { Flavor } from '/src/core/shares/types/host_config';
-import { Languages } from '/src/core/translations/translation_json_tool';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ElectronData } from '/src/electron_loader/electron_data';
-import { ElectronLoader } from '/src/electron_loader/electron_loader';
-import { getElectronLoader } from '/src/electron_loader/electron_loader_util';
-import { English, SimplifiedChinese, TraditionalChinese } from 'languages';
-import { ClientFlavor } from '/src/props/config_props';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { MemoryRouter } from 'react-router-dom';
-import { App } from './app';
-import { emojiLoader } from './emoji_loader/emoji_loader';
-import * as serviceWorker from './serviceWorker';
-import './index.css';
-
-const mode = (process.env.REACT_APP_DEV_MODE as ClientFlavor) || ClientFlavor.Dev;
+import { getClientConfig } from "src/client.config";
+import { Sanguosha } from "src/core/game/engine";
+import { createLogger } from "src/core/shares/libs/logger/create";
+import { Flavor } from "src/core/shares/types/host_config";
+import { Languages } from "src/core/translations/translation_json_tool";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ElectronData } from "src/electron_loader/electron_data";
+import { ElectronLoader } from "src/electron_loader/electron_loader";
+import { getElectronLoader } from "src/electron_loader/electron_loader_util";
+import { English, SimplifiedChinese, TraditionalChinese } from "./languages";
+import { ClientFlavor } from "src/props/config_props";
+import { createRoot } from "react-dom/client";
+import App from "./app";
+import { emojiLoader } from "./emoji_loader/emoji_loader";
+import * as serviceWorker from "./serviceWorker";
+import "./index.css";
+import { MemoryRouter } from "react-router-dom";
+const mode =
+  (import.meta.env.REACT_APP_DEV_MODE as ClientFlavor) || ClientFlavor.Dev;
 const config = getClientConfig(mode);
-const logger = createLogger(mode === ClientFlavor.Dev ? Flavor.Dev : Flavor.Prod);
+const logger = createLogger(
+  mode === ClientFlavor.Dev ? Flavor.Dev : Flavor.Prod
+);
 
 if (config.flavor !== ClientFlavor.Web) {
-  import('./index.module.css');
+  import("./index.module.css");
 }
 
 let translator: ClientTranslationModule;
@@ -36,21 +37,24 @@ async function onDeviceReady() {
     [Languages.EN_US, English],
     [Languages.ZH_CN, SimplifiedChinese],
     [Languages.ZH_HK, TraditionalChinese],
-    [Languages.ZH_TW, TraditionalChinese],
+    [Languages.ZH_TW, TraditionalChinese]
   );
   emojiLoader(translator);
   Sanguosha.initialize();
-
-  ReactDOM.render(
+  createRoot(document.getElementById("root")).render(
     <MemoryRouter>
-      <App config={config} electronLoader={electronLoader} translator={translator} logger={logger} />
-    </MemoryRouter>,
-    document.getElementById('root'),
+      <App
+        config={config}
+        electronLoader={electronLoader}
+        translator={translator}
+        logger={logger}
+      />
+    </MemoryRouter>
   );
 }
 
 if (mode === ClientFlavor.Mobile) {
-  document.addEventListener('deviceready', onDeviceReady, false);
+  document.addEventListener("deviceready", onDeviceReady, false);
 } else {
   onDeviceReady();
 }

@@ -1,40 +1,41 @@
-import logoImage from '/src/assets/images/lobby/logo.png';
-import { AudioLoader } from 'audio_loader/audio_loader';
-import classNames from 'classnames';
-import { Sanguosha } from '/src/core/game/engine';
-import { TemporaryRoomCreationInfo } from '/src/core/game/game_props';
-import { RoomMode } from '/src/core/shares/types/room_props';
-import { RoomInfo } from '/src/core/shares/types/server_types';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ElectronData } from '/src/electron_loader/electron_data';
-import { ElectronLoader } from '/src/electron_loader/electron_loader';
-import { ImageLoader } from '/src/image_loader/image_loader';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import { Background } from '/src/pages/room/ui/background/background';
-import { SettingsDialog } from '/src/pages/ui/settings/settings';
-import { ServerHostTag } from '/src/props/config_props';
-import { LobbyButton } from '/src/props/game_props';
-import * as React from 'react';
-import { CampaignService } from '/src/services/campaign_service/campaign_service';
-import { ConnectionService } from '/src/services/connection_service/connection_service';
-import { PagePropsWithConfig } from 'types/page_props';
-import { installAudioPlayerService } from '/src/ui/audio/install';
-import { Button } from '/src/ui/button/button';
-import { LinkButton } from '/src/ui/button/link_button';
-import { Picture } from '/src/ui/picture/picture';
-import { SignalBar } from '/src/ui/signal_bar/signal_bar';
-import { Tooltip } from '/src/ui/tooltip/tooltip';
-import lockerImage from './images/locked.png';
-import styles from './lobby.module.css';
-import { Messages } from './messages';
-import { AcknowledgeDialog } from './ui/acknowledge_dialog/acknowledge_dialog';
-import { Chat } from './ui/chat/chat';
-import { CreateRoomButton } from './ui/create_room_button/create_room_button';
-import { CreateRoomDialog } from './ui/create_room_dialog/create_room_dialog';
-import { EnterPasscodeDialog } from './ui/enter_passcode_dialog/enter_passcode_dialog';
-import { FeedbackDialog } from './ui/feedback_dialog/feedback_dialog';
+import logoImage from "src/assets/images/lobby/logo.png";
+import { AudioLoader } from "audio_loader/audio_loader";
+import classNames from "classnames";
+import { Sanguosha } from "src/core/game/engine";
+import { TemporaryRoomCreationInfo } from "src/core/game/game_props";
+import { RoomMode } from "src/core/shares/types/room_props";
+import { RoomInfo } from "src/core/shares/types/server_types";
+import { TranslationPack } from "src/core/translations/translation_json_tool";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ElectronData } from "src/electron_loader/electron_data";
+import { ElectronLoader } from "src/electron_loader/electron_loader";
+import { ImageLoader } from "src/image_loader/image_loader";
+import { Background } from "src/pages/room/ui/background/background";
+import { SettingsDialog } from "src/pages/ui/settings/settings";
+import { ServerHostTag } from "src/props/config_props";
+import { LobbyButton } from "src/props/game_props";
+import { CampaignService } from "src/services/campaign_service/campaign_service";
+import { ConnectionService } from "src/services/connection_service/connection_service";
+import { PagePropsWithConfig } from "types/page_props";
+import { installAudioPlayerService } from "src/ui/audio/install";
+import { Button } from "src/ui/button/button";
+import { LinkButton } from "src/ui/button/link_button";
+import { Picture } from "src/ui/picture/picture";
+import { SignalBar } from "src/ui/signal_bar/signal_bar";
+import { Tooltip } from "src/ui/tooltip/tooltip";
+import lockerImage from "./images/locked.png";
+import styles from "./lobby.module.css";
+import { Messages } from "./messages";
+import { AcknowledgeDialog } from "./ui/acknowledge_dialog/acknowledge_dialog";
+import { Chat } from "./ui/chat/chat";
+import { CreateRoomButton } from "./ui/create_room_button/create_room_button";
+import { CreateRoomDialog } from "./ui/create_room_dialog/create_room_dialog";
+import { EnterPasscodeDialog } from "./ui/enter_passcode_dialog/enter_passcode_dialog";
+import { FeedbackDialog } from "./ui/feedback_dialog/feedback_dialog";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { LocalClientEmitter } from "src/core/network/local/local_emitter.client";
+import { ClientSocket } from "src/core/network/socket.client";
 
 type LobbyProps = PagePropsWithConfig<{
   translator: ClientTranslationModule;
@@ -50,525 +51,626 @@ type HostRoomInfo = {
   host: ServerHostTag;
   ping: number;
 };
+const Lobby = (props: LobbyProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [openSettings, setOpenSettings] = useState(false);
 
-@mobxReact.observer
-export class Lobby extends React.Component<LobbyProps> {
-  @mobx.observable.shallow
-  private roomList: { info: RoomInfo; host: ServerHostTag; ping: number }[] = [];
-  @mobx.observable.ref
-  private unmatchedCoreVersion = false;
-  @mobx.observable.ref
-  private openRoomCreationDialog = false;
-  @mobx.observable.ref
-  private openSettings = false;
-  @mobx.observable.ref
-  private openPasscodeEnterDialog = false;
-  @mobx.observable.ref
-  private openFeedback = false;
-  @mobx.observable.ref
-  private showPasscodeError = false;
-  @mobx.observable.ref
-  private defaultMainVolume = 50;
-  @mobx.observable.ref
-  private defaultGameVolume = 50;
-  @mobx.observable.ref
-  private openAcknowledgement = false;
-  @mobx.observable.ref
-  private username: string;
-  @mobx.observable.ref
-  private viewCharacterExtenstions: number | undefined;
-  @mobx.observable.ref
-  private updateTo: string;
-  @mobx.observable.ref
-  private updateComplete: boolean = false;
-  @mobx.observable.ref
-  private updateProgress: number = 0;
-  @mobx.observable.ref
-  private updateDownloadingFile: number = 1;
-  @mobx.observable.ref
-  private updateDownloadTotalFile: number = 1;
-  @mobx.observable.ref
-  private gameLog: string;
+  let roomList: { info: RoomInfo; host: ServerHostTag; ping: number }[] = [];
 
-  private backgroundImage = this.props.imageLoader.getLobbyBackgroundImage();
-  private illustrationImage = this.props.imageLoader.getRandomLobbyIllustration();
-  private gameLogBoardImage = this.props.imageLoader.getGameLogBoradImage();
-  private roomListBackgroundImage = this.props.imageLoader.getRoomListBackgroundImage();
-  private audioService = installAudioPlayerService(this.props.audioLoader, this.props.electronLoader);
+  let unmatchedCoreVersion = false;
+  const [openRoomCreationDialog, setOpenRoomCreationDialog] = useState(false);
+  const [openPasscodeEnterDialog, setOpenPasscodeEnterDialog] = useState(false);
+  const [openFeedback, setOpenFeedback] = useState(false);
+  const [showPasscodeError, setShowPasscodeError] = useState(false);
+  const [openAcknowledgement, setOpenAcknowledgement] = useState(false);
+  const [username, setUserName] = useState("");
+  let defaultMainVolume = 50;
 
-  private currentInteractiveRoomInfo: HostRoomInfo;
+  let defaultGameVolume = 50;
 
-  private readonly settings = {
-    onVolumeChange: mobx.action((volume: number) => {
-      this.props.electronLoader.setData(ElectronData.GameVolume, volume.toString());
-      this.defaultGameVolume = volume;
-      this.audioService.changeGameVolume();
-    }),
-    onMainVolumeChange: mobx.action((volume: number) => {
-      this.props.electronLoader.setData(ElectronData.MainVolume, volume.toString());
-      this.defaultMainVolume = volume;
-      this.audioService.changeBGMVolume();
-    }),
+  let viewCharacterExtenstions: number | undefined;
+
+  let updateTo: string;
+
+  let updateComplete: boolean = false;
+
+  let updateProgress: number = 0;
+
+  let updateDownloadingFile: number = 1;
+
+  let updateDownloadTotalFile: number = 1;
+
+  const [gameLog, setGameLog] = useState<string>();
+  let backgroundImage = props.imageLoader.getLobbyBackgroundImage();
+  let illustrationImage = useRef(
+    props.imageLoader.getRandomLobbyIllustration()
+  ).current;
+  let gameLogBoardImage = props.imageLoader.getGameLogBoradImage();
+  let roomListBackgroundImage = props.imageLoader.getRoomListBackgroundImage();
+  let audioService = installAudioPlayerService(
+    props.audioLoader,
+    props.electronLoader
+  );
+  let currentInteractiveRoomInfo: HostRoomInfo;
+  let settings = {
+    onVolumeChange: (volume: number) => {
+      props.electronLoader.setData(ElectronData.GameVolume, volume.toString());
+      defaultGameVolume = volume;
+      audioService.changeGameVolume();
+    },
+    onMainVolumeChange: (volume: number) => {
+      props.electronLoader.setData(ElectronData.MainVolume, volume.toString());
+      defaultMainVolume = volume;
+      audioService.changeBGMVolume();
+    },
   };
 
-  @mobx.action
-  componentDidMount() {
-    this.queryRoomList();
-    this.props.electronLoader.refreshReplayDataFlow();
-    this.audioService.playLobbyBGM();
-    this.defaultMainVolume = this.props.electronLoader.getData(ElectronData.MainVolume)
-      ? Number.parseInt(this.props.electronLoader.getData(ElectronData.MainVolume), 10)
+  useEffect(() => {
+    queryRoomList();
+    props.electronLoader.refreshReplayDataFlow();
+    audioService.playLobbyBGM();
+    defaultMainVolume = props.electronLoader.getData(ElectronData.MainVolume)
+      ? Number.parseInt(
+          props.electronLoader.getData(ElectronData.MainVolume),
+          10
+        )
       : 50;
-    this.defaultGameVolume = this.props.electronLoader.getData(ElectronData.GameVolume)
-      ? Number.parseInt(this.props.electronLoader.getData(ElectronData.GameVolume), 10)
+    defaultGameVolume = props.electronLoader.getData(ElectronData.GameVolume)
+      ? Number.parseInt(
+          props.electronLoader.getData(ElectronData.GameVolume),
+          10
+        )
       : 50;
-    this.username = this.props.electronLoader.getData(ElectronData.PlayerName);
-    this.props.electronLoader.saveTemporaryData(ElectronData.PlayerId, `${this.username}-${Date.now()}`);
+    setUserName(props.electronLoader.getData(ElectronData.PlayerName));
 
-    this.props.electronLoader.whenUpdate(
-      mobx.action(
-        (nextVersion: string, progress: number, totalFile: number, complete?: boolean, downloadingFile?: number) => {
-          this.updateTo = nextVersion;
-          this.updateComplete = !!complete;
-          this.updateProgress = progress;
-          this.updateDownloadTotalFile = totalFile;
-          this.updateDownloadingFile = downloadingFile || 1;
-        },
-      ),
+    props.electronLoader.saveTemporaryData(
+      ElectronData.PlayerId,
+      `${username}-${Date.now()}`
     );
-    this.props.electronLoader.getGameLog().then(mobx.action(inlineHtml => (this.gameLog = inlineHtml)));
-  }
-
-  private readonly queryRoomList = () => {
-    mobx.runInAction(() => (this.roomList = []));
-    this.props.connectionService.Lobby.getRoomList(
-      mobx.action(content => {
-        this.roomList.push(
-          ...content.packet.map(roomInfo => ({ info: roomInfo, host: content.hostTag, ping: content.ping })),
-        );
-      }),
+    props.electronLoader.whenUpdate(
+      (
+        nextVersion: string,
+        progress: number,
+        totalFile: number,
+        complete?: boolean,
+        downloadingFile?: number
+      ) => {
+        updateTo = nextVersion;
+        updateComplete = !!complete;
+        updateProgress = progress;
+        updateDownloadTotalFile = totalFile;
+        updateDownloadingFile = downloadingFile || 1;
+      }
     );
-  };
 
-  getUnmatchedHint() {
-    return this.unmatchedCoreVersion && <div>{this.props.translator.tr(Messages.versionMismatch())}</div>;
+    props.electronLoader.getGameLog().then((inlineHtml: any) => {
+      if (!inlineHtml) {
+        setGameLog(inlineHtml);
+      }
+    });
+
+    return () => {
+      const excludedBgmStopList = ["/characters"];
+      if (!excludedBgmStopList.includes(location.pathname)) {
+        audioService.stop();
+      }
+    };
+  }, []);
+
+  function queryRoomList() {
+    () => {
+      roomList = [];
+    };
+    props.connectionService.Lobby.getRoomList((content) => {
+      roomList.push(
+        ...content.packet.map((RoomInfo) => ({
+          info: roomInfo,
+          host: content.hostTag,
+          ping: content.ping,
+        }))
+      );
+    });
   }
-
-  private readonly RoomListTable = () => (
+  function getUnmatchedHint() {
+    return (
+      unmatchedCoreVersion && (
+        <div>{props.translator.tr(Messages.versionMismatch())}</div>
+      )
+    );
+  }
+  let RoomListTable = () => (
     <>
-      {!this.unmatchedCoreVersion &&
-        this.roomList.map((hostInfo, index) => (
+      {!unmatchedCoreVersion &&
+        roomList.map((hostInfo, index) => (
           <li className={styles.roomInfo} key={hostInfo.info.id}>
             <span className={styles.roomName}>
               <span>{hostInfo.info.name}</span>
             </span>
             <span
               className={styles.roomMode}
-              onMouseEnter={this.viewGameCharaterExtensions(index)}
-              onMouseLeave={this.closeGameCharaterExtensions}
+              onMouseEnter={viewGameCharaterExtensions(index)}
+              onMouseLeave={closeGameCharaterExtensions}
             >
               <Picture
                 className={styles.gameModeIcon}
-                image={this.props.imageLoader.getGameModeIcon(hostInfo.info.gameMode)}
+                image={props.imageLoader.getGameModeIcon(
+                  hostInfo.info.gameMode
+                )}
               />
-              {this.viewCharacterExtenstions === index && (
-                <Tooltip position={['slightBottom', 'right']}>
-                  {hostInfo.info.packages.map(p => this.props.translator.tr(p)).join(', ')}
+              {viewCharacterExtenstions === index && (
+                <Tooltip position={["slightBottom", "right"]}>
+                  {hostInfo.info.packages
+                    .map((p) => props.translator.tr(p))
+                    .join(", ")}
                 </Tooltip>
               )}
             </span>
-            <span className={styles.roomStatus}>{this.props.translator.tr(hostInfo.info.status)}</span>
-            <span className={styles.roomPlayers}>{`${hostInfo.info.activePlayers}/${hostInfo.info.totalPlayers}`}</span>
-            <span className={styles.roomLocker}>{hostInfo.info.passcode && <img src={lockerImage} alt="" />}</span>
+            <span className={styles.roomStatus}>
+              {props.translator.tr(hostInfo.info.status)}
+            </span>
+            <span
+              className={styles.roomPlayers}
+            >{`${hostInfo.info.activePlayers}/${hostInfo.info.totalPlayers}`}</span>
+            <span className={styles.roomLocker}>
+              {hostInfo.info.passcode && <img src={lockerImage} alt="" />}
+            </span>
             <span className={styles.roomActions}>
               <LinkButton
-                onClick={this.enterRoom(hostInfo)}
+                onClick={enterRoom(hostInfo)}
                 disabled={
                   hostInfo.info.activePlayers === hostInfo.info.totalPlayers ||
-                  !this.username ||
-                  hostInfo.info.status === 'playing'
+                  !username ||
+                  hostInfo.info.status === "playing"
                 }
               >
-                {this.props.translator.tr(Messages.join())}
+                {props.translator.tr(Messages.join())}
               </LinkButton>
-              {hostInfo.info.allowObserver && hostInfo.info.status === 'playing' && (
-                <LinkButton onClick={this.enterRoomAsObserver(hostInfo)} disabled={!this.username}>
-                  {this.props.translator.tr(Messages.observe())}
-                </LinkButton>
-              )}
+              {hostInfo.info.allowObserver &&
+                hostInfo.info.status === "playing" && (
+                  <LinkButton
+                    onClick={enterRoomAsObserver(hostInfo)}
+                    disabled={!username}
+                  >
+                    {props.translator.tr(Messages.observe())}
+                  </LinkButton>
+                )}
             </span>
             <SignalBar
               host={hostInfo.host}
               className={styles.signalBar}
-              connectionService={this.props.connectionService}
+              connectionService={props.connectionService}
             />
           </li>
         ))}
     </>
   );
 
-  private createRoom(roomInfo: TemporaryRoomCreationInfo, roomName: string, passcode?: string) {
+  function createRoom(
+    roomInfo: TemporaryRoomCreationInfo,
+    roomName: string,
+    passcode?: string
+  ) {
     if (roomInfo.campaignMode) {
-      this.props.campaignService.createRoom(this.props.config.flavor, roomInfo, event => {
-        const { packet, ping, hostTag, error } = event;
-        if (packet) {
-          const { roomId, roomInfo: gameInfo } = packet;
-          const hostConfig = this.props.config.host.find(config => config.hostTag === hostTag);
-          this.props.history.push(`/room/${roomId}`, {
-            gameMode: gameInfo.gameMode,
-            ping,
-            hostConfig,
-            roomMode: RoomMode.Campaign,
-            hostPlayerId: roomInfo.hostPlayerId,
-            roomName,
-          });
-        } else {
-          this.props.logger.error(error);
+      props.campaignService.createRoom(
+        props.config.flavor,
+        roomInfo,
+        (event) => {
+          const { packet, ping, hostTag, error } = event;
+          if (packet) {
+            const { roomId, roomInfo: gameInfo } = packet;
+            const hostConfig = props.config.host.find(
+              (config) => config.hostTag === hostTag
+            );
+            let socket: ClientSocket = new LocalClientEmitter(
+              (window as any).eventEmitter,
+              roomId,
+              new Date().getTime()
+            );
+            navigate(`/room/${roomId}`, {
+              state: {
+                gameMode: gameInfo.gameMode,
+                ping,
+                hostConfig,
+                roomMode: RoomMode.Campaign,
+                hostPlayerId: roomInfo.hostPlayerId,
+                roomName,
+                socket,
+              },
+            });
+          } else {
+            props.logger.error(error);
+          }
         }
-      });
+      );
     } else {
-      this.props.connectionService.Lobby.createWaitingRoom(roomInfo, event => {
+      props.connectionService.Lobby.createWaitingRoom(roomInfo, (event) => {
         const { packet, ping, hostTag, error } = event;
-        if (packet && 'roomId' in packet) {
+        if (packet && "roomId" in packet) {
           const { roomId, roomInfo } = packet;
-          const hostConfig = this.props.config.host.find(config => config.hostTag === hostTag);
-          this.props.history.push(`/waiting-room/${roomId}`, {
+          const hostConfig = props.config.host.find(
+            (config) => config.hostTag === hostTag
+          );
+          navigate(`/waiting-room/${roomId}`, {
             roomInfo,
             ping,
             hostConfig,
           });
         } else {
-          this.props.logger.error(error);
+          props.logger.error(error);
         }
       });
     }
   }
 
-  componentWillUnmount() {
-    const excludedBgmStopList = ['/characters'];
-    if (!excludedBgmStopList.includes(this.props.history.location.pathname)) {
-      this.audioService.stop();
+  function onCreateRoom() {
+    if (unmatchedCoreVersion) {
+      return;
     }
+    setOpenRoomCreationDialog(true);
   }
 
-  @mobx.action
-  private readonly onCreateRoom = () => {
-    if (this.unmatchedCoreVersion) {
+  function onClickRefresh() {
+    if (unmatchedCoreVersion) {
       return;
     }
 
-    this.openRoomCreationDialog = true;
-  };
+    queryRoomList();
+  }
+  function enterRoom(hostInfo: HostRoomInfo) {
+    console.log("enterRoom");
 
-  private readonly onClickRefresh = () => {
-    if (this.unmatchedCoreVersion) {
-      return;
-    }
-
-    this.queryRoomList();
-  };
-
-  @mobx.action
-  private readonly enterRoom = (hostInfo: HostRoomInfo) => () => {
     const { info, host } = hostInfo;
     if (info.passcode) {
-      this.openPasscodeEnterDialog = true;
-      this.currentInteractiveRoomInfo = hostInfo;
+      setOpenPasscodeEnterDialog(true);
+
+      currentInteractiveRoomInfo = hostInfo;
     } else {
-      this.props.connectionService.Lobby.checkRoomExist(host, info.id, (exist, ping) => {
-        if (exist) {
-          this.props.history.push(`/waiting-room/${info.id}`, {
-            ping,
-            hostConfig: this.props.config.host.find(config => config.hostTag === host),
-          });
-        } else {
-          //TODO: add error popout
-          mobx.runInAction(() => {
-            const deadRoomIndex = this.roomList.findIndex(
-              roomHostInfo => roomHostInfo.info.id === this.currentInteractiveRoomInfo.info.id,
-            );
-            if (deadRoomIndex >= 0) {
-              this.roomList.splice(deadRoomIndex, 1);
-            }
-          });
-        }
-      });
-    }
-  };
-
-  @mobx.action
-  private readonly enterRoomAsObserver = (hostInfo: HostRoomInfo) => () => {
-    const { info, host } = hostInfo;
-    this.props.connectionService.Lobby.checkRoomExist(host, info.id, (exist, ping) => {
-      if (exist) {
-        this.props.history.push(`/room/${info.id}`, {
-          ping,
-          hostConfig: this.props.config.host.find(config => config.hostTag === host),
-          roomMode: RoomMode.Observer,
-        });
-      } else {
-        //TODO: add error popout
-        mobx.runInAction(() => {
-          const deadRoomIndex = this.roomList.findIndex(
-            roomHostInfo => roomHostInfo.info.id === this.currentInteractiveRoomInfo.info.id,
-          );
-          if (deadRoomIndex >= 0) {
-            this.roomList.splice(deadRoomIndex, 1);
-          }
-        });
-      }
-    });
-  };
-
-  @mobx.action
-  private readonly onRoomCreated = (roomInfo: TemporaryRoomCreationInfo, roomName: string, passcode?: string) => {
-    this.openRoomCreationDialog = false;
-    this.createRoom(roomInfo, roomName, passcode);
-  };
-
-  @mobx.action
-  private readonly onRoomCreationCancelled = () => {
-    this.openRoomCreationDialog = false;
-  };
-
-  @mobx.action
-  private readonly onClickSettings = () => {
-    this.openSettings = true;
-  };
-
-  private readonly onClickCharactersList = () => {
-    this.props.history.push('/characters');
-  };
-
-  @mobx.action
-  private readonly onCloseSettings = () => {
-    this.username = this.props.electronLoader.getData(ElectronData.PlayerName);
-    this.openSettings = false;
-  };
-
-  @mobx.action
-  private readonly onOpenAcknowledgement = () => {
-    this.openAcknowledgement = true;
-  };
-
-  @mobx.action
-  private readonly onCloseAcknowledgement = () => {
-    this.openAcknowledgement = false;
-  };
-
-  @mobx.action
-  private readonly onPasscodeSubmit = (passcode?: string) => {
-    if (this.currentInteractiveRoomInfo && passcode && this.currentInteractiveRoomInfo.info.passcode === passcode) {
-      this.openPasscodeEnterDialog = false;
-      this.showPasscodeError = false;
-      this.props.connectionService.Lobby.checkRoomExist(
-        this.currentInteractiveRoomInfo.host,
-        this.currentInteractiveRoomInfo.info.id,
-        exist => {
+      props.connectionService.Lobby.checkRoomExist(
+        host,
+        info.id,
+        (exist, ping) => {
           if (exist) {
-            this.props.history.push(`/waiting-room/${this.currentInteractiveRoomInfo.info.id}`, {
-              hostConfig: this.props.config.host.find(
-                config => config.hostTag === this.currentInteractiveRoomInfo.host,
+            navigate(`/waiting-room/${info.id}`, {
+              ping,
+              hostConfig: props.config.host.find(
+                (config) => config.hostTag === host
               ),
             });
           } else {
             //TODO: add error popout
-            mobx.runInAction(() => {
-              const deadRoomIndex = this.roomList.findIndex(
-                roomHostInfo => roomHostInfo.info.id === this.currentInteractiveRoomInfo.info.id,
+            () => {
+              const deadRoomIndex = roomList.findIndex(
+                (roomHostInfo) =>
+                  roomHostInfo.info.id === currentInteractiveRoomInfo.info.id
               );
               if (deadRoomIndex >= 0) {
-                this.roomList.splice(deadRoomIndex, 1);
+                roomList.splice(deadRoomIndex, 1);
               }
-            });
+            };
           }
-        },
+        }
+      );
+    }
+  }
+
+  function enterRoomAsObserver(hostInfo: HostRoomInfo) {
+    const { info, host } = hostInfo;
+    props.connectionService.Lobby.checkRoomExist(
+      host,
+      info.id,
+      (exist, ping) => {
+        if (exist) {
+          navigate(`/room/${info.id}`, {
+            ping,
+            hostConfig: props.config.host.find(
+              (config) => config.hostTag === host
+            ),
+            roomMode: RoomMode.Observer,
+          });
+        } else {
+          //TODO: add error popout
+          () => {
+            const deadRoomIndex = roomList.findIndex(
+              (roomHostInfo) =>
+                roomHostInfo.info.id === currentInteractiveRoomInfo.info.id
+            );
+            if (deadRoomIndex >= 0) {
+              roomList.splice(deadRoomIndex, 1);
+            }
+          };
+        }
+      }
+    );
+  }
+
+  function onRoomCreated(
+    roomInfo: TemporaryRoomCreationInfo,
+    roomName: string,
+    passcode?: string
+  ) {
+    setOpenRoomCreationDialog(false);
+    createRoom(roomInfo, roomName, passcode);
+  }
+
+  function onRoomCreationCancelled() {
+    setOpenRoomCreationDialog(false);
+  }
+
+  function onClickSettings() {
+    setOpenSettings(true);
+  }
+
+  function onClickCharactersList() {
+    navigate("/characters");
+  }
+
+  function onCloseSettings() {
+    setUserName(props.electronLoader.getData(ElectronData.PlayerName));
+    setOpenSettings(false);
+  }
+
+  function onOpenAcknowledgement() {
+    setOpenAcknowledgement(true);
+  }
+
+  function onCloseAcknowledgement() {
+    setOpenAcknowledgement(false);
+  }
+
+  function onPasscodeSubmit(passcode?: string) {
+    if (
+      currentInteractiveRoomInfo &&
+      passcode &&
+      currentInteractiveRoomInfo.info.passcode === passcode
+    ) {
+      setOpenPasscodeEnterDialog(false);
+
+      setShowPasscodeError(false);
+      props.connectionService.Lobby.checkRoomExist(
+        currentInteractiveRoomInfo.host,
+        currentInteractiveRoomInfo.info.id,
+        (exist) => {
+          if (exist) {
+            navigate(`/waiting-room/${currentInteractiveRoomInfo.info.id}`, {
+              hostConfig: props.config.host.find(
+                (config) => config.hostTag === currentInteractiveRoomInfo.host
+              ),
+            });
+          } else {
+            //TODO: add error popout
+            () => {
+              const deadRoomIndex = roomList.findIndex(
+                (roomHostInfo) =>
+                  roomHostInfo.info.id === currentInteractiveRoomInfo.info.id
+              );
+              if (deadRoomIndex >= 0) {
+                roomList.splice(deadRoomIndex, 1);
+              }
+            };
+          }
+        }
       );
     } else {
-      this.showPasscodeError = true;
+      setShowPasscodeError(true);
     }
-  };
+  }
 
-  @mobx.action
-  private readonly onPasscodeDialogClose = () => {
-    this.openPasscodeEnterDialog = false;
-    this.showPasscodeError = false;
-  };
+  function onPasscodeDialogClose() {
+    setOpenPasscodeEnterDialog(false);
 
-  @mobx.action
-  private readonly onOpenFeedback = () => {
-    this.openFeedback = true;
-  };
+    setShowPasscodeError(false);
+  }
 
-  @mobx.action
-  private readonly onFeedbackDialogClose = () => {
-    this.openFeedback = false;
-  };
+  function onOpenFeedback() {
+    setOpenFeedback(true);
+  }
 
-  @mobx.action
-  private readonly viewGameCharaterExtensions = (index: number) => () => {
-    this.viewCharacterExtenstions = index;
-  };
-  @mobx.action
-  private readonly closeGameCharaterExtensions = () => {
-    this.viewCharacterExtenstions = undefined;
-  };
+  function onFeedbackDialogClose() {
+    setOpenFeedback(false);
+  }
 
-  private readonly onOpenReplay = () => {
-    this.props.electronLoader.readReplay(Sanguosha.Version).then(replay => {
+  function viewGameCharaterExtensions(index: number) {
+    viewCharacterExtenstions = index;
+  }
+
+  function closeGameCharaterExtensions() {
+    viewCharacterExtenstions = undefined;
+  }
+
+  function onOpenReplay() {
+    props.electronLoader.readReplay(Sanguosha.Version).then((replay) => {
       if (!replay) {
         return;
       }
-
-      this.props.history.push('/replay', { replayData: replay });
+      navigate("/replay", { replayData: replay });
     });
-  };
-
-  render() {
-    return (
-      <div className={styles.lobby}>
-        <Background image={this.backgroundImage} />
-        <div className={styles.board}>
-          <div className={styles.functionBoard}>
-            <div className={styles.illustration}>
-              <Picture image={this.illustrationImage} />
-              <img className={styles.logo} src={logoImage} alt={'logo'} />
+  }
+  return (
+    <div className={styles.lobby}>
+      <Background image={backgroundImage} />
+      <div className={styles.board}>
+        <div className={styles.functionBoard}>
+          <div className={styles.illustration}>
+            <Picture image={illustrationImage} />
+            <img className={styles.logo} src={logoImage} alt={"logo"} />
+          </div>
+          <div className={styles.gameLog}>
+            <div className={styles.gameLogContainer}>
+              <Picture
+                className={styles.gameLogBoardImage}
+                image={gameLogBoardImage}
+              />
+              <p
+                className={styles.gameLogText}
+                dangerouslySetInnerHTML={{ __html: gameLog }}
+              />
             </div>
-            <div className={styles.gameLog}>
-              <div className={styles.gameLogContainer}>
-                <Picture className={styles.gameLogBoardImage} image={this.gameLogBoardImage} />
-                <p className={styles.gameLogText} dangerouslySetInnerHTML={{ __html: this.gameLog }} />
-              </div>
-            </div>
-            <Button
-              variant="primary"
-              className={styles.button}
-              onClick={this.onClickRefresh}
-              disabled={this.unmatchedCoreVersion}
-            >
-              {this.props.translator.tr(Messages.refreshRoom())}
-            </Button>
           </div>
-          <div className={classNames(styles.roomList, { [styles.unavailable]: !this.username })}>
-            {this.roomList.length === 0 && <span>{this.props.translator.tr(Messages.noRoomsAvailable())}</span>}
-            {this.getUnmatchedHint()}
-            <this.RoomListTable />
-            <CreateRoomButton
-              imageLoader={this.props.imageLoader}
-              onClick={this.onCreateRoom}
-              className={styles.createRoomButton}
-              disabled={!this.username || this.unmatchedCoreVersion}
-            />
-            <Picture image={this.roomListBackgroundImage} className={styles.roomListBackground} />
-          </div>
-          <div className={styles.systemButtons}>
-            <button
-              className={styles.systemButton}
-              onClick={this.onOpenReplay}
-              disabled={!this.props.electronLoader.ReplayEnabled}
-            >
-              <Picture
-                image={this.props.imageLoader.getLobbyButtonImage(LobbyButton.Record)}
-                className={styles.lobbyButtonIcon}
-              />
-            </button>
-            <button className={styles.systemButton} onClick={this.onClickCharactersList}>
-              <Picture
-                image={this.props.imageLoader.getLobbyButtonImage(LobbyButton.CharactersList)}
-                className={styles.lobbyButtonIcon}
-              />
-            </button>
-            <button className={styles.systemButton} onClick={this.onClickSettings}>
-              {!this.username && (
-                <Tooltip autoAnimation position={['top']}>
-                  {this.props.translator.tr(Messages.usernamePlaceholder())}
-                </Tooltip>
-              )}
-              <Picture
-                image={this.props.imageLoader.getLobbyButtonImage(LobbyButton.Settings)}
-                className={styles.lobbyButtonIcon}
-              />
-            </button>
-            <button className={styles.systemButton} onClick={this.onOpenFeedback}>
-              <Picture
-                image={this.props.imageLoader.getLobbyButtonImage(LobbyButton.Feedback)}
-                className={styles.lobbyButtonIcon}
-              />
-            </button>
-            <button className={styles.systemButton} onClick={this.onOpenAcknowledgement}>
-              <Picture
-                image={this.props.imageLoader.getLobbyButtonImage(LobbyButton.Acknowledgement)}
-                className={styles.lobbyButtonIcon}
-              />
-            </button>
-          </div>
-          <Chat
-            className={styles.chatSection}
-            username={this.props.electronLoader.getData(ElectronData.PlayerName)}
-            translator={this.props.translator}
-            connectionService={this.props.connectionService}
+          <Button
+            variant="primary"
+            className={styles.button}
+            onClick={onClickRefresh}
+            disabled={unmatchedCoreVersion}
+          >
+            {props.translator.tr(Messages.refreshRoom())}
+          </Button>
+        </div>
+        <div
+          className={classNames(styles.roomList, {
+            [styles.unavailable]: !username,
+          })}
+        >
+          {roomList.length === 0 && (
+            <span>{props.translator.tr(Messages.noRoomsAvailable())}</span>
+          )}
+          {getUnmatchedHint()}
+          <RoomListTable />
+          <CreateRoomButton
+            imageLoader={props.imageLoader}
+            onClick={onCreateRoom}
+            className={styles.createRoomButton}
+            disabled={!username || unmatchedCoreVersion}
+          />
+          <Picture
+            image={roomListBackgroundImage}
+            className={styles.roomListBackground}
           />
         </div>
-        <div className={styles.chatInfo}></div>
-        {this.openRoomCreationDialog && (
-          <CreateRoomDialog
-            imageLoader={this.props.imageLoader}
-            translator={this.props.translator}
-            electronLoader={this.props.electronLoader}
-            playerName={this.username}
-            onSubmit={this.onRoomCreated}
-            onCancel={this.onRoomCreationCancelled}
-          />
-        )}
-        {this.openSettings && (
-          <SettingsDialog
-            electronLoader={this.props.electronLoader}
-            defaultGameVolume={this.defaultGameVolume}
-            defaultMainVolume={this.defaultMainVolume}
-            imageLoader={this.props.imageLoader}
-            translator={this.props.translator}
-            onMainVolumeChange={this.settings.onMainVolumeChange}
-            onGameVolumeChange={this.settings.onVolumeChange}
-            onConfirm={this.onCloseSettings}
-          />
-        )}
-        {this.openPasscodeEnterDialog && (
-          <EnterPasscodeDialog
-            translator={this.props.translator}
-            imageLoader={this.props.imageLoader}
-            onSubmit={this.onPasscodeSubmit}
-            onClose={this.onPasscodeDialogClose}
-            showError={this.showPasscodeError}
-          />
-        )}
-        {this.openFeedback && (
-          <FeedbackDialog imageLoader={this.props.imageLoader} onClose={this.onFeedbackDialogClose} />
-        )}
-        {this.openAcknowledgement && (
-          <AcknowledgeDialog imageLoader={this.props.imageLoader} onClose={this.onCloseAcknowledgement} />
-        )}
-        <div className={styles.version}>
-          {this.updateTo && !this.updateComplete && (
-            <span>
-              {this.props.translator.trx(
-                TranslationPack.translationJsonPatcher(Messages.updating(), this.updateTo).toString(),
+        <div className={styles.systemButtons}>
+          <button
+            className={styles.systemButton}
+            onClick={onOpenReplay}
+            disabled={!props.electronLoader.ReplayEnabled}
+          >
+            <Picture
+              image={props.imageLoader.getLobbyButtonImage(LobbyButton.Record)}
+              className={styles.lobbyButtonIcon}
+            />
+          </button>
+          <button
+            className={styles.systemButton}
+            onClick={onClickCharactersList}
+          >
+            <Picture
+              image={props.imageLoader.getLobbyButtonImage(
+                LobbyButton.CharactersList
               )}
-              {this.props.translator.trx(
-                TranslationPack.translationJsonPatcher(
-                  Messages.downloadingPatch(),
-                  this.updateDownloadingFile,
-                  this.updateDownloadTotalFile,
-                ).toString(),
+              className={styles.lobbyButtonIcon}
+            />
+          </button>
+          <button
+            className={styles.systemButton}
+            onClick={(e) => onClickSettings()}
+          >
+            {!username && (
+              <Tooltip autoAnimation position={["top"]}>
+                {props.translator.tr(Messages.usernamePlaceholder())}
+              </Tooltip>
+            )}
+            <Picture
+              image={props.imageLoader.getLobbyButtonImage(
+                LobbyButton.Settings
               )}
-              {(this.updateProgress * 100).toFixed(2)} %
-            </span>
-          )}
-          {this.updateComplete && <span>{this.props.translator.tr(Messages.updateComplete())}</span>}
-          {this.props.translator.trx(
-            TranslationPack.translationJsonPatcher('/src/core version: {0}', Sanguosha.Version).toString(),
-          )}
+              className={styles.lobbyButtonIcon}
+            />
+          </button>
+          <button className={styles.systemButton} onClick={onOpenFeedback}>
+            <Picture
+              image={props.imageLoader.getLobbyButtonImage(
+                LobbyButton.Feedback
+              )}
+              className={styles.lobbyButtonIcon}
+            />
+          </button>
+          <button
+            className={styles.systemButton}
+            onClick={onOpenAcknowledgement}
+          >
+            <Picture
+              image={props.imageLoader.getLobbyButtonImage(
+                LobbyButton.Acknowledgement
+              )}
+              className={styles.lobbyButtonIcon}
+            />
+          </button>
         </div>
       </div>
-    );
-  }
-}
+      <div className={styles.chatInfo}></div>
+      {openRoomCreationDialog && (
+        <CreateRoomDialog
+          imageLoader={props.imageLoader}
+          translator={props.translator}
+          electronLoader={props.electronLoader}
+          playerName={username}
+          onSubmit={onRoomCreated}
+          onCancel={onRoomCreationCancelled}
+        />
+      )}
+      {openSettings && (
+        <SettingsDialog
+          electronLoader={props.electronLoader}
+          defaultGameVolume={defaultGameVolume}
+          defaultMainVolume={defaultMainVolume}
+          imageLoader={props.imageLoader}
+          translator={props.translator}
+          onMainVolumeChange={settings.onMainVolumeChange}
+          onGameVolumeChange={settings.onVolumeChange}
+          onConfirm={() => onCloseSettings()}
+        />
+      )}
+      {openPasscodeEnterDialog && (
+        <EnterPasscodeDialog
+          translator={props.translator}
+          imageLoader={props.imageLoader}
+          onSubmit={onPasscodeSubmit}
+          onClose={onPasscodeDialogClose}
+          showError={showPasscodeError}
+        />
+      )}
+      {openFeedback && (
+        <FeedbackDialog
+          imageLoader={props.imageLoader}
+          onClose={() => onFeedbackDialogClose()}
+        />
+      )}
+      {openAcknowledgement && (
+        <AcknowledgeDialog
+          imageLoader={props.imageLoader}
+          onClose={onCloseAcknowledgement}
+        />
+      )}
+      <div className={styles.version}>
+        {updateTo && !updateComplete && (
+          <span>
+            {props.translator.trx(
+              TranslationPack.translationJsonPatcher(
+                Messages.updating(),
+                updateTo
+              ).toString()
+            )}
+            {props.translator.trx(
+              TranslationPack.translationJsonPatcher(
+                Messages.downloadingPatch(),
+                updateDownloadingFile,
+                updateDownloadTotalFile
+              ).toString()
+            )}
+            {(updateProgress * 100).toFixed(2)} %
+          </span>
+        )}
+        {updateComplete && (
+          <span>{props.translator.tr(Messages.updateComplete())}</span>
+        )}
+        {props.translator.trx(
+          TranslationPack.translationJsonPatcher(
+            "/src/core version: {0}",
+            Sanguosha.Version
+          ).toString()
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Lobby;

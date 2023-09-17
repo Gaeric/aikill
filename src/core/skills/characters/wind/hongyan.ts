@@ -1,11 +1,11 @@
-import { Card, VirtualCard } from '/src/core/cards/card';
-import { CardId, CardSuit } from '/src/core/cards/libs/card_props';
-import { Sanguosha } from '/src/core/game/engine';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { CompulsorySkill, RulesBreakerSkill, ShadowSkill, TransformSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
+import { Card, VirtualCard } from 'src/core/cards/card';
+import { CardId, CardSuit } from 'src/core/cards/libs/card_props';
+import { Sanguosha } from 'src/core/game/engine';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { CompulsorySkill, RulesBreakerSkill, ShadowSkill, TransformSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
 
 @CompulsorySkill({ name: 'hongyan', description: 'hongyan_description' })
 export class HongYan extends TransformSkill implements OnDefineReleaseTiming {

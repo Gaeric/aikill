@@ -1,10 +1,10 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { DamageType } from '/src/core/game/game_props';
-import { AllStage, DamageEffectStage } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { CompulsorySkill, TriggerSkill } from '/src/core/skills/skill';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
+import { DamageType } from 'src/core/game/game_props';
+import { AllStage, DamageEffectStage } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { CompulsorySkill, TriggerSkill } from 'src/core/skills/skill';
 
 @CompulsorySkill({ name: 'xianshuai', description: 'xianshuai_description' })
 export class XianShuai extends TriggerSkill {

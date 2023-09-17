@@ -1,16 +1,16 @@
-import { Card, CardType, VirtualCard } from '/src/core/cards/card';
-import { CardMatcher } from '/src/core/cards/libs/card_matcher';
-import { CardId, CardSuit } from '/src/core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder, WorkPlace } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { INFINITE_TRIGGERING_TIMES } from '/src/core/game/game_props';
-import { AllStage, CardUseStage, PlayerPhase, StagePriority } from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
-import { CommonSkill, RulesBreakerSkill, ShadowSkill, TriggerSkill, ViewAsSkill } from '/src/core/skills/skill';
-import { PersistentSkill } from '/src/core/skills/skill_wrappers';
+import { Card, CardType, VirtualCard } from 'src/core/cards/card';
+import { CardMatcher } from 'src/core/cards/libs/card_matcher';
+import { CardId, CardSuit } from 'src/core/cards/libs/card_props';
+import { GameEventIdentifiers, ServerEventFinder, WorkPlace } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { INFINITE_TRIGGERING_TIMES } from 'src/core/game/game_props';
+import { AllStage, CardUseStage, PlayerPhase, StagePriority } from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { Precondition } from 'src/core/shares/libs/precondition/precondition';
+import { CommonSkill, RulesBreakerSkill, ShadowSkill, TriggerSkill, ViewAsSkill } from 'src/core/skills/skill';
+import { PersistentSkill } from 'src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'jianying', description: 'jianying_description' })
 export class JianYing extends ViewAsSkill {

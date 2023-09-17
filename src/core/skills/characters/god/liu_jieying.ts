@@ -1,15 +1,15 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { EventPacker } from 'src/core/event/event_packer';
 import {
   AllStage,
   ChainLockStage,
   GameBeginStage,
   PhaseStageChangeStage,
   PlayerPhaseStages,
-} from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { Room } from '/src/core/room/room';
-import { CompulsorySkill, GlobalRulesBreakerSkill, ShadowSkill, TriggerSkill } from '/src/core/skills/skill';
+} from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { Room } from 'src/core/room/room';
+import { CompulsorySkill, GlobalRulesBreakerSkill, ShadowSkill, TriggerSkill } from 'src/core/skills/skill';
 
 @CompulsorySkill({ name: 'liu_jieying', description: 'liu_jieying_description' })
 export class LiuJieYing extends TriggerSkill {

@@ -1,20 +1,28 @@
-import { Card } from '/src/core/cards/card';
-import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Skill, TriggerSkill } from '/src/core/skills/skill';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { BaseAction } from './base_action';
-import { RoomPresenter } from '../room.presenter';
-import { RoomStore } from '../room.store';
+import { Card } from "src/core/cards/card";
+import {
+  ClientEventFinder,
+  GameEventIdentifiers,
+  ServerEventFinder,
+} from "src/core/event/event";
+import { EventPacker } from "src/core/event/event_packer";
+import { Sanguosha } from "src/core/game/engine";
+import { Player } from "src/core/player/player";
+import { PlayerCardsArea, PlayerId } from "src/core/player/player_props";
+import { Skill, TriggerSkill } from "src/core/skills/skill";
+import { TranslationPack } from "src/core/translations/translation_json_tool";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { BaseAction } from "./base_action";
+import { RoomPresenter } from "../room.presenter";
+import { RoomStore } from "../room.store";
 
 export class SkillUseAction extends BaseAction {
   public static isSkillDisabled =
-    (event: ServerEventFinder<GameEventIdentifiers.AskForSkillUseEvent>) => (skill: Skill) => {
-      if (skill instanceof TriggerSkill && event.invokeSkillNames.includes(skill.Name)) {
+    (event: ServerEventFinder<GameEventIdentifiers.AskForSkillUseEvent>) =>
+    (skill: Skill) => {
+      if (
+        skill instanceof TriggerSkill &&
+        event.invokeSkillNames.includes(skill.Name)
+      ) {
         return false;
       }
 
@@ -28,39 +36,49 @@ export class SkillUseAction extends BaseAction {
     store: RoomStore,
     presenter: RoomPresenter,
     askForEvent: ServerEventFinder<GameEventIdentifiers.AskForSkillUseEvent>,
-    translator: ClientTranslationModule,
+    translator: ClientTranslationModule
   ) {
     super(playerId, store, presenter, translator);
     this.askForEvent = askForEvent;
   }
 
-  private invokeSpecifiedSkill(skillName: string, translator: ClientTranslationModule, callback: () => void) {
+  private invokeSpecifiedSkill(
+    skillName: string,
+    translator: ClientTranslationModule,
+    callback: () => void
+  ) {
     if (!EventPacker.isUncancellableEvent(this.askForEvent)) {
-      this.presenter.enableActionButton('cancel');
+      this.presenter.enableActionButton("cancel");
     } else {
-      this.presenter.disableActionButton('cancel');
+      this.presenter.disableActionButton("cancel");
     }
 
     const event: ClientEventFinder<GameEventIdentifiers.AskForSkillUseEvent> = {
       invoke: undefined,
-      fromId: this.presenter.ClientPlayer!.Id,
+      fromId: this.presenter.getClientPlayer().Id,
     };
     const skill = Sanguosha.getSkillBySkillName<TriggerSkill>(skillName);
     this.presenter.createIncomingConversation({
       conversation:
         this.askForEvent.conversation ||
-        TranslationPack.translationJsonPatcher('do you want to trigger skill {0} ?', skill.Name).extract(),
+        TranslationPack.translationJsonPatcher(
+          "do you want to trigger skill {0} ?",
+          skill.Name
+        ).extract(),
       translator,
     });
     this.selectSkill(skill);
     this.onPlay();
-    this.enableToCallAction() && this.presenter.enableActionButton('confirm');
+    this.enableToCallAction() && this.presenter.enableActionButton("confirm");
 
     this.presenter.defineConfirmButtonActions(() => {
       event.invoke = skillName;
       event.cardIds = this.selectedCards;
       event.toIds = this.selectedTargets;
-      this.store.room.broadcast(GameEventIdentifiers.AskForSkillUseEvent, event);
+      this.store.room.broadcast(
+        GameEventIdentifiers.AskForSkillUseEvent,
+        event
+      );
       this.presenter.closeIncomingConversation();
       this.resetActionHandlers();
       this.resetAction();
@@ -69,7 +87,10 @@ export class SkillUseAction extends BaseAction {
     });
     !EventPacker.isUncancellableEvent(this.askForEvent) &&
       this.presenter.defineCancelButtonActions(() => {
-        this.store.room.broadcast(GameEventIdentifiers.AskForSkillUseEvent, event);
+        this.store.room.broadcast(
+          GameEventIdentifiers.AskForSkillUseEvent,
+          event
+        );
         this.presenter.closeIncomingConversation();
         this.resetActionHandlers();
         this.resetAction();
@@ -79,9 +100,9 @@ export class SkillUseAction extends BaseAction {
   }
 
   onSelect(translator: ClientTranslationModule) {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       const { invokeSkillNames, toId } = this.askForEvent;
-      if (toId !== this.presenter.ClientPlayer!.Id) {
+      if (toId !== this.presenter.getClientPlayer().Id) {
         return resolve();
       }
 
@@ -97,7 +118,7 @@ export class SkillUseAction extends BaseAction {
         this.presenter.createIncomingConversation({
           optionsActionHanlder: actionHandlers,
           translator: this.translator,
-          conversation: 'please choose a skill',
+          conversation: "please choose a skill",
         });
       }
     });
@@ -120,7 +141,7 @@ export class SkillUseAction extends BaseAction {
           card.Id,
           this.selectedCards,
           this.selectedTargets,
-          this.equipSkillCardId,
+          this.equipSkillCardId
         ) &&
           this.selectedSkillToPlay.availableCardAreas().includes(fromArea) &&
           (!this.selectedSkillToPlay.cardFilter(
@@ -128,14 +149,14 @@ export class SkillUseAction extends BaseAction {
             this.player,
             this.selectedCards,
             this.selectedTargets,
-            this.selectedCardToPlay,
+            this.selectedCardToPlay
           ) ||
             this.selectedSkillToPlay.cardFilter(
               this.store.room,
               this.player,
               [...this.selectedCards, card.Id],
               this.selectedTargets,
-              this.selectedCardToPlay,
+              this.selectedCardToPlay
             )) &&
           card.Id !== this.equipSkillCardId) ||
         this.selectedCards.includes(card.Id)
@@ -150,20 +171,22 @@ export class SkillUseAction extends BaseAction {
     this.presenter.highlightCards();
 
     if (EventPacker.isUncancellableEvent(this.askForEvent)) {
-      this.presenter.disableActionButton('cancel');
+      this.presenter.disableActionButton("cancel");
       this.presenter.broadcastUIUpdate();
     }
-    this.presenter.setupPlayersSelectionMatcher((player: Player) => this.isPlayerEnabled(player));
+    this.presenter.setupPlayersSelectionMatcher((player: Player) =>
+      this.isPlayerEnabled(player)
+    );
     this.presenter.setupClientPlayerCardActionsMatcher((card: Card) =>
-      this.isCardEnabledOnSkillTriggered(card, PlayerCardsArea.HandArea),
+      this.isCardEnabledOnSkillTriggered(card, PlayerCardsArea.HandArea)
     );
     this.presenter.setupClientPlayerOutsideCardActionsMatcher(
       (card: Card) =>
         this.isOutsideCardShowOnSkillTriggered(card) ||
-        this.isCardEnabledOnSkillTriggered(card, PlayerCardsArea.OutsideArea),
+        this.isCardEnabledOnSkillTriggered(card, PlayerCardsArea.OutsideArea)
     );
     this.presenter.setupCardSkillSelectionMatcher((card: Card) =>
-      this.isCardEnabledOnSkillTriggered(card, PlayerCardsArea.EquipArea),
+      this.isCardEnabledOnSkillTriggered(card, PlayerCardsArea.EquipArea)
     );
   }
 }

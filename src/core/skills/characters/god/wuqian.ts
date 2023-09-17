@@ -1,18 +1,18 @@
-import { GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
+import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
 import {
   AllStage,
   PhaseChangeStage,
   PhaseStageChangeStage,
   PlayerPhase,
   PlayerPhaseStages,
-} from '/src/core/game/stage_processor';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { MarkEnum } from '/src/core/shares/types/mark_list';
-import { ActiveSkill, TriggerSkill } from '/src/core/skills/skill';
-import { OnDefineReleaseTiming } from '/src/core/skills/skill_hooks';
-import { CommonSkill, CompulsorySkill, ShadowSkill } from '/src/core/skills/skill_wrappers';
+} from 'src/core/game/stage_processor';
+import { Player } from 'src/core/player/player';
+import { PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { MarkEnum } from 'src/core/shares/types/mark_list';
+import { ActiveSkill, TriggerSkill } from 'src/core/skills/skill';
+import { OnDefineReleaseTiming } from 'src/core/skills/skill_hooks';
+import { CommonSkill, CompulsorySkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
 import { WuShuang } from '../standard/wushuang';
 
 @CommonSkill({ name: 'wuqian', description: 'wuqian_description' })

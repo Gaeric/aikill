@@ -1,13 +1,13 @@
-import { CardId } from '/src/core/cards/libs/card_props';
-import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { Sanguosha } from '/src/core/game/engine';
-import { DamageType } from '/src/core/game/game_props';
-import { Player } from '/src/core/player/player';
-import { PlayerCardsArea, PlayerId } from '/src/core/player/player_props';
-import { Room } from '/src/core/room/room';
-import { JudgeMatcher, JudgeMatcherEnum } from '/src/core/shares/libs/judge_matchers';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
-import { ActiveSkill, CommonSkill, SelfTargetSkill } from '/src/core/skills/skill';
+import { CardId } from 'src/core/cards/libs/card_props';
+import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { Sanguosha } from 'src/core/game/engine';
+import { DamageType } from 'src/core/game/game_props';
+import { Player } from 'src/core/player/player';
+import { PlayerCardsArea, PlayerId } from 'src/core/player/player_props';
+import { Room } from 'src/core/room/room';
+import { JudgeMatcher, JudgeMatcherEnum } from 'src/core/shares/libs/judge_matchers';
+import { Precondition } from 'src/core/shares/libs/precondition/precondition';
+import { ActiveSkill, CommonSkill, SelfTargetSkill } from 'src/core/skills/skill';
 import { ExtralCardSkillProperty } from '../interface/extral_property';
 
 @CommonSkill({ name: 'lightning', description: 'lightning_description' })

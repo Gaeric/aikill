@@ -1,422 +1,443 @@
-import { AudioLoader } from 'audio_loader/audio_loader';
-import { clientActiveListenerEvents, GameEventIdentifiers, ServerEventFinder } from '/src/core/event/event';
-import { EventPacker } from '/src/core/event/event_packer';
-import { Sanguosha } from '/src/core/game/engine';
-import { TemporaryRoomCreationInfo } from '/src/core/game/game_props';
-import { LocalClientEmitter } from '/src/core/network/local/local_emitter.client';
-import { ClientSocket } from '/src/core/network/socket.client';
-import { Player } from '/src/core/player/player';
-import { PlayerId } from '/src/core/player/player_props';
-import { Precondition } from '/src/core/shares/libs/precondition/precondition';
-import { RoomMode } from '/src/core/shares/types/room_props';
-import { TranslationPack } from '/src/core/translations/translation_json_tool';
-import { ClientTranslationModule } from '/src/core/translations/translation_module.client';
-import { ElectronData } from '/src/electron_loader/electron_data';
-import { ElectronLoader } from '/src/electron_loader/electron_loader';
-import { ImageLoader } from '/src/image_loader/image_loader';
-import * as mobx from 'mobx';
-import * as mobxReact from 'mobx-react';
-import { SettingsDialog } from '/src/pages/ui/settings/settings';
-import { ServerHostTag, ServiceConfig } from '/src/props/config_props';
-import * as React from 'react';
-import { match } from 'react-router-dom';
-import { ConnectionService } from '/src/services/connection_service/connection_service';
-import { CharacterSkinInfo } from 'skins/skins';
-import { PagePropsWithConfig } from '/src/types/page_props';
-import { installAudioPlayerService } from '/src/ui/audio/install';
-import { GameClientProcessor } from './game_processor';
-import { installService, RoomBaseService } from './install_service';
-import styles from './room.module.css';
-import { RoomPresenter } from './room.presenter';
-import { RoomStore } from './room.store';
-import { Background } from './ui/background/background';
-import { Banner } from './ui/banner/banner';
-import { Dashboard } from './ui/dashboard/dashboard';
-import { GameDialog } from './ui/game_dialog/game_dialog';
-import { GameBoard } from './ui/gameboard/gameboard';
-import { SeatsLayout } from './ui/seats_layout/seats_layout';
+import { AudioLoader } from "audio_loader/audio_loader";
+import {
+  clientActiveListenerEvents,
+  GameEventIdentifiers,
+  ServerEventFinder,
+} from "src/core/event/event";
+import { EventPacker } from "src/core/event/event_packer";
+import { Sanguosha } from "src/core/game/engine";
+import { TemporaryRoomCreationInfo } from "src/core/game/game_props";
+import { LocalClientEmitter } from "src/core/network/local/local_emitter.client";
+import { ClientSocket } from "src/core/network/socket.client";
+import { Player } from "src/core/player/player";
+import { PlayerId } from "src/core/player/player_props";
+import { Precondition } from "src/core/shares/libs/precondition/precondition";
+import { RoomMode } from "src/core/shares/types/room_props";
+import { TranslationPack } from "src/core/translations/translation_json_tool";
+import { ClientTranslationModule } from "src/core/translations/translation_module.client";
+import { ElectronData } from "src/electron_loader/electron_data";
+import { ElectronLoader } from "src/electron_loader/electron_loader";
+import { ImageLoader } from "src/image_loader/image_loader";
+import { SettingsDialog } from "src/pages/ui/settings/settings";
+import { ServerHostTag, ServiceConfig } from "src/props/config_props";
+import * as React from "react";
 
-@mobxReact.observer
-export class RoomPage extends React.Component<
-  PagePropsWithConfig<{
-    match: match<{ slug: string }>;
-    translator: ClientTranslationModule;
-    imageLoader: ImageLoader;
-    audioLoader: AudioLoader;
-    electronLoader: ElectronLoader;
-    getConnectionService(campaignMode: boolean): ConnectionService;
-    skinData?: CharacterSkinInfo[];
-  }>
-> {
-  private presenter: RoomPresenter;
-  private store: RoomStore;
-  private socket: ClientSocket;
-  private gameProcessor: GameClientProcessor;
-  private roomId: number;
-  private playerName: string = this.props.electronLoader.getData(ElectronData.PlayerName) || 'unknown';
-  private playerId: PlayerId = Precondition.exists(
-    this.props.electronLoader.getTemporaryData(ElectronData.PlayerId),
-    'unknown player id',
+import { ConnectionService } from "src/services/connection_service/connection_service";
+import { CharacterSkinInfo } from "src/skins/skins";
+import { PagePropsWithConfig } from "src/types/page_props";
+import { installAudioPlayerService } from "src/ui/audio/install";
+import { GameClientProcessor } from "./game_processor";
+import { installService, RoomBaseService } from "./install_service";
+import styles from "./room.module.css";
+import { RoomPresenter } from "./room.presenter";
+import { RoomStore } from "./room.store";
+import { Background } from "./ui/background/background";
+import { Banner } from "./ui/banner/banner";
+import { Dashboard } from "./ui/dashboard/dashboard";
+import { GameDialog } from "./ui/game_dialog/game_dialog";
+import { GameBoard } from "./ui/gameboard/gameboard";
+import { SeatsLayout } from "./ui/seats_layout/seats_layout";
+import { useLocation, useParams } from "react-router-dom";
+
+/* todo: RoomPage onetime init */
+export function RoomPage(props: PagePropsWithConfig) {
+  let presenter = RoomPresenter(props.imageLoader).newRoomPresent;
+  let store = presenter.store;
+  // let socket: ClientSocket;
+  let gameProcessor: GameClientProcessor;
+  let storeRef = React.useRef(store);
+  let presenterRef = React.useRef(presenter);
+  let roomId: number = Number(useParams().slug);
+  presenterRef.current = presenter;
+  React.useEffect(() => {
+    storeRef.current = store;
+  }, [store]);
+  let playerName: string =
+    props.electronLoader.getData(ElectronData.PlayerName) || "unknown";
+  let playerId: PlayerId = Precondition.exists(
+    props.electronLoader.getTemporaryData(ElectronData.PlayerId),
+    "unknown player id"
   );
-  private baseService: RoomBaseService;
-  private audioService = installAudioPlayerService(this.props.audioLoader, this.props.electronLoader);
-  private roomMode: RoomMode;
-  private connectionService: ConnectionService;
+  let baseService: RoomBaseService;
+  let audioService = installAudioPlayerService(
+    props.audioLoader,
+    props.electronLoader
+  );
 
-  private lastEventTimeStamp: number;
+  let connectionService: ConnectionService;
 
-  @mobx.observable.ref
-  private roomPing: number = 999;
-  @mobx.observable.ref
-  private gameHostedServer: ServerHostTag;
-  @mobx.observable.ref
-  openSettings = false;
-  @mobx.observable.ref
-  private defaultMainVolume = this.props.electronLoader.getData(ElectronData.MainVolume)
-    ? Number.parseInt(this.props.electronLoader.getData(ElectronData.MainVolume), 10)
+  let lastEventTimeStamp: number;
+
+  let roomPing: number = 999;
+
+  let gameHostedServer: ServerHostTag;
+
+  let [openSettings, setOpenSettings] = React.useState(false);
+
+  let defaultMainVolume = props.electronLoader.getData(ElectronData.MainVolume)
+    ? Number.parseInt(props.electronLoader.getData(ElectronData.MainVolume), 10)
     : 50;
-  @mobx.observable.ref
-  private defaultGameVolume = this.props.electronLoader.getData(ElectronData.GameVolume)
-    ? Number.parseInt(this.props.electronLoader.getData(ElectronData.GameVolume), 10)
-    : 50;
-  @mobx.observable.ref
-  private renderSideBoard = true;
 
-  private readonly settings = {
-    onVolumeChange: mobx.action((volume: number) => {
-      this.props.electronLoader.setData(ElectronData.GameVolume, volume.toString());
-      this.defaultGameVolume = volume;
-      this.audioService.changeGameVolume();
-    }),
-    onMainVolumeChange: mobx.action((volume: number) => {
-      this.props.electronLoader.setData(ElectronData.MainVolume, volume.toString());
-      this.defaultMainVolume = volume;
-      this.audioService.changeBGMVolume();
-    }),
+  let defaultGameVolume = props.electronLoader.getData(ElectronData.GameVolume)
+    ? Number.parseInt(props.electronLoader.getData(ElectronData.GameVolume), 10)
+    : 50;
+
+  let [renderSideBoard, setRenderSideBoard] = React.useState<boolean>(true);
+
+  let settings = {
+    onVolumeChange: (volume: number) => {
+      props.electronLoader.setData(ElectronData.GameVolume, volume.toString());
+      defaultGameVolume = volume;
+      audioService.changeGameVolume();
+    },
+    onMainVolumeChange: (volume: number) => {
+      props.electronLoader.setData(ElectronData.MainVolume, volume.toString());
+      defaultMainVolume = volume;
+      audioService.changeBGMVolume();
+    },
   };
 
-  constructor(
-    props: PagePropsWithConfig<{
-      match: match<{ slug: string }>;
-      translator: ClientTranslationModule;
-      imageLoader: ImageLoader;
-      audioLoader: AudioLoader;
-      electronLoader: ElectronLoader;
-      getConnectionService(campaignMode: boolean): ConnectionService;
-      skinData?: CharacterSkinInfo[];
-    }>,
+  const location: any = useLocation();
+
+  const { ping, hostConfig, roomMode, socket } = location.state;
+
+  /* todo: should delete */
+  connectionService = props.getConnectionService(
+    roomMode === RoomMode.Campaign
+  );
+  gameHostedServer = hostConfig.hostTag;
+
+  if (ping !== undefined) {
+    () => (roomPing = ping);
+  }
+
+  gameProcessor = React.useRef(
+    new GameClientProcessor(
+      presenterRef,
+      storeRef,
+      props.translator,
+      props.imageLoader,
+      audioService,
+      props.electronLoader,
+      props.skinData,
+      createWaitingRoomCaller
+    )
+  ).current;
+
+  baseService = installService(props.translator, store, props.imageLoader);
+
+  function createWaitingRoomCaller(
+    roomInfo: TemporaryRoomCreationInfo,
+    roomId: number
   ) {
-    super(props);
-    const { match, translator } = this.props;
-
-    this.roomId = parseInt(match.params.slug, 10);
-    this.presenter = new RoomPresenter(this.props.imageLoader);
-    this.store = this.presenter.createStore();
-
-    const roomId = this.roomId.toString();
-    const { ping, hostConfig, roomMode } = this.props.location.state as {
-      ping?: number;
-      hostConfig: ServiceConfig;
-      roomMode: RoomMode;
-    };
-    this.roomMode = roomMode;
-    this.connectionService = this.props.getConnectionService(this.roomMode === RoomMode.Campaign);
-
-    if (this.roomMode === RoomMode.Campaign) {
-      this.socket = new LocalClientEmitter((window as any).eventEmitter, roomId);
-      mobx.runInAction(() => (this.gameHostedServer = ServerHostTag.Localhost));
-    } else {
-      this.socket = new ClientSocket(
-        `${hostConfig.protocol}://${hostConfig.host}:${hostConfig.port}/room-${roomId}`,
-        roomId,
-      );
-      mobx.runInAction(() => (this.gameHostedServer = hostConfig.hostTag));
-    }
-
-    if (ping !== undefined) {
-      mobx.runInAction(() => (this.roomPing = ping));
-    }
-
-    this.baseService = installService(this.props.translator, this.store, this.props.imageLoader);
-    this.gameProcessor = new GameClientProcessor(
-      this.presenter,
-      this.store,
-      translator,
-      this.props.imageLoader,
-      this.audioService,
-      this.props.electronLoader,
-      this.props.skinData,
-      this.createWaitingRoomCaller,
-    );
-  }
-
-  private readonly createWaitingRoomCaller = (roomInfo: TemporaryRoomCreationInfo, roomId: number) => {
-    this.props.history.push(`/waiting-room/${roomId}`, {
+    props.history.push(`/waiting-room/${roomId}`, {
       ping: 0,
-      hostConfig: this.props.config.host.find(host => host.hostTag === this.gameHostedServer),
+      hostConfig: props.config.host.find(
+        (host) => host.hostTag === gameHostedServer
+      ),
     });
-  };
-
-  private readonly onHandleBulkEvents = async (events: ServerEventFinder<GameEventIdentifiers>[]) => {
-    this.store.room.emitStatus('trusted', this.playerId!);
-    for (const content of events) {
-      const identifier = Precondition.exists(EventPacker.getIdentifier(content), 'Unable to load event identifier');
-      await this.gameProcessor.onHandleIncomingEvent(identifier, content);
-      this.showMessageFromEvent(content);
-      this.updateGameStatus(content);
-    }
-  };
-
-  componentDidMount() {
-    this.audioService.playRoomBGM();
-    this.presenter.setupRoomStatus({
-      playerName: this.playerName,
-      socket: this.socket,
-      roomId: this.roomId,
-      timestamp: Date.now(),
-      playerId: this.playerId,
-    });
-
-    if (!this.playerId) {
-      this.props.electronLoader.saveTemporaryData(ElectronData.PlayerId, `${this.playerName}-${Date.now()}`);
-    }
-
-    this.socket.on(GameEventIdentifiers.PlayerEnterRefusedEvent, () => {
-      this.props.history.push('/lobby');
-    });
-
-    clientActiveListenerEvents().forEach(identifier => {
-      this.socket.on(identifier, async (content: ServerEventFinder<GameEventIdentifiers>) => {
-        const timestamp = EventPacker.getTimestamp(content);
-        if (timestamp) {
-          this.lastEventTimeStamp = timestamp;
-        }
-
-        if (identifier === GameEventIdentifiers.PlayerBulkPacketEvent) {
-          await this.onHandleBulkEvents(
-            (content as ServerEventFinder<GameEventIdentifiers.PlayerBulkPacketEvent>).stackedLostMessages,
-          );
-        } else {
-          await this.gameProcessor.onHandleIncomingEvent(identifier, content);
-          this.showMessageFromEvent(content);
-          this.animation(identifier, content);
-          this.updateGameStatus(content);
-        }
-      });
-    });
-
-    this.setupReconnection();
-    this.joinRoom();
-
-    window.addEventListener('beforeunload', () => this.disconnect());
   }
 
-  private readonly setupReconnection = () => {
-    this.socket.onReconnected(() => {
-      const playerId = this.playerId;
+  async function onHandleBulkEvents(
+    events: ServerEventFinder<GameEventIdentifiers>[]
+  ) {
+    store.room!.emitStatus("trusted", playerId!);
+    for (const content of events) {
+      const identifier = Precondition.exists(
+        EventPacker.getIdentifier(content),
+        "Unable to load event identifier"
+      );
+      await gameProcessor.onHandleIncomingEvent(identifier, content);
+      `call back of client event onhandle event ${identifier}`;
+      showMessageFromEvent(content);
+      updateGameStatus(content);
+    }
+  }
+
+  function setupReconnection() {
+    socket.onReconnected(() => {
       if (!playerId) {
         return;
       }
-
-      this.socket.notify(
+      socket.notify(
         GameEventIdentifiers.PlayerReenterEvent,
-        EventPacker.createIdentifierEvent(GameEventIdentifiers.PlayerReenterEvent, {
-          timestamp: this.lastEventTimeStamp,
-          playerId,
-          playerName: this.playerName,
-        }),
+        EventPacker.createIdentifierEvent(
+          GameEventIdentifiers.PlayerReenterEvent,
+          {
+            timestamp: lastEventTimeStamp,
+            playerId,
+            playerName: playerName,
+          }
+        )
       );
     });
-  };
+  }
 
-  private readonly joinRoom = () => {
-    this.socket.notify(
-      GameEventIdentifiers.PlayerEnterEvent,
-      EventPacker.createIdentifierEvent(GameEventIdentifiers.PlayerEnterEvent, {
-        playerName: this.playerName,
-        timestamp: this.store.clientRoomInfo.timestamp,
-        playerId: this.playerId!,
-        coreVersion: Sanguosha.Version,
-        joinAsObserver: this.roomMode === RoomMode.Observer,
-      }),
-    );
-  };
-
-  private readonly disconnect = () => {
-    if (this.roomMode === RoomMode.Campaign) {
-      this.socket.disconnect();
+  function disconnect() {
+    if (roomMode === RoomMode.Campaign) {
+      socket.disconnect();
     } else {
-      this.socket.notify(
+      socket.notify(
         GameEventIdentifiers.PlayerLeaveEvent,
-        EventPacker.createIdentifierEvent(GameEventIdentifiers.PlayerLeaveEvent, {
-          playerId: this.store.clientPlayerId,
-        }),
+        EventPacker.createIdentifierEvent(
+          GameEventIdentifiers.PlayerLeaveEvent,
+          {
+            playerId: store.clientPlayerId,
+          }
+        )
       );
     }
-  };
-
-  componentWillUnmount() {
-    this.disconnect();
-    this.audioService.stop();
   }
 
-  private updateGameStatus(event: ServerEventFinder<GameEventIdentifiers>) {
+  function updateGameStatus(event: ServerEventFinder<GameEventIdentifiers>) {
     const info = EventPacker.getGameRunningInfo(event);
-    this.presenter.updateNumberOfDrawStack(info.numberOfDrawStack);
-    this.presenter.updateGameCircle(info.circle);
+    presenter.updateNumberOfDrawStack(info.numberOfDrawStack);
+    presenter.updateGameCircle(info.circle);
   }
 
-  private animation<T extends GameEventIdentifiers>(identifier: T, event: ServerEventFinder<T>) {
-    this.baseService.Animation.GuideLineAnimation.animate(identifier, event);
-    this.baseService.Animation.MoveInstantCardAnimation.animate(identifier, event);
+  function animation<T extends GameEventIdentifiers>(
+    identifier: T,
+    event: ServerEventFinder<T>
+  ) {
+    baseService.Animation.GuideLineAnimation.animate(identifier, event);
+    baseService.Animation.MoveInstantCardAnimation.animate(identifier, event);
   }
 
-  private showMessageFromEvent(event: ServerEventFinder<GameEventIdentifiers>) {
-    if (EventPacker.getIdentifier(event) === GameEventIdentifiers.MoveCardEvent) {
-      for (const info of (event as ServerEventFinder<GameEventIdentifiers.MoveCardEvent>).infos) {
-        const { messages = [], translationsMessage, unengagedMessage, engagedPlayerIds } = info;
-        const { translator } = this.props;
+  function showMessageFromEvent(
+    event: ServerEventFinder<GameEventIdentifiers>
+  ) {
+    if (
+      EventPacker.getIdentifier(event) === GameEventIdentifiers.MoveCardEvent
+    ) {
+      for (const info of (
+        event as ServerEventFinder<GameEventIdentifiers.MoveCardEvent>
+      ).infos) {
+        const {
+          messages = [],
+          translationsMessage,
+          unengagedMessage,
+          engagedPlayerIds,
+        } = info;
 
-        if (unengagedMessage && engagedPlayerIds && !engagedPlayerIds.includes(this.store.clientPlayerId)) {
+        if (
+          unengagedMessage &&
+          engagedPlayerIds &&
+          !engagedPlayerIds.includes(store.clientPlayerId)
+        ) {
           messages.push(TranslationPack.create(unengagedMessage).toString());
         } else if (translationsMessage) {
           messages.push(TranslationPack.create(translationsMessage).toString());
         }
 
-        messages.forEach(message => {
-          this.presenter.addGameLog(translator.trx(message));
+        messages.forEach((message) => {
+          presenterRef.current.addGameLog(props.translator.trx(message));
         });
       }
     } else {
-      const { messages = [], translationsMessage, unengagedMessage, engagedPlayerIds } = event;
-      const { translator } = this.props;
+      const {
+        messages = [],
+        translationsMessage,
+        unengagedMessage,
+        engagedPlayerIds,
+      } = event;
 
-      if (unengagedMessage && engagedPlayerIds && !engagedPlayerIds.includes(this.store.clientPlayerId)) {
+      if (
+        unengagedMessage &&
+        engagedPlayerIds &&
+        !engagedPlayerIds.includes(store.clientPlayerId)
+      ) {
         messages.push(TranslationPack.create(unengagedMessage).toString());
       } else if (translationsMessage) {
         messages.push(TranslationPack.create(translationsMessage).toString());
       }
 
-      messages.forEach(message => {
-        this.presenter.addGameLog(translator.trx(message));
+      messages.forEach((message) => {
+        presenterRef.current.addGameLog(props.translator.trx(message));
       });
     }
   }
 
-  private readonly onTrusted = () => {
-    this.gameProcessor.onPlayTrustedAction();
-  };
+  function onTrusted() {
+    gameProcessor.onPlayTrustedAction();
+  }
 
-  @mobx.action
-  private readonly onClickSettings = () => {
-    this.openSettings = true;
-  };
-  @mobx.action
-  private readonly onCloseSettings = () => {
-    this.openSettings = false;
-  };
-  @mobx.action
-  private readonly onSwitchSideBoard = () => (this.renderSideBoard = !this.renderSideBoard);
+  function onClickSettings() {
+    setOpenSettings(true);
+  }
 
-  private readonly onChangeObserver = (player: Player) => {
-    this.socket.notify(GameEventIdentifiers.ObserverRequestChangeEvent, {
-      observerId: this.playerId,
+  function onCloseSettings() {
+    setOpenSettings(false);
+  }
+
+  function onSwitchSideBoard() {
+    let render = !renderSideBoard;
+    setRenderSideBoard(() => render);
+    return render;
+  }
+  function onChangeObserver(player: Player) {
+    socket.notify(GameEventIdentifiers.ObserverRequestChangeEvent, {
+      observerId: playerId,
       toObserverId: player.Id,
     });
+    presenterRef.current.setupClientPlayerId(player.Id);
+    props.translator.setupPlayer(player);
+    // presenterRef.broadcastUIUpdate();
+  }
+  const observerMode = roomMode === RoomMode.Observer;
+  const background = props.imageLoader.getBackgroundImage();
 
-    this.presenter.setupClientPlayerId(player.Id);
-    this.props.translator.setupPlayer(player);
-    this.presenter.broadcastUIUpdate();
-  };
+  // todo:
+  React.useEffect(() => {
+    audioService.playRoomBGM();
+    window.addEventListener("beforeunload", () => disconnect());
+    socket.on(GameEventIdentifiers.PlayerEnterRefusedEvent, () => {
+      props.history.push("/lobby");
+    });
 
-  render() {
-    const observerMode = this.roomMode === RoomMode.Observer;
-    const background = this.props.imageLoader.getBackgroundImage();
+    setupReconnection();
+    presenter.setupRoomStatus({
+      playerName: playerName,
+      socket: socket,
+      roomId: roomId,
+      timestamp: Date.now(),
+      playerId: playerId,
+    });
 
-    return (
-      <div className={styles.room}>
-        <Background image={background} />
-        {this.store.selectorDialog}
-        {this.store.selectorViewDialog}
+    clientActiveListenerEvents().forEach((identifier: GameEventIdentifiers) => {
+      socket.on(
+        identifier,
+        async (content: ServerEventFinder<GameEventIdentifiers>) => {
+          const timestamp = EventPacker.getTimestamp(content);
+          if (timestamp) {
+            lastEventTimeStamp = timestamp;
+          }
 
-        <div className={styles.incomingConversation}>{this.store.incomingConversation}</div>
-        {this.store.room && (
-          <div className={styles.roomBoard}>
-            <Banner
-              roomIndex={this.roomId}
-              translator={this.props.translator}
-              roomName={this.store.room.getRoomInfo().name}
-              className={styles.roomBanner}
-              connectionService={this.connectionService}
-              onClickSettings={this.onClickSettings}
-              onSwitchSideBoard={this.onSwitchSideBoard}
-              defaultPing={this.roomPing}
-              host={this.gameHostedServer}
-            />
-            <div className={styles.mainBoard}>
-              <SeatsLayout
-                imageLoader={this.props.imageLoader}
-                updateFlag={this.store.updateUIFlag}
-                store={this.store}
-                presenter={this.presenter}
-                skinData={this.props.skinData}
-                translator={this.props.translator}
-                onClick={this.store.onClickPlayer}
-                playerSelectableMatcher={this.store.playersSelectionMatcher}
-                onRequestView={this.onChangeObserver}
-                observerMode={observerMode}
-              />
-              {this.renderSideBoard && (
-                <div className={styles.sideBoard}>
-                  <GameBoard store={this.store} translator={this.props.translator} />
-                  <GameDialog
-                    store={this.store}
-                    presenter={this.presenter}
-                    translator={this.props.translator}
-                    connectionService={this.connectionService}
-                    replayOrObserverMode={observerMode}
-                  />
-                </div>
-              )}
-            </div>
-            <Dashboard
-              updateFlag={this.store.updateUIFlag}
-              store={this.store}
-              presenter={this.presenter}
-              translator={this.props.translator}
-              skinData={this.props.skinData}
-              imageLoader={this.props.imageLoader}
-              handcardHiddenMatcher={this.store.clientPlayerHandcardShowMatcher}
-              cardEnableMatcher={this.store.clientPlayerCardActionsMatcher}
-              outsideCardEnableMatcher={this.store.clientPlayerOutsideCardActionsMatcher}
-              onClickConfirmButton={this.store.confirmButtonAction}
-              onClickCancelButton={this.store.cancelButtonAction}
-              onClickFinishButton={this.store.finishButtonAction}
-              onClick={this.store.onClickHandCardToPlay}
-              onClickEquipment={this.store.onClickEquipmentToDoAction}
-              onClickPlayer={this.store.onClickPlayer}
-              onTrusted={this.onTrusted}
-              cardSkillEnableMatcher={this.store.cardSkillsSelectionMatcher}
-              playerSelectableMatcher={this.store.playersSelectionMatcher}
-              onClickSkill={this.store.onClickSkill}
-              isSkillDisabled={this.store.isSkillDisabled}
+          if (identifier === GameEventIdentifiers.PlayerBulkPacketEvent) {
+            await onHandleBulkEvents(
+              (
+                content as ServerEventFinder<GameEventIdentifiers.PlayerBulkPacketEvent>
+              ).stackedLostMessages
+            );
+          } else {
+            await gameProcessor.onHandleIncomingEvent(identifier, content);
+            showMessageFromEvent(content);
+            animation(identifier, content);
+            updateGameStatus(content);
+          }
+        }
+      );
+    });
+
+    return () => {
+      disconnect();
+      audioService.stop();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (store.clientRoomInfo && !store.room) {
+      /* todo: what is the time this UseEffect exec */
+      socket.notify(
+        GameEventIdentifiers.PlayerEnterEvent,
+        EventPacker.createIdentifierEvent(
+          GameEventIdentifiers.PlayerEnterEvent,
+          {
+            playerName: playerName,
+            timestamp: store.clientRoomInfo!.timestamp,
+            playerId: playerId!,
+            coreVersion: Sanguosha.Version,
+            joinAsObserver: roomMode === RoomMode.Observer,
+          }
+        )
+      );
+    }
+  }, [store.clientRoomInfo, store.room]);
+
+  return (
+    <div className={styles.room} id="room">
+      <Background image={background} />
+      {store.selectorDialog}
+      {store.selectorViewDialog}
+
+      <div className={styles.incomingConversation}>
+        {store.incomingConversation}
+      </div>
+      {store.room && (
+        <div className={styles.roomBoard}>
+          <Banner
+            roomIndex={roomId}
+            translator={props.translator}
+            roomName={store.room.getRoomInfo().name}
+            className={styles.roomBanner}
+            connectionService={connectionService}
+            onClickSettings={onClickSettings}
+            onSwitchSideBoard={onSwitchSideBoard}
+            defaultPing={roomPing}
+            host={gameHostedServer}
+          />
+          <div className={styles.mainBoard}>
+            <SeatsLayout
+              imageLoader={props.imageLoader}
+              store={store}
+              presenter={presenter}
+              skinData={props.skinData}
+              translator={props.translator}
+              onClick={store.onClickPlayer}
+              playerSelectableMatcher={store.playersSelectionMatcher}
+              onRequestView={onChangeObserver}
               observerMode={observerMode}
             />
+            {renderSideBoard && (
+              <div className={styles.sideBoard}>
+                <GameBoard store={store} translator={props.translator} />
+                <GameDialog
+                  store={store}
+                  presenter={presenter}
+                  translator={props.translator}
+                  connectionService={connectionService}
+                  replayOrObserverMode={observerMode}
+                />
+              </div>
+            )}
           </div>
-        )}
-        {this.openSettings && (
-          <SettingsDialog
-            defaultGameVolume={this.defaultGameVolume}
-            defaultMainVolume={this.defaultMainVolume}
-            imageLoader={this.props.imageLoader}
-            translator={this.props.translator}
-            onMainVolumeChange={this.settings.onMainVolumeChange}
-            onGameVolumeChange={this.settings.onVolumeChange}
-            onConfirm={this.onCloseSettings}
-            electronLoader={this.props.electronLoader}
+          <Dashboard
+            store={store}
+            presenter={presenter}
+            translator={props.translator}
+            skinData={props.skinData}
+            imageLoader={props.imageLoader}
+            handcardHiddenMatcher={store.clientPlayerHandcardShowMatcher}
+            cardEnableMatcher={store.clientPlayerCardActionsMatcher}
+            outsideCardEnableMatcher={
+              store.clientPlayerOutsideCardActionsMatcher
+            }
+            onClickConfirmButton={store.confirmButtonAction}
+            onClickCancelButton={store.cancelButtonAction}
+            onClickFinishButton={store.finishButtonAction}
+            onClick={store.onClickHandCardToPlay}
+            onClickEquipment={store.onClickEquipmentToDoAction}
+            onClickPlayer={store.onClickPlayer}
+            onTrusted={onTrusted}
+            cardSkillEnableMatcher={store.cardSkillsSelectionMatcher}
+            playerSelectableMatcher={store.playersSelectionMatcher}
+            onClickSkill={store.onClickSkill}
+            isSkillDisabled={store.isSkillDisabled}
+            observerMode={observerMode}
           />
-        )}
-      </div>
-    );
-  }
+        </div>
+      )}
+      {openSettings && (
+        <SettingsDialog
+          defaultGameVolume={defaultGameVolume}
+          defaultMainVolume={defaultMainVolume}
+          imageLoader={props.imageLoader}
+          translator={props.translator}
+          onMainVolumeChange={settings.onMainVolumeChange}
+          onGameVolumeChange={settings.onVolumeChange}
+          onConfirm={onCloseSettings}
+          electronLoader={props.electronLoader}
+        />
+      )}
+    </div>
+  );
 }
