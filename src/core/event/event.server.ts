@@ -1,6 +1,11 @@
 import { CardMatcherSocketPassenger } from 'src/core/cards/libs/card_matcher';
 import { CardChoosingOptions, CardId } from 'src/core/cards/libs/card_props';
-import { CharacterEquipSections, CharacterGender, CharacterId, CharacterNationality } from 'src/core/characters/character';
+import {
+  CharacterEquipSections,
+  CharacterGender,
+  CharacterId,
+  CharacterNationality,
+} from 'src/core/characters/character';
 import {
   DamageType,
   GameCommonRuleObject,
@@ -30,6 +35,7 @@ import {
   WaitingRoomEvent,
   WaitingRoomEventUtilities,
 } from './event';
+import { Seal, SealMethod } from '../player/player';
 
 export type MovingCardProps = {
   card: CardId;
@@ -558,6 +564,11 @@ export interface ServerEvent extends EventUtilities {
   };
   [GameEventIdentifiers.ClearCardTagsEvent]: {
     toId: PlayerId;
+  };
+  [GameEventIdentifiers.ChangeSealsEvent]: {
+    toId: PlayerId;
+    seals: Seal[];
+    method: SealMethod;
   };
 }
 

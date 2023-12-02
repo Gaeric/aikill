@@ -723,8 +723,8 @@ export { YaoHu, YaoHuShadow, YaoHuDebuff } from './characters/benevolence/yaohu'
 export { HuaiBi } from './characters/benevolence/huaibi';
 export { GuYing } from './characters/benevolence/guying';
 
-export { BeiFen } from './characters/yue/beifen';
-export { ShuangJia, ShuangJiaDistance, ShuangJiaRemoveSeal } from './characters/yue/shuangjia';
+export { BeiFen, BeiFenBuf } from './characters/yue/beifen';
+export { ShuangJia, ShuangJiaDistance, ShuangJiaRemoveSeal, ShuangJiaHoldCard } from './characters/yue/shuangjia';
 
 export {
   MouLieGong,

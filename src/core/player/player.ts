@@ -85,6 +85,12 @@ export type Seal = {
   binding: SealOnPlayer | SealOnCard;
 };
 
+export const enum SealMethod {
+  Clear,
+  Add,
+  Remove,
+}
+
 export abstract class Player implements PlayerInfo {
   private hp: number = 0;
   private maxHp: number = 0;

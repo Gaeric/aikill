@@ -25,6 +25,7 @@ import { YiJiang2014Package } from 'src/core/characters/yijiang2014';
 import { YiJiang2015Package } from 'src/core/characters/yijiang2015';
 import { Yuan6Package } from 'src/core/characters/yuan6';
 import { Yuan7Package } from 'src/core/characters/yuan7';
+import { YuePackage } from 'src/core/characters/yue';
 import { GameCharacterExtensions } from 'src/core/game/game_props';
 
 export type CharacterPackages = {
@@ -72,6 +73,7 @@ export class CharacterLoader {
     [GameCharacterExtensions.Benevolence]: BenevolencePackage,
     [GameCharacterExtensions.Strategem]: StrategemPackage,
     [GameCharacterExtensions.Pve]: PvePackage,
+    [GameCharacterExtensions.Yue]: YuePackage,
   };
 
   public static getInstance() {

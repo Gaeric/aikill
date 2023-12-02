@@ -29,6 +29,7 @@ import * as yiJiang4CharactersDictionary from './yijiang2014';
 import * as yiJiang5CharactersDictionary from './yijiang2015';
 import * as yuan6CharacterDictionary from './yuan6';
 import * as yuan7CharacterDictionary from './yuan7';
+import * as yueCharacterDictionary from './yue';
 
 export {
   cardsDictionary,
@@ -62,4 +63,5 @@ export {
   benevolenceCharactersDictionary,
   strategemCharacterDictionary,
   pveCharactersDictionary,
+  yueCharacterDictionary,
 };

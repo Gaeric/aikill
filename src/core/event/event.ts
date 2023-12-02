@@ -105,6 +105,7 @@ export const enum GameEventIdentifiers {
   SetCardTagEvent,
   RemoveCardTagEvent,
   ClearCardTagsEvent,
+  ChangeSealsEvent,
 
   ArmorChangeEvent,
 }
@@ -215,6 +216,8 @@ export const clientActiveListenerEvents = () => [
   GameEventIdentifiers.SetCardTagEvent,
   GameEventIdentifiers.RemoveCardTagEvent,
   GameEventIdentifiers.ClearCardTagsEvent,
+
+  GameEventIdentifiers.ChangeSealsEvent,
 
   GameEventIdentifiers.ArmorChangeEvent,
 ];

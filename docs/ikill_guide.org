@@ -1,0 +1,132 @@
+#+title: iKill扩展指南
+#+startup: content
+#+author: Gaeric
+#+HTML_HEAD: <link href="./worg.css" rel="stylesheet" type="text/css">
+#+HTML_HEAD: <link href="/static/css/worg.css" rel="stylesheet" type="text/css">
+#+OPTIONS: ^:{}
+* 简介
+* 安装
+* 核心概念
+** 架构约束
+** 编程建议
+   1. IO通路应当尽可能复用，做一件事情的Event应该有且仅有一个
+   2. 游戏中修改数据的操作，应当尽量使用绑定在room上的方法，其它类型的操作应当只用于读取数据
+   3. switch-case语法写上default以便于发现问题
+** 技能类型
+*** 通用概念
+**** Player
+***** seal
+      seal用于描述一些，需要为玩家标记，无需公开至房间的数据，一般用来标记卡牌或是武将。
+*** 触发技
+    触发技有四个方法是必须实现的，其最小模板如下：
+    #+begin_src typescript-ts
+      export class Demo extends TriggerSkill {
+        public isTriggerable(event: ServerEventFinder<GameEventIdentifiers.GameBeginEvent>, stage?: AllStage): boolean {
+          return false;
+        }
+
+        public canUse(room: Room, owner: Player, content: ServerEventFinder<GameEventIdentifiers.GameBeginEvent>): boolean {
+          return true;
+        }
+
+        public async onTrigger(): Promise<boolean> {
+          return true;
+        }
+
+        public async onEffect(room: Room, event: ServerEventFinder<GameEventIdentifiers.SkillEffectEvent>): Promise<boolean> {
+          return true;
+        }
+      }
+    #+end_src
+*** 装饰器
+    #+begin_src typescript-ts
+      @CompulsorySkill({ name: 'shuangjia', description: 'shuangjia_description' })
+    #+end_src
+* 武将示例
+** 乐蔡文姬
+   有小伙伴希望在dsgs中添加乐蔡文姬这个角色，其描述如下：
+
+   乐蔡文姬：群势力，3体力上限，3体力值，其技能如下：
+   - 霜笳 :: 锁定技，游戏开始时，你的初始手牌增加“胡笳”标记且不计入手牌上限，你每拥有一张“胡笳”，其它角色与你计算距离+1（最多+5）。
+   - 悲愤 :: 锁定技，当你失去胡笳后，你获得与手中“胡笳”花色均不同的牌各一张，你手中“胡笳”少于其他牌时，你使用牌无距离和次数限制。
+*** 分析
+    阅读霜笳的描述，我们可以认为这个技能由如下几个部分构成：
+    1. 游戏开始时，你的初始手牌增加胡笳标记：这是一个触发技，触发时机为游戏开始时，效果是给此时的手牌增加一个标记，标记名为胡笳。
+    2. 初始手牌增加胡笳标记且不计入手牌上限：这是一个规则类技能，改变的是弃牌时的手牌上限规则。通过后文的描述，我们发现没有其它方式增加胡笳标记，于是这一段可以简化为：拥有胡笳标记的卡牌不记入手牌上限。
+    3. 你每拥有一张胡笳，其它角色与你计算距离+1，最多加5：这也是一个规则类技能，改变的是其它角色与你的距离。
+
+    而悲愤，拆解如下：
+    1. 当你失去胡笳后，你获得与手中胡笳花色均不同的牌各一张：显然这也是一个触发技，触发时间是当你的卡牌移动时，效果是你获得一些与手中胡笳花色均不同的卡牌。这里要特别注意，有一些隐藏条件：一般来说从手牌中使用的装备牌并不算失去，而是进入装备栏；胡笳是乐蔡文姬专有的卡牌标记，其它人并不能使用，所以失去带有胡笳标记的卡牌时，卡牌上的胡笳标记应当被删除。
+    2. 你手中的胡笳牌小于其它牌时，你使用牌无距离和次数限制：这里应该拆解成两个部分：
+       - 当你的胡笳牌小于其它牌时，你使用牌无距离限制。
+       - 当你的胡笳牌小于其它牌时，你使用牌无次数限制。
+*** 实现
+**** 霜笳
+     首先实现技能的第一个部分，技能模板见于 [[*触发技][触发技]]；同时因为是一个锁定技，这个技能的所有分支都应用锁定技的[[*装饰器][装饰器]]：
+     #+begin_src typescript-ts
+       // 装饰器，表示这是一个锁定技，技能名为shuangjia，描述为shuangjia_description
+       @CompulsorySkill({ name: 'shuangjia', description: 'shuangjia_description' })
+       // 因为是一个触发技，所以从TriggerSkill派生
+       export class ShuangJia extends TriggerSkill {
+         // isTriggerable判断游戏的当前时机是否应当触发该技能；在本例中，只在游戏开始时触发
+         public isTriggerable(event: ServerEventFinder<GameEventIdentifiers.GameBeginEvent>, stage?: AllStage): boolean {
+           return stage === GameBeginStage.AfterGameBegan;
+         }
+
+         // canUse判断玩家是否满足使用该技能的条件；在本例中，可以无条件执行
+         public canUse(room: Room, owner: Player, content: ServerEventFinder<GameEventIdentifiers.GameBeginEvent>): boolean {
+           return true;
+         }
+
+         // onTrigger描述触发时的关联过程，大多数时候没有什么做用；本例中直接返回true
+         public async onTrigger(): Promise<boolean> {
+           return true;
+         }
+
+         // onEffect描述该技能的效果，在本例中，为所有手牌添加shuangjia标记
+         public async onEffect(room: Room, event: ServerEventFinder<GameEventIdentifiers.SkillEffectEvent>): Promise<boolean> {
+           const owner = room.getPlayerById(event.fromId);
+           const cards = owner.getCardIds();
+           room.setCardTag(owner.Id, this.Name, cards);
+           return true;
+         }
+       }
+     #+end_src
+**** 悲愤
+* UI组件拆解
+  #+begin_src typescript-ts
+    export type ClientRoomInfo = {
+      roomId: number;
+      // -- 
+      socket: ClientSocket;
+      timestamp: number;
+      playerName: string;
+      playerId: PlayerId;
+    };
+  #+end_src
+
+  #+begin_src typescript-ts
+  #+end_src
+
+  #+begin_src typescript-ts
+  #+end_src
+
+  #+begin_src typescript-ts
+  #+end_src
+
+  #+begin_src typescript-ts
+  #+end_src
+
+  #+begin_src typescript-ts
+  #+end_src
+
+  #+begin_src typescript-ts
+  #+end_src
+
+  #+begin_src typescript-ts
+  #+end_src
+
+  #+begin_src typescript-ts
+  #+end_src
+
+** 

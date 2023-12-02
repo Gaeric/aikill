@@ -1,18 +1,17 @@
 import { CardId } from 'src/core/cards/libs/card_props';
-import { GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
+import { GameEventIdentifiers, ServerEventFinder, WorkPlace } from 'src/core/event/event';
 import { AllStage, CardMoveStage, StagePriority } from 'src/core/game/stage_processor';
-import { SealOnCard, Player, Seal, SealType } from 'src/core/player/player';
+import { SealOnCard, Player, Seal, SealType, SealMethod } from 'src/core/player/player';
 import { Room } from 'src/core/room/room';
 import { RulesBreakerSkill, TriggerSkill } from 'src/core/skills/skill';
-import { AfterGameBeganStage } from 'src/core/skills/skill_utils';
+import { AfterGameBeganStage, ExcludeHandCard } from 'src/core/skills/skill_utils';
 import { CompulsorySkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
 
-// - 霜笳 :: 锁定技，游戏开始时，你的初始手牌增加“胡笳”标记且不计入手牌上限，你每拥有一张“胡笳”，其它角色与你计算距离+1（最多+5）。
 @CompulsorySkill({ name: 'shuangjia', description: 'shuangjia_description' })
 export class ShuangJia extends TriggerSkill {
   public isTriggerable = AfterGameBeganStage;
 
-  public canUse(room: Room, owner: Player, content: ServerEventFinder<GameEventIdentifiers.GameBeginEvent>): boolean {
+  public canUse(): boolean {
     return true;
   }
 
@@ -27,9 +26,7 @@ export class ShuangJia extends TriggerSkill {
       binding: { kind: SealType.CardSeal, cardId },
     }));
 
-    room.addSeals(event.fromId, seals);
-    console.log('seals:');
-    console.log(room.getPlayerById(event.fromId).getSeals());
+    room.changeSeals(event.fromId, seals, SealMethod.Add);
 
     return true;
   }
@@ -38,9 +35,8 @@ export class ShuangJia extends TriggerSkill {
 @ShadowSkill
 @CompulsorySkill({ name: ShuangJia.Name, description: ShuangJia.Description })
 export class ShuangJiaDistance extends RulesBreakerSkill {
-  public breakDefenseDistance(room: Room, owner: Player): number {
+  public breakDefenseDistance(_room: Room, owner: Player): number {
     const shuangJiaSeals = owner.getSeals().filter(seal => seal.name == ShuangJia.Name);
-    console.log(`shuangjua card length: ${shuangJiaSeals.length}`);
     return Math.min(shuangJiaSeals.length, 5);
   }
 }
@@ -48,7 +44,11 @@ export class ShuangJiaDistance extends RulesBreakerSkill {
 @ShadowSkill
 @CompulsorySkill({ name: ShuangJiaDistance.Name, description: ShuangJiaDistance.Description })
 export class ShuangJiaRemoveSeal extends TriggerSkill {
-  isTriggerable(event: ServerEventFinder<GameEventIdentifiers.MoveCardEvent>, stage?: AllStage) {
+  public isAutoTrigger(): boolean {
+    return true;
+  }
+
+  isTriggerable(_event: ServerEventFinder<GameEventIdentifiers.MoveCardEvent>, stage?: AllStage) {
     return stage === CardMoveStage.AfterCardMoved;
   }
 
@@ -76,7 +76,7 @@ export class ShuangJiaRemoveSeal extends TriggerSkill {
     return shuangJiaSeals;
   }
 
-  canUse(room: Room, owner: Player, event: ServerEventFinder<GameEventIdentifiers.MoveCardEvent>) {
+  canUse(_room: Room, owner: Player, event: ServerEventFinder<GameEventIdentifiers.MoveCardEvent>) {
     return this.filterShuangJiaSeals(owner, event).length > 0;
   }
 
@@ -85,11 +85,27 @@ export class ShuangJiaRemoveSeal extends TriggerSkill {
   }
 
   async onEffect(room: Room, event: ServerEventFinder<GameEventIdentifiers.SkillEffectEvent>) {
-    console.log('shuangjia remove seals');
     const moveCardEvent = event.triggeredOnEvent as ServerEventFinder<GameEventIdentifiers.MoveCardEvent>;
     const owner = room.getPlayerById(event.fromId);
     const shuangJiaSeals = this.filterShuangJiaSeals(owner, moveCardEvent);
-    room.removeSeals(event.fromId, shuangJiaSeals);
+    room.changeSeals(event.fromId, shuangJiaSeals, SealMethod.Remove);
     return true;
+  }
+}
+
+@ShadowSkill
+@CompulsorySkill({ name: ShuangJiaRemoveSeal.Name, description: ShuangJiaRemoveSeal.Description })
+export class ShuangJiaHoldCard extends ExcludeHandCard {
+  protected calcHoldCardIds(
+    room: Room<WorkPlace>,
+    event: ServerEventFinder<GameEventIdentifiers.SkillEffectEvent>,
+  ): CardId[] {
+    const owner = room.getPlayerById(event.fromId);
+    let shunagJiaCardIds = owner
+      .getSeals()
+      .filter(seal => seal.name == ShuangJia.Name && seal.binding.kind === SealType.CardSeal)
+      .map(seal => (seal.binding as SealOnCard).cardId);
+
+    return shunagJiaCardIds;
   }
 }

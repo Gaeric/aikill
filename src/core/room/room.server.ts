@@ -35,7 +35,7 @@ import {
   PlayerPhase,
 } from 'src/core/game/stage_processor';
 import { ServerSocket } from 'src/core/network/socket.server';
-import { Player } from 'src/core/player/player';
+import { Player, SealMethod } from 'src/core/player/player';
 import { ServerPlayer, SmartPlayer } from 'src/core/player/player.server';
 import { PlayerCardsArea, PlayerId, PlayerInfo } from 'src/core/player/player_props';
 import { Algorithm } from 'src/core/shares/libs/algorithm';
@@ -2226,6 +2226,15 @@ export class ServerRoom extends Room<WorkPlace.Server> {
   }
   public getCardTag(player: PlayerId, cardTag: string): CardId[] | undefined {
     return this.getPlayerById(player).getCardTag(cardTag);
+  }
+
+  public changeSeals(player: PlayerId, seals: Seal[], method: SealMethod) {
+    this.broadcast(GameEventIdentifiers.ChangeSealsEvent, {
+      toId: player,
+      seals,
+      method,
+    });
+    return super.changeSeals(player, seals, method);
   }
 
   public findCardsByMatcherFrom(cardMatcher: CardMatcher, fromDrawStack: boolean = true): CardId[] {
