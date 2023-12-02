@@ -9,8 +9,8 @@ export const markDictionary: Word[] = [
 ];
 
 export const generalDictionary: Word[] = [
-  { source: 'cheat', target: '作弊' },
-  { source: 'cheat_description', target: '可以獲得任意牌（僅用於測試）' },
+  { source: 'cheat_card', target: '作弊' },
+  { source: 'cheat_card_description', target: '可以獲得任意牌（僅用於測試）' },
   { source: 'standard', target: '標準版' },
   { source: 'legion_fight', target: '軍爭篇' },
   { source: 'wind', target: '風' },

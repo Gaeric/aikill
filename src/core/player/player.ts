@@ -65,17 +65,37 @@ export type HuaShenInfo = {
   characterId: CharacterId;
 };
 
+export const enum SealType {
+  PlayerSeal,
+  CardSeal,
+}
+
+export type SealOnPlayer = {
+  kind: SealType.PlayerSeal;
+  playerId: PlayerId;
+};
+
+export type SealOnCard = {
+  kind: SealType.CardSeal;
+  cardId: CardId;
+};
+
+export type Seal = {
+  name: string;
+  binding: SealOnPlayer | SealOnCard;
+};
+
 export abstract class Player implements PlayerInfo {
-  private hp: number;
-  private maxHp: number;
-  private armor: number;
+  private hp: number = 0;
+  private maxHp: number = 0;
+  private armor: number = 0;
   private dying: boolean = false;
   private dead: boolean;
   private chainLocked: boolean = false;
   private turnedOver: boolean = false;
   private playerSkills: Skill[] = [];
   private hookedSkills: Skill[] = [];
-  private gender: CharacterGender;
+  private gender: CharacterGender = CharacterGender.Neutral;
   private equipSectionsStatus: {
     [K in CharacterEquipSections]: 'enabled' | 'disabled';
   } = {
@@ -95,13 +115,11 @@ export abstract class Player implements PlayerInfo {
   protected abstract playerPosition: number;
   protected ready: boolean = false;
   protected playerRole: PlayerRole = PlayerRole.Unknown;
-  protected nationality: CharacterNationality;
+  protected nationality: CharacterNationality = CharacterNationality.God;
   protected huashenInfo: HuaShenInfo | undefined;
 
   private cardUseHistory: CardId[] = [];
-  private skillUsedHistory: {
-    [K: string]: number;
-  }[] = [];
+  private skillUsedHistory: { [K: string]: number } = {};
   private switchSkillState: string[] = [];
   private playerCharacter: Character | undefined;
   protected playerCards: PlayerCards;
@@ -119,6 +137,7 @@ export abstract class Player implements PlayerInfo {
   private cardTags: {
     [cardTag: string]: CardId[];
   } = {};
+  private seals: Seal[] = [];
 
   constructor(
     playerCards?: PlayerCards & {
@@ -188,6 +207,36 @@ export abstract class Player implements PlayerInfo {
     this.playerCards = playerCards;
     this.playerOutsideCards = playerOutsideCards;
     this.playerOutsideCharactersAreaNames = playerOutsideCharactersAreaNames;
+  }
+
+  public getSeals() {
+    return this.seals;
+  }
+
+  public addSeals(seals: Seal[]) {
+    this.seals = this.seals.concat(seals);
+  }
+
+  public removeSeals(seals: Seal[]) {
+    const newSeals = this.seals.filter(
+      p_seal =>
+        seals.find(
+          seal =>
+            seal.name === p_seal.name &&
+            ((seal.binding.kind === SealType.PlayerSeal &&
+              p_seal.binding.kind == SealType.PlayerSeal &&
+              seal.binding.playerId == p_seal.binding.playerId) ||
+              (seal.binding.kind === SealType.CardSeal &&
+                p_seal.binding.kind === SealType.CardSeal &&
+                seal.binding.cardId === p_seal.binding.cardId)),
+        ) === undefined,
+    );
+
+    this.seals = newSeals;
+  }
+
+  public clearSeals() {
+    this.seals = [];
   }
 
   public clearFlags() {
@@ -290,8 +339,8 @@ export abstract class Player implements PlayerInfo {
         return card.is(CardType.Equip)
           ? true
           : onResponse
-          ? onResponse.match(card)
-          : card.Skill.canUse(room, this, cardId);
+            ? onResponse.match(card)
+            : card.Skill.canUse(room, this, cardId);
       }
     } else {
       if (canUseToSomeone) {

@@ -9,8 +9,8 @@ import { Room } from 'src/core/room/room';
 import { Functional } from 'src/core/shares/libs/functional';
 import { ActiveSkill, CommonSkill } from 'src/core/skills/skill';
 
-@CommonSkill({ name: 'cheat', description: 'cheat_description' })
-export class Cheat extends ActiveSkill {
+@CommonSkill({ name: 'cheat_card', description: 'cheat_card_description' })
+export class CheatCard extends ActiveSkill {
   public canUse(room: Room, owner: Player) {
     return true;
   }
@@ -55,10 +55,10 @@ export class Cheat extends ActiveSkill {
       selectedOption === Functional.getCardTypeRawText(CardType.Basic)
         ? CardType.Basic
         : selectedOption === Functional.getCardTypeRawText(CardType.Equip)
-        ? CardType.Equip
-        : selectedOption === Functional.getCardTypeRawText(CardType.Trick)
-        ? CardType.Trick
-        : undefined;
+          ? CardType.Equip
+          : selectedOption === Functional.getCardTypeRawText(CardType.Trick)
+            ? CardType.Trick
+            : undefined;
 
     askForChoose.options = Sanguosha.getCardsByMatcher(
       new CardMatcher({
@@ -109,8 +109,8 @@ export class Cheat extends ActiveSkill {
             fromArea: owner
               ? owner.cardFrom(cards[0].Id)
               : room.isCardInDropStack(cards[0].Id)
-              ? CardMoveArea.DropStack
-              : CardMoveArea.DrawStack,
+                ? CardMoveArea.DropStack
+                : CardMoveArea.DrawStack,
           },
         ],
         fromId: fromOthers,

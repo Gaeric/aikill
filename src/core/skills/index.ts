@@ -47,7 +47,7 @@ export { JiJiang, JiJiangShadow } from './characters/standard/jijiang';
 export { JiuYuan } from './characters/standard/jiuyuan';
 export { JiZhi } from './characters/standard/jizhi';
 export { QiCai, QiCaiBlock } from './characters/standard/qicai';
-export { Rende, RenDeShadow } from './characters/standard/rende';
+export { RendeGiveCards, RendeUseCard } from './characters/standard/rende';
 export { ZhiHeng } from './characters/standard/zhiheng';
 export { GuanXing } from './characters/standard/guanxing';
 export { KongCheng } from './characters/standard/kongcheng';
@@ -723,6 +723,9 @@ export { YaoHu, YaoHuShadow, YaoHuDebuff } from './characters/benevolence/yaohu'
 export { HuaiBi } from './characters/benevolence/huaibi';
 export { GuYing } from './characters/benevolence/guying';
 
+export { BeiFen } from './characters/yue/beifen';
+export { ShuangJia, ShuangJiaDistance, ShuangJiaRemoveSeal } from './characters/yue/shuangjia';
+
 export {
   MouLieGong,
   MouLieGongShadow,
@@ -740,7 +743,8 @@ export { DuoJing, DuoJingShadow, DuoJingRemover } from './characters/strategem/d
 export { XiaYuan } from './characters/strategem/xiayuan';
 export { MouJieYue } from './characters/strategem/mou_jieyue';
 
-export { Cheat } from './system/cheat';
+export { CheatCard } from './system/cheat_card';
+export { CheatSkill } from './system/cheat_skill';
 export { BaHu, BaHuShadow } from './game_mode/1v2/bahu';
 export { FeiYang } from './game_mode/1v2/feiyang';
 

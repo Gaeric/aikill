@@ -19,8 +19,6 @@ export const enum GameCharacterExtensions {
   Mountain = 'mountain',
   Shadow = 'shadow',
   Thunder = 'thunder',
-  // SP,
-  // NewStandard,
   God = 'god',
   YiJiang2011 = 'yijiang2011',
   YiJiang2012 = 'yijiang2012',
@@ -40,6 +38,7 @@ export const enum GameCharacterExtensions {
   Benevolence = 'benevolence',
   Strategem = 'strategem',
   Pve = 'pve',
+  Yue = 'yue',
 }
 
 export const enum GameCardExtensions {
