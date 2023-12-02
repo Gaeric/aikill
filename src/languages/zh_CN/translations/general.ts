@@ -1,4 +1,4 @@
-import { Word } from 'languages';
+import { Word } from 'src/languages';
 
 export const markDictionary: Word[] = [
   { source: 'nightmare', target: '梦魇' },

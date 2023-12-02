@@ -1,4 +1,4 @@
-import { Word } from 'languages';
+import { Word } from 'src/languages';
 
 export const characterDictionary: Word[] = [
   { source: 'yijiang2011', target: '将1' },

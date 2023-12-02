@@ -1,4 +1,4 @@
-import { Word } from 'languages';
+import { Word } from 'src/languages';
 
 export const dictionary: Word[] = [
   { source: 'dragon-team', target: '龙队' },
