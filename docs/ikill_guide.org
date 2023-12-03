@@ -12,12 +12,13 @@
    1. IO通路应当尽可能复用，做一件事情的Event应该有且仅有一个
    2. 游戏中修改数据的操作，应当尽量使用绑定在room上的方法，其它类型的操作应当只用于读取数据
    3. switch-case语法写上default以便于发现问题
+   4. 一个技能结构，尽量只实现一个效果，保证其足够灵活可复用
 ** 技能类型
 *** 通用概念
 **** Player
 ***** seal
       seal用于描述一些，需要为玩家标记，无需公开至房间的数据，一般用来标记卡牌或是武将。
-*** 触发技
+*** 触发技能
     触发技有四个方法是必须实现的，其最小模板如下：
     #+begin_src typescript-ts
       export class Demo extends TriggerSkill {
@@ -38,6 +39,74 @@
         }
       }
     #+end_src
+*** 规则技能
+    #+begin_src typescript-ts
+      export abstract class RulesBreakerSkill extends Skill {
+        public canUse() {
+          return true;
+        }
+
+        public isRefreshAt() {
+          return false;
+        }
+
+        public async onEffect() {
+          return true;
+        }
+        public async onUse() {
+          return true;
+        }
+
+        public breakDistanceTo(room: Room, owner: Player, target: Player): number {
+          return 0;
+        }
+
+        public breakCardUsableTimesTo(cardId: CardId | CardMatcher, room: Room, owner: Player, target: Player): number {
+          return 0;
+        }
+        public breakDrawCardNumber(room: Room, owner: Player): number {
+          return 0;
+        }
+        public breakCardUsableTimes(cardId: CardId | CardMatcher, room: Room, owner: Player): number {
+          return 0;
+        }
+        public breakCardUsableDistance(cardId: CardId | CardMatcher | undefined, room: Room, owner: Player): number {
+          return 0;
+        }
+        public breakCardUsableDistanceTo(
+          cardId: CardId | CardMatcher | undefined,
+          room: Room,
+          owner: Player,
+          target: Player,
+        ): number {
+          return 0;
+        }
+        public breakCardUsableTargets(cardId: CardId | CardMatcher, room: Room, owner: Player): number {
+          return 0;
+        }
+        public breakAttackDistance(cardId: CardId | CardMatcher | undefined, room: Room, owner: Player): number {
+          return 0;
+        }
+        public breakOffenseDistance(room: Room, owner: Player): number {
+          return 0;
+        }
+        public breakDefenseDistance(room: Room, owner: Player): number {
+          return 0;
+        }
+        public breakBaseCardHoldNumber(room: Room, owner: Player): number {
+          return -1;
+        }
+        public breakAdditionalCardHoldNumber(room: Room, owner: Player): number {
+          return 0;
+        }
+        public breakAdditionalAttackRange(room: Room, owner: Player): number {
+          return 0;
+        }
+        public breakFinalAttackRange(room: Room, owner: Player): number {
+          return -1;
+        }
+      }
+    #+end_src
 *** 装饰器
     #+begin_src typescript-ts
       @CompulsorySkill({ name: 'shuangjia', description: 'shuangjia_description' })
@@ -52,8 +121,8 @@
 *** 分析
     阅读霜笳的描述，我们可以认为这个技能由如下几个部分构成：
     1. 游戏开始时，你的初始手牌增加胡笳标记：这是一个触发技，触发时机为游戏开始时，效果是给此时的手牌增加一个标记，标记名为胡笳。
-    2. 初始手牌增加胡笳标记且不计入手牌上限：这是一个规则类技能，改变的是弃牌时的手牌上限规则。通过后文的描述，我们发现没有其它方式增加胡笳标记，于是这一段可以简化为：拥有胡笳标记的卡牌不记入手牌上限。
-    3. 你每拥有一张胡笳，其它角色与你计算距离+1，最多加5：这也是一个规则类技能，改变的是其它角色与你的距离。
+    2. 你每拥有一张胡笳，其它角色与你计算距离+1，最多加5：这是一个规则类技能，改变的是其它角色与你的距离。
+    3. 初始手牌增加胡笳标记且不计入手牌上限：这是一个触发技，触发时机为弃牌阶段弃牌时。通过后文的描述，我们发现没有其它方式增加胡笳标记，于是这一段可以简化为：拥有胡笳标记的卡牌不记入手牌上限。
 
     而悲愤，拆解如下：
     1. 当你失去胡笳后，你获得与手中胡笳花色均不同的牌各一张：显然这也是一个触发技，触发时间是当你的卡牌移动时，效果是你获得一些与手中胡笳花色均不同的卡牌。这里要特别注意，有一些隐藏条件：一般来说从手牌中使用的装备牌并不算失去，而是进入装备栏；胡笳是乐蔡文姬专有的卡牌标记，其它人并不能使用，所以失去带有胡笳标记的卡牌时，卡牌上的胡笳标记应当被删除。
@@ -61,34 +130,176 @@
        - 当你的胡笳牌小于其它牌时，你使用牌无距离限制。
        - 当你的胡笳牌小于其它牌时，你使用牌无次数限制。
 *** 实现
-**** 霜笳
-     首先实现技能的第一个部分，技能模板见于 [[*触发技][触发技]]；同时因为是一个锁定技，这个技能的所有分支都应用锁定技的[[*装饰器][装饰器]]：
-     #+begin_src typescript-ts
-       // 装饰器，表示这是一个锁定技，技能名为shuangjia，描述为shuangjia_description
-       @CompulsorySkill({ name: 'shuangjia', description: 'shuangjia_description' })
-       // 因为是一个触发技，所以从TriggerSkill派生
-       export class ShuangJia extends TriggerSkill {
-         // isTriggerable判断游戏的当前时机是否应当触发该技能；在本例中，只在游戏开始时触发
-         public isTriggerable(event: ServerEventFinder<GameEventIdentifiers.GameBeginEvent>, stage?: AllStage): boolean {
-           return stage === GameBeginStage.AfterGameBegan;
-         }
+**** 霜笳-1
+     首先实现技能的第一个部分，游戏开始时，你的初始手牌增加胡笳标记。
 
-         // canUse判断玩家是否满足使用该技能的条件；在本例中，可以无条件执行
+     #+begin_src typescript-ts
+       @CompulsorySkill({ name: 'shuangjia', description: 'shuangjia_description' })
+     #+end_src
+     使用 [[*装饰器][装饰器]] 修饰，指明其为锁定技，技能名为shuangjia，描述为shuangjia_description，这两部分在UI上会被翻译为对应的语言。PS：装饰器：见于《typescript教程》
+
+     #+begin_src typescript-ts
+       export class ShuangJia extends TriggerSkill
+     #+end_src
+     因为是一个触发技，所以从TriggerSkill派生，技能模板见于 [[*触发技][触发技]]
+
+     #+begin_src typescript-ts
+       public isTriggerable(event: ServerEventFinder<GameEventIdentifiers.GameBeginEvent>, stage?: AllStage): boolean {
+         return stage === GameBeginStage.AfterGameBegan;
+       }
+     #+end_src
+     isTriggerable判断游戏的当前时机是否应当触发该技能；在本例中，只在游戏开始时触发。
+
+     #+begin_src typescript-ts
+       public isTriggerable = AfterGameBeganStage;
+     #+end_src
+     由于Triggerable描述的时机有很强的通用性，为了增强可读性，减少冗余，定义了一个触发时机AfterGameGeganStage，并赋值给isTriggerable函数，其效力等同。
+
+     #+begin_src typescript-ts
          public canUse(room: Room, owner: Player, content: ServerEventFinder<GameEventIdentifiers.GameBeginEvent>): boolean {
            return true;
          }
 
-         // onTrigger描述触发时的关联过程，大多数时候没有什么做用；本例中直接返回true
+     #+end_src
+     canUse判断玩家是否满足使用该技能的条件；在本例中，可以无条件执行
+
+     #+begin_src typescript-ts
+         public async onTrigger(): Promise<boolean> {
+           return true;
+         }
+     #+end_src
+     onTrigger描述触发时的关联过程，大多数时候没有什么做用；本例中直接返回true
+
+     #+begin_src typescript-ts
+       public async onEffect(room: Room, event: ServerEventFinder<GameEventIdentifiers.SkillEffectEvent>): Promise<boolean> {
+           const cardIds = room.getPlayerById(event.fromId).getCardIds();
+       const seals: Seal[] = cardIds.map(cardId => ({
+         name: this.GeneralName,
+         binding: { kind: SealType.CardSeal, cardId },
+       }));
+
+       room.changeSeals(event.fromId, seals, SealMethod.Add);
+
+       return true;
+       }
+     #+end_src
+     onEffect描述该技能的效果，在本例中，触发技能时，为所有手牌添加一个以'shuangjia'命名的seal。
+
+     下面是完整内容：
+     #+begin_src typescript-ts
+       @CompulsorySkill({ name: 'shuangjia', description: 'shuangjia_description' })
+       export class ShuangJia extends TriggerSkill {
+         public isTriggerable = AfterGameBeganStage;
+
+         public canUse(): boolean {
+           return true;
+         }
+
          public async onTrigger(): Promise<boolean> {
            return true;
          }
 
-         // onEffect描述该技能的效果，在本例中，为所有手牌添加shuangjia标记
          public async onEffect(room: Room, event: ServerEventFinder<GameEventIdentifiers.SkillEffectEvent>): Promise<boolean> {
-           const owner = room.getPlayerById(event.fromId);
-           const cards = owner.getCardIds();
-           room.setCardTag(owner.Id, this.Name, cards);
+           const cardIds = room.getPlayerById(event.fromId).getCardIds();
+           const seals: Seal[] = cardIds.map(cardId => ({
+             name: this.GeneralName,
+             binding: { kind: SealType.CardSeal, cardId },
+           }));
+
+           room.changeSeals(event.fromId, seals, SealMethod.Add);
+
            return true;
+         }
+       }
+     #+end_src
+**** 霜笳-1.1
+     在实现其它部分前，我们需要先为霜笳增加另一个技能，用于管理我们添加的seal标记
+     #+begin_src typescript-ts
+       @ShadowSkill
+       @CompulsorySkill({ name: ShuangJia.Name, description: ShuangJia.Description })
+       export class ShuangJiaRemoveSeal extends TriggerSkill {
+         public isAutoTrigger(): boolean {
+           return true;
+         }
+
+         isTriggerable(_event: ServerEventFinder<GameEventIdentifiers.MoveCardEvent>, stage?: AllStage) {
+           return stage === CardMoveStage.AfterCardMoved;
+         }
+
+         getPriority() {
+           return StagePriority.High;
+         }
+
+         filterShuangJiaSeals(owner: Player, event: ServerEventFinder<GameEventIdentifiers.MoveCardEvent>) {
+           const allMoveCardIds = event.infos.reduce((cardIds: CardId[], info) => {
+             const ids = info.movingCards.map(card => card.card);
+             cardIds = cardIds.concat(ids);
+             return cardIds;
+           }, []);
+
+           // info => info.movingCards.map(card => card.card);
+           const shuangJiaSeals = owner
+             .getSeals()
+             .filter(
+               seal =>
+                 seal.name == ShuangJia.Name &&
+                 seal.binding.kind === SealType.CardSeal &&
+                 allMoveCardIds.find(cardId => (seal.binding as SealOnCard).cardId === cardId),
+             );
+
+           return shuangJiaSeals;
+         }
+
+         canUse(_room: Room, owner: Player, event: ServerEventFinder<GameEventIdentifiers.MoveCardEvent>) {
+           return this.filterShuangJiaSeals(owner, event).length > 0;
+         }
+
+         async onTrigger() {
+           return true;
+         }
+
+         async onEffect(room: Room, event: ServerEventFinder<GameEventIdentifiers.SkillEffectEvent>) {
+           const moveCardEvent = event.triggeredOnEvent as ServerEventFinder<GameEventIdentifiers.MoveCardEvent>;
+           const owner = room.getPlayerById(event.fromId);
+           const shuangJiaSeals = this.filterShuangJiaSeals(owner, moveCardEvent);
+           room.changeSeals(event.fromId, shuangJiaSeals, SealMethod.Remove);
+           return true;
+         }
+       }
+     #+end_src
+**** 霜笳-2
+     实现技能的第二部分，你每拥有一张胡笳，其它角色与你计算距离+1，最多加5
+     #+begin_src typescript-ts
+       @ShadowSkill
+       @CompulsorySkill({ name: ShuangJiaRemoveSeal.Name, description: ShuangJiaRemoveSeal.Description })
+       export class ShuangJiaDistance extends RulesBreakerSkill {
+         public breakDefenseDistance(_room: Room, owner: Player): number {
+           const shuangJiaSeals = owner.getSeals().filter(seal => seal.name == ShuangJia.Name);
+           return Math.min(shuangJiaSeals.length, 5);
+         }
+       }
+     #+end_src
+     这部分技能很简单，完整内容如上。
+
+     - ShadowSkill :: 这个装饰器用于标识着该技能为隐藏技能，它改变成技能的名称，为其头部增加了"#"字符串，这种技能在UI界面不会显示。
+     - CompulsorySkill :: 注意其中的name和description部分从其它技能中继承，在需要使用技能名时，推荐这种获取属性的写法，而不是硬编码字符串。
+     - RulesBreakerSkill :: 这是一类规则修改技能，请见于 [[*规则技能][规则技能]]
+**** 霜笳.3
+     #+begin_src typescript-ts
+       @ShadowSkill
+       @CompulsorySkill({ name: ShuangJiaDistance.Name, description: ShuangJiaDistance.Description })
+       export class ShuangJiaHoldCard extends ExcludeHandCard {
+         protected calcHoldCardIds(
+           room: Room<WorkPlace>,
+           event: ServerEventFinder<GameEventIdentifiers.SkillEffectEvent>,
+         ): CardId[] {
+           const owner = room.getPlayerById(event.fromId);
+           let shunagJiaCardIds = owner
+             .getSeals()
+             .filter(seal => seal.name == ShuangJia.Name && seal.binding.kind === SealType.CardSeal)
+             .map(seal => (seal.binding as SealOnCard).cardId);
+
+           return shunagJiaCardIds;
          }
        }
      #+end_src
@@ -104,29 +315,3 @@
       playerId: PlayerId;
     };
   #+end_src
-
-  #+begin_src typescript-ts
-  #+end_src
-
-  #+begin_src typescript-ts
-  #+end_src
-
-  #+begin_src typescript-ts
-  #+end_src
-
-  #+begin_src typescript-ts
-  #+end_src
-
-  #+begin_src typescript-ts
-  #+end_src
-
-  #+begin_src typescript-ts
-  #+end_src
-
-  #+begin_src typescript-ts
-  #+end_src
-
-  #+begin_src typescript-ts
-  #+end_src
-
-** 

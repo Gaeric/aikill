@@ -34,15 +34,6 @@ export class ShuangJia extends TriggerSkill {
 
 @ShadowSkill
 @CompulsorySkill({ name: ShuangJia.Name, description: ShuangJia.Description })
-export class ShuangJiaDistance extends RulesBreakerSkill {
-  public breakDefenseDistance(_room: Room, owner: Player): number {
-    const shuangJiaSeals = owner.getSeals().filter(seal => seal.name == ShuangJia.Name);
-    return Math.min(shuangJiaSeals.length, 5);
-  }
-}
-
-@ShadowSkill
-@CompulsorySkill({ name: ShuangJiaDistance.Name, description: ShuangJiaDistance.Description })
 export class ShuangJiaRemoveSeal extends TriggerSkill {
   public isAutoTrigger(): boolean {
     return true;
@@ -95,6 +86,15 @@ export class ShuangJiaRemoveSeal extends TriggerSkill {
 
 @ShadowSkill
 @CompulsorySkill({ name: ShuangJiaRemoveSeal.Name, description: ShuangJiaRemoveSeal.Description })
+export class ShuangJiaDistance extends RulesBreakerSkill {
+  public breakDefenseDistance(_room: Room, owner: Player): number {
+    const shuangJiaSeals = owner.getSeals().filter(seal => seal.name == ShuangJia.Name);
+    return Math.min(shuangJiaSeals.length, 5);
+  }
+}
+
+@ShadowSkill
+@CompulsorySkill({ name: ShuangJiaDistance.Name, description: ShuangJiaDistance.Description })
 export class ShuangJiaHoldCard extends ExcludeHandCard {
   protected calcHoldCardIds(
     room: Room<WorkPlace>,
