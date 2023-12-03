@@ -58,10 +58,8 @@ export class BeiFen extends EffectHookSkill {
 @CompulsorySkill({ name: BeiFen.Name, description: BeiFen.Description })
 export class BeiFenBuf extends RulesBreakerSkill {
   private bufAvailable(owner: Player): boolean {
-    return (
-      owner.getSeals().filter(seal => seal.name === ShuangJia.Name).length <
-      owner.getCardIds(PlayerCardsArea.HandArea).length
-    );
+    const shunagJiaCardNumber = owner.getSeals().filter(seal => seal.name === ShuangJia.Name).length;
+    return owner.getCardIds(PlayerCardsArea.HandArea).length > shunagJiaCardNumber * 2;
   }
 
   public breakCardUsableTimes(_cardId: CardId | CardMatcher, _room: Room<WorkPlace>, owner: Player): number {

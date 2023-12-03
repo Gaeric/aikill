@@ -35,7 +35,7 @@ import {
   PlayerPhase,
 } from 'src/core/game/stage_processor';
 import { ServerSocket } from 'src/core/network/socket.server';
-import { Player, SealMethod } from 'src/core/player/player';
+import { Player, Seal, SealMethod } from 'src/core/player/player';
 import { ServerPlayer, SmartPlayer } from 'src/core/player/player.server';
 import { PlayerCardsArea, PlayerId, PlayerInfo } from 'src/core/player/player_props';
 import { Algorithm } from 'src/core/shares/libs/algorithm';
