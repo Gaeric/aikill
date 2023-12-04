@@ -2,16 +2,15 @@ import { VirtualCard } from 'src/core/cards/card';
 import { CardMatcher } from 'src/core/cards/libs/card_matcher';
 import { CardMoveArea, CardMoveReason, GameEventIdentifiers, ServerEventFinder } from 'src/core/event/event';
 import { GameCardExtensions } from 'src/core/game/game_props';
-import { AllStage, SkillEffectStage } from 'src/core/game/stage_processor';
 import { Player } from 'src/core/player/player';
 import { PlayerId } from 'src/core/player/player_props';
 import { Room } from 'src/core/room/room';
-import { CommonSkill, TriggerSkill } from 'src/core/skills/skill';
-import { SingleTargetOnceActSkill } from 'src/core/skills/skill_utils';
+import { CommonSkill } from 'src/core/skills/skill';
+import { EffectHookSkill, SingleTargetOnceActSkill } from 'src/core/skills/skill_utils';
 import { CompulsorySkill, ShadowSkill } from 'src/core/skills/skill_wrappers';
 
 @CommonSkill({ name: 'rende', description: 'rende_description' })
-export class RendeGiveCards extends SingleTargetOnceActSkill {
+export class Rende extends SingleTargetOnceActSkill {
   async onEffect(room: Room, skillUseEvent: ServerEventFinder<GameEventIdentifiers.SkillEffectEvent>) {
     await room.moveCards({
       movingCards: skillUseEvent.cardIds!.map(card => ({ card, fromArea: CardMoveArea.HandArea })),
@@ -28,18 +27,10 @@ export class RendeGiveCards extends SingleTargetOnceActSkill {
 }
 
 @ShadowSkill
-@CompulsorySkill({ name: RendeGiveCards.Name, description: RendeGiveCards.Description })
-export class RendeUseCard extends TriggerSkill {
-  isAutoTrigger() {
-    return true;
-  }
-
-  public isTriggerable(_event: ServerEventFinder<GameEventIdentifiers.SkillEffectEvent>, stage?: AllStage) {
-    return stage === SkillEffectStage.AfterSkillEffected;
-  }
-
+@CompulsorySkill({ name: Rende.Name, description: Rende.Description })
+export class RendeUseCard extends EffectHookSkill {
   public canUse(room: Room, owner: Player, event: ServerEventFinder<GameEventIdentifiers.SkillEffectEvent>) {
-    if (event.skillName !== RendeGiveCards.Name || owner.hasUsedSkill(this.Name)) {
+    if (event.skillName !== Rende.Name || owner.hasUsedSkill(this.Name)) {
       return false;
     }
 
@@ -54,10 +45,6 @@ export class RendeUseCard extends TriggerSkill {
     console.log(`rendeCardLength is ${rendeCardLength}`);
 
     return rendeCardLength >= 2;
-  }
-
-  async onTrigger() {
-    return true;
   }
 
   async onEffect(room: Room, event: ServerEventFinder<GameEventIdentifiers.SkillEffectEvent>) {

@@ -47,7 +47,7 @@ export { JiJiang, JiJiangShadow } from './characters/standard/jijiang';
 export { JiuYuan } from './characters/standard/jiuyuan';
 export { JiZhi } from './characters/standard/jizhi';
 export { QiCai, QiCaiBlock } from './characters/standard/qicai';
-export { RendeGiveCards, RendeUseCard } from './characters/standard/rende';
+export { Rende, RendeUseCard } from './characters/standard/rende';
 export { ZhiHeng } from './characters/standard/zhiheng';
 export { GuanXing } from './characters/standard/guanxing';
 export { KongCheng } from './characters/standard/kongcheng';
