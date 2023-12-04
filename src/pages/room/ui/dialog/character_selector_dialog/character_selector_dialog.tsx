@@ -27,7 +27,7 @@ export function CharacterSelectorDialog(props: CharacterSelectorDialogProps) {
   >([]);
 
   function onOpenTooltip(character: Character) {
-    setTooltipCharacter(character);
+    // setTooltipCharacter(character);
   }
   function onCloseTooltip() {
     setTooltipCharacter(undefined);
