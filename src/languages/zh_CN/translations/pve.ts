@@ -188,7 +188,7 @@ export const skillDescriptions: Word[] = [
   },
   {
     source: 'pve_classic_lianzhen_description',
-    target: '回合开始时，你可以指定一名角色，该角色每获得一张牌，你摸一张牌；若此时在你的回合内，你额外摸一张牌；',
+    target: '回合开始时，你可以指定一名其它角色，该角色每获得一张牌，你摸一张牌；若此时在你的回合内，你额外摸一张牌；',
   },
   {
     source: 'pve_tishen_description',
