@@ -1,16 +1,16 @@
-import { Player } from "src/core/player/player";
-import { ClientPlayer } from "src/core/player/player.client";
-import { ClientTranslationModule } from "src/core/translations/translation_module.client";
-import { ImageLoader } from "src/image_loader/image_loader";
+import { Player } from 'src/core/player/player';
+import { ClientPlayer } from 'src/core/player/player.client';
+import { ClientTranslationModule } from 'src/core/translations/translation_module.client';
+import { ImageLoader } from 'src/image_loader/image_loader';
 
-import { MoveCard } from "src/pages/room/animations/move_card/move_card";
-import { RoomPresenter } from "src/pages/room/room.presenter";
-import { RoomStore } from "src/pages/room/room.store";
-import * as React from "react";
-import { CharacterSkinInfo } from "src/skins/skins";
-import { Button } from "src/ui/button/button";
-import styles from "./seats_layout.module.css";
-import { PlayerCard } from "../player/player";
+import { MoveCard } from 'src/pages/room/animations/move_card/move_card';
+import { RoomPresenter } from 'src/pages/room/room.presenter';
+import { RoomStore } from 'src/pages/room/room.store';
+import * as React from 'react';
+import { CharacterSkinInfo } from 'src/skins/skins';
+import { Button } from 'src/ui/button/button';
+import styles from './seats_layout.module.css';
+import { PlayerCard } from '../player/player';
 
 type SeatsLayoutProps = {
   store: RoomStore;
@@ -63,12 +63,8 @@ export function SeatsLayout(props: SeatsLayoutProps) {
 
   const renderRequestViewButton = (player: Player) =>
     props.observerMode && (
-      <Button
-        variant="primary"
-        onClick={() => onRequestView(player)}
-        className={styles.observeButton}
-      >
-        {props.translator.tr("Observe")}
+      <Button variant="primary" onClick={() => onRequestView(player)} className={styles.observeButton}>
+        {props.translator.tr('Observe')}
       </Button>
     );
 
@@ -81,48 +77,30 @@ export function SeatsLayout(props: SeatsLayoutProps) {
 
     let playerIndex = getLastPosition();
     while (numberOfPlayers > 0) {
-      const player = props.store.room.Players[playerIndex] as
-        | ClientPlayer
-        | undefined;
+      const player = props.store.room.Players[playerIndex] as ClientPlayer | undefined;
 
       players.unshift(
         <div className={styles.playerCard}>
           <PlayerCard
             key={playerIndex}
             imageLoader={props.imageLoader}
-            onClick={() => onClick(player)}
+            onClick={onClick(player)}
             skinData={props.skinData}
-            delight={
-              props.store.delightedPlayers !== undefined
-                ? props.store.delightedPlayers
-                : undefined
-            }
-            disabled={
-              !props.playerSelectableMatcher ||
-              !props.playerSelectableMatcher(player)
-            }
+            delight={props.store.delightedPlayers !== undefined ? props.store.delightedPlayers : undefined}
+            disabled={!props.playerSelectableMatcher || !props.playerSelectableMatcher(player)}
             store={props.store}
             player={player}
             translator={props.translator}
             presenter={props.presenter}
-            playerPhase={
-              props.store.room.CurrentPlayer === player
-                ? props.store.room.CurrentPlayerPhase
-                : undefined
-            }
+            playerPhase={props.store.room.CurrentPlayer === player ? props.store.room.CurrentPlayerPhase : undefined}
             actionTimeLimit={props.store.notificationTime}
-            inAction={
-              player !== undefined &&
-              props.store.notifiedPlayers.includes(player.Id)
-            }
-            incomingMessage={
-              player && props.store.incomingUserMessages[player.Id]
-            }
+            inAction={player !== undefined && props.store.notifiedPlayers.includes(player.Id)}
+            incomingMessage={player && props.store.incomingUserMessages[player.Id]}
             onCloseIncomingMessage={player && onCloseIncomingMessage(player)}
             selected={props.store.selectedPlayers.includes(player!)}
           />
           {player && renderRequestViewButton(player)}
-        </div>
+        </div>,
       );
       do {
         playerIndex = getLastPosition(playerIndex);
@@ -141,48 +119,29 @@ export function SeatsLayout(props: SeatsLayoutProps) {
 
     let playerIndex = getNextPosition();
     while (numberOfPlayers > 0) {
-      const player = props.store.room.Players[playerIndex] as
-        | ClientPlayer
-        | undefined;
-      console.log(players);
+      const player = props.store.room.Players[playerIndex] as ClientPlayer | undefined;
       players.unshift(
         <div className={styles.playerCard}>
           <PlayerCard
             key={playerIndex}
             imageLoader={props.imageLoader}
-            onClick={() => onClick(player)}
+            onClick={onClick(player)}
             skinData={props.skinData}
-            delight={
-              props.store.delightedPlayers !== undefined
-                ? props.store.delightedPlayers
-                : undefined
-            }
-            disabled={
-              !props.playerSelectableMatcher ||
-              !props.playerSelectableMatcher(player)
-            }
+            delight={props.store.delightedPlayers !== undefined ? props.store.delightedPlayers : undefined}
+            disabled={!props.playerSelectableMatcher || !props.playerSelectableMatcher(player)}
             store={props.store}
             player={player}
             translator={props.translator}
             presenter={props.presenter}
-            playerPhase={
-              props.store.room.CurrentPlayer === player
-                ? props.store.room.CurrentPlayerPhase
-                : undefined
-            }
+            playerPhase={props.store.room.CurrentPlayer === player ? props.store.room.CurrentPlayerPhase : undefined}
             actionTimeLimit={props.store.notificationTime}
-            inAction={
-              player !== undefined &&
-              props.store.notifiedPlayers.includes(player.Id)
-            }
-            incomingMessage={
-              player && props.store.incomingUserMessages[player.Id]
-            }
+            inAction={player !== undefined && props.store.notifiedPlayers.includes(player.Id)}
+            incomingMessage={player && props.store.incomingUserMessages[player.Id]}
             onCloseIncomingMessage={player && onCloseIncomingMessage(player)}
             selected={props.store.selectedPlayers.includes(player!)}
           />
           {player && renderRequestViewButton(player)}
-        </div>
+        </div>,
       );
       do {
         playerIndex = getNextPosition(playerIndex);
@@ -198,48 +157,30 @@ export function SeatsLayout(props: SeatsLayoutProps) {
 
     let numberOfPlayers = topNumberOfPlayers;
     while (numberOfPlayers > 0) {
-      const player = props.store.room.Players[playerIndex] as
-        | ClientPlayer
-        | undefined;
+      const player = props.store.room.Players[playerIndex] as ClientPlayer | undefined;
 
       players.unshift(
         <div className={styles.playerCard}>
           <PlayerCard
             key={playerIndex}
             imageLoader={props.imageLoader}
-            onClick={() => onClick(player)}
-            delight={
-              props.store.delightedPlayers !== undefined
-                ? props.store.delightedPlayers
-                : undefined
-            }
-            disabled={
-              !props.playerSelectableMatcher ||
-              !props.playerSelectableMatcher(player)
-            }
+            onClick={onClick(player)}
+            delight={props.store.delightedPlayers !== undefined ? props.store.delightedPlayers : undefined}
+            disabled={!props.playerSelectableMatcher || !props.playerSelectableMatcher(player)}
             store={props.store}
             player={player}
             skinData={props.skinData}
             translator={props.translator}
             presenter={props.presenter}
-            playerPhase={
-              props.store.room.CurrentPlayer === player
-                ? props.store.room.CurrentPlayerPhase
-                : undefined
-            }
+            playerPhase={props.store.room.CurrentPlayer === player ? props.store.room.CurrentPlayerPhase : undefined}
             actionTimeLimit={props.store.notificationTime}
-            inAction={
-              player !== undefined &&
-              props.store.notifiedPlayers.includes(player.Id)
-            }
-            incomingMessage={
-              player && props.store.incomingUserMessages[player.Id]
-            }
+            inAction={player !== undefined && props.store.notifiedPlayers.includes(player.Id)}
+            incomingMessage={player && props.store.incomingUserMessages[player.Id]}
             onCloseIncomingMessage={player && onCloseIncomingMessage(player)}
             selected={props.store.selectedPlayers.includes(player!)}
           />
           {player && renderRequestViewButton(player)}
-        </div>
+        </div>,
       );
 
       do {
