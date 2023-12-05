@@ -15,7 +15,12 @@
 
   本文档用于记录本项目的开发过程，其中包括架构、特性和缺陷。
 * Architecture
-** [#A] Arch-001 :: 分离image_loader和audio_loader中的资源文件，重定义项目名称，发布本项目
+** DONE [#A] Arch-001 :: 分离image_loader和audio_loader中的资源文件，重定义项目名称，发布本项目
+   :LOGBOOK:
+   - State "DONE"       from              [2023-12-05 Tue 00:12] \\
+     已完成
+   :END:
+
 ** [#B] Arch-002 :: 观察者模式 -- 用以收集玩家策略数据
 ** [#A] Arch-003 :: 技能设计模式研究和重构
 ** [#C] Arch-004 :: 适配Tauri跨平台客户端解决方案
