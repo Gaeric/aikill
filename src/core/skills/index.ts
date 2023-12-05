@@ -574,7 +574,7 @@ export { YuHua } from './characters/limited/yuhua';
 export { PianChong, PianChongShadow } from './characters/limited/pianchong';
 export { ZunWei } from './characters/limited/zunwei';
 export { NewFenYin, NewFenYinShadow } from './characters/limited/new_fenyin';
-export { LiJi, LiJiShadow } from './characters/limited/liji';
+export { LiJi } from './characters/limited/liji';
 export { XiongHuo, XiongHuoShadow, XiongHuoFilter, XiongHuoRemover } from './characters/limited/xionghuo';
 export { ShaJue } from './characters/limited/shajue';
 export { TuoGu } from './characters/limited/tuogu';
