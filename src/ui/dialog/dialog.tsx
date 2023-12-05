@@ -1,23 +1,12 @@
-import classNames from "classnames";
-import * as React from "react";
-import { Curtain } from "src/ui/curtain/curtain";
-import styles from "./dialog.module.css";
+import classNames from 'classnames';
+import * as React from 'react';
+import { Curtain } from 'src/ui/curtain/curtain';
+import styles from './dialog.module.css';
 
-export function Dialog(props: {
-  className?: string;
-  children?: React.ReactNode;
-  onClose?(): void;
-}) {
+export function Dialog(props: { className?: string; children?: React.ReactNode; onClose?(): void }) {
   const [moving, setMoving] = React.useState(false);
 
   let onElementRendered = React.useRef<HTMLDivElement>();
-
-  let Container = (prop: { children?: React.ReactNode }) =>
-    props.onClose !== undefined ? (
-      <Curtain onCancel={props.onClose}>{prop.children}</Curtain>
-    ) : (
-      <>{prop.children}</>
-    );
 
   const [topOffset, setTopOffset] = React.useState<number>();
   const [leftOffset, setLeftOffset] = React.useState<number>();
@@ -25,30 +14,28 @@ export function Dialog(props: {
   const [posX, setPosX] = React.useState<number>(0);
   const [posY, setPosY] = React.useState<number>(0);
 
-  let onMouseDown = (
-    e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>
-  ) => {
+  let onMouseDown = (e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>) => {
     if (e.currentTarget !== e.target) {
       return;
     }
 
     e.stopPropagation();
     e.preventDefault();
-    setMoving(true);
-    const clientX =
-      (e as React.MouseEvent<HTMLElement, MouseEvent>).clientX ||
-      (e as React.TouchEvent<HTMLElement>).touches[0].clientX;
-    const clientY =
-      (e as React.MouseEvent<HTMLElement, MouseEvent>).clientY ||
-      (e as React.TouchEvent<HTMLElement>).touches[0].clientY;
+    setMoving(() => true);
 
-    setPosX(clientX);
-    setPosY(clientY);
+    setPosX(
+      () =>
+        (e as React.MouseEvent<HTMLElement, MouseEvent>).clientX ||
+        (e as React.TouchEvent<HTMLElement>).touches[0].clientX,
+    );
+    setPosY(
+      () =>
+        (e as React.MouseEvent<HTMLElement, MouseEvent>).clientY ||
+        (e as React.TouchEvent<HTMLElement>).touches[0].clientY,
+    );
   };
 
-  function onMouseMove(
-    e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>
-  ) {
+  function onMouseMove(e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>) {
     if (!moving || e.currentTarget !== e.target) {
       return;
     }
@@ -68,23 +55,21 @@ export function Dialog(props: {
     currentLeftOffset += clientX - posX;
     currentTopOffset += clientY - posY;
 
-    setTopOffset(currentTopOffset);
-    setLeftOffset(currentLeftOffset);
+    setTopOffset(() => currentTopOffset);
+    setLeftOffset(() => currentLeftOffset);
 
-    setPosX(clientX);
-    setPosY(clientY);
+    setPosX(() => clientX);
+    setPosY(() => clientY);
   }
 
-  let onMouseUp = (
-    e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>
-  ) => {
+  let onMouseUp = (e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>) => {
     if (e.currentTarget !== e.target) {
       return;
     }
 
     e.stopPropagation();
     e.preventDefault();
-    setMoving(false);
+    setMoving(() => false);
   };
 
   React.useEffect(() => {
@@ -98,7 +83,8 @@ export function Dialog(props: {
   });
 
   return (
-    <Container>
+    <>
+      {props.onClose ? <div className={styles.Curtain} onClick={props.onClose}></div> : <></>}
       <div
         className={classNames(styles.dialog, props.className)}
         onMouseMove={onMouseMove}
@@ -112,6 +98,6 @@ export function Dialog(props: {
       >
         {props.children}
       </div>
-    </Container>
+    </>
   );
 }

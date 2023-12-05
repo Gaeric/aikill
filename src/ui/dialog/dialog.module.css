@@ -3,3 +3,10 @@
     align-self: center;
     z-index: 999;
 }
+.Curtain {
+    background: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    z-index: 2;
+}
