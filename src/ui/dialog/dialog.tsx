@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import * as React from 'react';
-import { Curtain } from 'src/ui/curtain/curtain';
 import styles from './dialog.module.css';
 
 export function Dialog(props: { className?: string; children?: React.ReactNode; onClose?(): void }) {

@@ -73,7 +73,7 @@ export class FangTong extends TriggerSkill {
       true,
     );
 
-    response.selectedCards = response.selectedCards || fang[Math.floor(Math.random() * fang.length)];
+    response.selectedCards = response.selectedCards || [fang[Math.floor(Math.random() * fang.length)]];
 
     await room.dropCards(CardMoveReason.SelfDrop, response.selectedCards, fromId, fromId, this.Name);
 

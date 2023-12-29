@@ -50,7 +50,7 @@ export class MingRen extends TriggerSkill {
       fromId,
     );
 
-    response.selectedCards = response.selectedCards || hands[0];
+    response.selectedCards = response.selectedCards || [hands[0]];
 
     await room.moveCards({
       movingCards: [{ card: response.selectedCards[0], fromArea: CardMoveArea.HandArea }],

@@ -74,7 +74,7 @@ export class WuRong extends ActiveSkill {
     const displayCards: CardId[] = [];
     for (const response of responses) {
       const handcards = room.getPlayerById(response.fromId).getCardIds(PlayerCardsArea.HandArea);
-      response.selectedCards = response.selectedCards || handcards[Math.floor(Math.random() * handcards.length)];
+      response.selectedCards = response.selectedCards || [handcards[Math.floor(Math.random() * handcards.length)]];
 
       const showCardEvent: ServerEventFinder<GameEventIdentifiers.CardDisplayEvent> = {
         displayCards: [response.selectedCards[0]],

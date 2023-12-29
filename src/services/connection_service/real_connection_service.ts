@@ -1,12 +1,10 @@
-import { GameCardExtensions } from "src/core/game/game_props";
-import { TemporaryRoomCreationInfo } from "src/core/game/game_props";
-import { RoomId } from "src/core/room/room";
-import {
-  ChatSocketEvent,
-  LobbySocketEvent,
-} from "src/core/shares/types/server_types";
-import { ClientConfig, ServerHostTag } from "src/props/config_props";
-import SocketIOClient from "socket.io-client";
+import { GameCardExtensions } from 'src/core/game/game_props';
+import { TemporaryRoomCreationInfo } from 'src/core/game/game_props';
+import { RoomId } from 'src/core/room/room';
+import { ChatSocketEvent, LobbySocketEvent } from 'src/core/shares/types/server_types';
+import { ClientConfig, ServerHostTag } from 'src/props/config_props';
+import SocketIOClient from 'socket.io-client';
+
 import {
   ChatPacketObject,
   ConnectionService,
@@ -14,24 +12,17 @@ import {
   CreateWaitingRoomListenerResponse,
   RoomListListenerResponse,
   VersionCheckListenerResponse,
-} from "./connection_service";
+} from './connection_service';
 
 export class RealConnectionService extends ConnectionService {
   protected chatSocket: SocketIOClient.Socket;
   protected chatHistory: ChatPacketObject[] = [];
 
-  private lobbySockets: Map<ServerHostTag, SocketIOClient.Socket> = new Map<
-    ServerHostTag,
-    SocketIOClient.Socket
-  >();
+  private lobbySockets: Map<ServerHostTag, SocketIOClient.Socket> = new Map<ServerHostTag, SocketIOClient.Socket>();
   private queryRoomListListener: (res: RoomListListenerResponse) => void;
   private versionCheckListener: (res: VersionCheckListenerResponse) => void;
-  private createGameListener: (
-    res: Omit<CreateGameListenerResponse, "hostTag">
-  ) => void;
-  private createWaitingRoomListener: (
-    res: Omit<CreateWaitingRoomListenerResponse, "hostTag">
-  ) => void;
+  private createGameListener: (res: Omit<CreateGameListenerResponse, 'hostTag'>) => void;
+  private createWaitingRoomListener: (res: Omit<CreateWaitingRoomListenerResponse, 'hostTag'>) => void;
   private checkRoomExistListener: (exist: boolean, ping: number) => void;
   private pingListener: (ping: number) => void;
   private pingBestHost: Promise<ServerHostTag>[] = [];
@@ -39,62 +30,53 @@ export class RealConnectionService extends ConnectionService {
     super();
     const { protocol, host, port } = config.host[0];
     const mainConnectionUrl = `${protocol}://${host}:${port}/`;
-    this.chatSocket = SocketIOClient(mainConnectionUrl + "chat");
+    this.chatSocket = SocketIOClient(mainConnectionUrl + 'chat');
 
     for (const hostInfo of config.host) {
       this.lobbySockets.set(
         hostInfo.hostTag,
-        SocketIOClient(
-          `${hostInfo.protocol}://${hostInfo.host}:${hostInfo.port}/lobby`
-        )
+        SocketIOClient(`${hostInfo.protocol}://${hostInfo.host}:${hostInfo.port}/lobby`),
       );
     }
 
     this.lobbySockets.forEach((lobbySocket, hostTag) => {
-      lobbySocket.on(LobbySocketEvent.QueryRoomList.toString(), (evt) => {
+      lobbySocket.on(LobbySocketEvent.QueryRoomList.toString(), evt => {
         this.queryRoomListListener?.({
           packet: evt,
           hostTag,
           ping: Math.round((Date.now() - this.pingStartTimestamp) / 2),
         });
       });
-      lobbySocket.on(LobbySocketEvent.VersionMismatch.toString(), (evt) => {
+      lobbySocket.on(LobbySocketEvent.VersionMismatch.toString(), evt => {
         this.versionCheckListener?.({
           packet: evt,
           hostTag,
           ping: Math.round((Date.now() - this.pingStartTimestamp) / 2),
         });
       });
-      lobbySocket.on(LobbySocketEvent.GameCreated.toString(), (evt) => {
+      lobbySocket.on(LobbySocketEvent.GameCreated.toString(), evt => {
         this.createGameListener?.({
           packet: evt,
           ping: Math.round((Date.now() - this.pingStartTimestamp) / 2),
         });
       });
-      lobbySocket.on(LobbySocketEvent.CreateWaitingRoom.toString(), (evt) => {
+      lobbySocket.on(LobbySocketEvent.CreateWaitingRoom.toString(), evt => {
         this.createWaitingRoomListener?.({
           packet: evt,
           ping: Math.round((Date.now() - this.pingStartTimestamp) / 2),
         });
       });
-      lobbySocket.on(LobbySocketEvent.CheckRoomExist.toString(), (exist) => {
-        this.checkRoomExistListener?.(
-          exist,
-          Math.round((Date.now() - this.pingStartTimestamp) / 2)
-        );
+      lobbySocket.on(LobbySocketEvent.CheckRoomExist.toString(), exist => {
+        this.checkRoomExistListener?.(exist, Math.round((Date.now() - this.pingStartTimestamp) / 2));
       });
       lobbySocket.on(LobbySocketEvent.PingServer.toString(), () => {
-        this.pingListener?.(
-          Math.round((Date.now() - this.pingStartTimestamp) / 2)
-        );
+        this.pingListener?.(Math.round((Date.now() - this.pingStartTimestamp) / 2));
       });
       for (const [host, lobbySocket] of this.lobbySockets.entries()) {
         this.pingBestHost.push(
-          new Promise<ServerHostTag>((resolve) =>
-            lobbySocket.on(LobbySocketEvent.PingServer.toString(), () =>
-              resolve(host)
-            )
-          )
+          new Promise<ServerHostTag>(resolve =>
+            lobbySocket.on(LobbySocketEvent.PingServer.toString(), () => resolve(host)),
+          ),
         );
       }
     });
@@ -106,24 +88,18 @@ export class RealConnectionService extends ConnectionService {
     getRoomList: (callback: (response: RoomListListenerResponse) => void) => {
       this.pingStartTimestamp = Date.now();
       this.queryRoomListListener = callback;
-      this.lobbySockets.forEach((lobbySocket) => {
+      this.lobbySockets.forEach(lobbySocket => {
         lobbySocket.emit(LobbySocketEvent.QueryRoomList.toString());
       });
     },
-    checkCoreVersion: (
-      callback: (response: VersionCheckListenerResponse) => void
-    ) => {
+    checkCoreVersion: (callback: (response: VersionCheckListenerResponse) => void) => {
       this.pingStartTimestamp = Date.now();
       this.versionCheckListener = callback;
-      this.lobbySockets.forEach((lobbySocket) => {
+      this.lobbySockets.forEach(lobbySocket => {
         lobbySocket.emit(LobbySocketEvent.VersionMismatch.toString());
       });
     },
-    checkRoomExist: (
-      host: ServerHostTag,
-      id: RoomId,
-      callback: (exist: boolean, ping: number) => void
-    ) => {
+    checkRoomExist: (host: ServerHostTag, id: RoomId, callback: (exist: boolean, ping: number) => void) => {
       const lobbySocket = this.lobbySockets.get(host)!;
       this.checkRoomExistListener = (exist: boolean, ping: number) => {
         callback(exist, ping);
@@ -132,15 +108,15 @@ export class RealConnectionService extends ConnectionService {
     },
     createWaitingRoom: (
       gameInfo: TemporaryRoomCreationInfo & { roomId?: number },
-      callback: (response: CreateWaitingRoomListenerResponse) => void
+      callback: (response: CreateWaitingRoomListenerResponse) => void,
     ) => {
       this.pingStartTimestamp = Date.now();
-      Promise.race(this.pingBestHost).then((serverHost) => {
+      Promise.race(this.pingBestHost).then(serverHost => {
         const lobbySocket = this.lobbySockets.get(serverHost)!;
         lobbySocket.emit(LobbySocketEvent.CreateWaitingRoom.toString(), {
           roomInfo: gameInfo,
         });
-        this.createWaitingRoomListener = (res) => {
+        this.createWaitingRoomListener = res => {
           callback({ hostTag: serverHost, ...res });
         };
       });
@@ -156,13 +132,13 @@ export class RealConnectionService extends ConnectionService {
       gameInfo: {
         cardExtensions: GameCardExtensions[];
       } & TemporaryRoomCreationInfo & { roomId?: number },
-      callback: (response: CreateGameListenerResponse) => void
+      callback: (response: CreateGameListenerResponse) => void,
     ) => {
       this.pingStartTimestamp = Date.now();
-      Promise.race(this.pingBestHost).then((serverHost) => {
+      Promise.race(this.pingBestHost).then(serverHost => {
         const lobbySocket = this.lobbySockets.get(serverHost)!;
         lobbySocket.emit(LobbySocketEvent.GameCreated.toString(), gameInfo);
-        this.createGameListener = (res) => {
+        this.createGameListener = res => {
           callback({ ...res, hostTag: serverHost });
         };
       });
@@ -172,9 +148,7 @@ export class RealConnectionService extends ConnectionService {
     },
     ping: (hostTag: ServerHostTag, callback: (ping: number) => void) => {
       this.pingStartTimestamp = Date.now();
-      const lobbySocket = this.lobbySockets.get(
-        hostTag
-      ) as SocketIOClient.Socket;
+      const lobbySocket = this.lobbySockets.get(hostTag) as SocketIOClient.Socket;
       this.pingListener = callback;
       lobbySocket.emit(LobbySocketEvent.PingServer.toString());
     },
@@ -189,7 +163,7 @@ export class RealConnectionService extends ConnectionService {
       });
     },
     disconnect: () => {
-      this.chatSocket.on(ChatSocketEvent.Chat, (data) => {
+      this.chatSocket.on(ChatSocketEvent.Chat, data => {
         if (!this.chatHistory.includes(data)) {
           this.chatHistory.push(data);
         }
@@ -199,7 +173,7 @@ export class RealConnectionService extends ConnectionService {
       });
     },
     received: (action: (data: ChatPacketObject) => void) => {
-      this.chatSocket.on(ChatSocketEvent.Chat, (data) => {
+      this.chatSocket.on(ChatSocketEvent.Chat, data => {
         if (!this.chatHistory.includes(data)) {
           this.chatHistory.push(data);
         }

@@ -229,7 +229,7 @@ export class VirtualCard<T extends Card = Card> extends Card {
 
   protected id = -1;
   protected cardNumber: number;
-  protected suit: CardSuit;
+  protected suit: CardSuit = CardSuit.NoSuit;
 
   private viewAsBlackCard: boolean = false;
   private viewAsRedCard: boolean = false;

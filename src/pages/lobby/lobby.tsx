@@ -265,7 +265,6 @@ const Lobby = (props: LobbyProps) => {
             let socket: ClientSocket = new LocalClientEmitter(
               (window as any).eventEmitter,
               roomId,
-              new Date().getTime()
             );
             navigate(`/room/${roomId}`, {
               state: {

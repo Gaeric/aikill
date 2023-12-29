@@ -83,7 +83,7 @@ export class WenJi extends TriggerSkill {
         toId,
       );
 
-      response.selectedCards = response.selectedCards || wholeCards[Math.floor(Math.random() * wholeCards.length)];
+      response.selectedCards = response.selectedCards || [wholeCards[Math.floor(Math.random() * wholeCards.length)]];
 
       await room.moveCards({
         movingCards: [{ card: response.selectedCards[0], fromArea: to.cardFrom(response.selectedCards[0]) }],

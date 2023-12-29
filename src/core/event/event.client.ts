@@ -222,7 +222,7 @@ type PlayCardOrSkillEvent =
     }
   | ({
       fromId: PlayerId;
-      end: false | undefined;
+      end: false;
     } & PlayerCardOrSkillInnerEvent);
 
 export type PlayerCardOrSkillInnerEvent =

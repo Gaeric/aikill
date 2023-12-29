@@ -163,7 +163,7 @@ export class ShenShiYin extends TriggerSkill {
         fromId,
       );
 
-      response.selectedCards = response.selectedCards || from.getCardIds(PlayerCardsArea.HandArea)[0];
+      response.selectedCards = response.selectedCards || [from.getCardIds(PlayerCardsArea.HandArea)[0]];
 
       await room.moveCards({
         movingCards: [{ card: response.selectedCards[0], fromArea: CardMoveArea.HandArea }],

@@ -1,5 +1,5 @@
-import { GameEventIdentifiers, ServerEventFinder } from "../core/event/event";
-import { Sanguosha } from "../core/game/engine";
+import { GameEventIdentifiers, ServerEventFinder } from '../core/event/event';
+import { Sanguosha } from '../core/game/engine';
 import {
   DELETE_DATA,
   DO_UPDATE,
@@ -11,10 +11,10 @@ import {
   REQUEST_CORE_VERSION,
   SAVE_REPLAY,
   SET_DATA,
-} from "../electron.port";
-import { ReplayDataType } from "../types/replay_props";
-import { ElectronData } from "./electron_data";
-import { ElectronLoader } from "./electron_loader";
+} from '../electron.port';
+import { ReplayDataType } from '../types/replay_props';
+import { ElectronData } from './electron_data';
+import { ElectronLoader } from './electron_loader';
 
 export class ProdElectronLoader extends ElectronLoader {
   private saveJson: any = {
@@ -55,7 +55,7 @@ export class ProdElectronLoader extends ElectronLoader {
             process.progress,
             process.totalFiles,
             process.complete,
-            process.downloadingFile
+            process.downloadingFile,
           );
         } else {
           this.updateTo = process.nextVersion;
@@ -64,7 +64,7 @@ export class ProdElectronLoader extends ElectronLoader {
           this.downloadingFile = process.downloadingFile;
           this.totalDownloads = process.totalFiles;
         }
-      }
+      },
     );
     this.ipcRenderer.on(REQUEST_CORE_VERSION, () => {
       this.ipcRenderer.send(REQUEST_CORE_VERSION, Sanguosha.PlainVersion);
@@ -72,7 +72,7 @@ export class ProdElectronLoader extends ElectronLoader {
   }
 
   public afterInit(): Promise<ProdElectronLoader> {
-    return new Promise<ProdElectronLoader>((resolve) => {
+    return new Promise<ProdElectronLoader>(resolve => {
       this.resolver = resolve;
     });
   }
@@ -83,8 +83,8 @@ export class ProdElectronLoader extends ElectronLoader {
       progress: number,
       totalFiles: number,
       complete?: boolean,
-      downloadingFile?: number
-    ) => void
+      downloadingFile?: number,
+    ) => void,
   ) => {
     this.whenUpdateallbackFn = updateCallback;
     this.updateTo &&
@@ -93,7 +93,7 @@ export class ProdElectronLoader extends ElectronLoader {
         this.updateProgress,
         this.totalDownloads,
         this.updateComplete,
-        this.downloadingFile
+        this.downloadingFile,
       );
   };
 
@@ -128,7 +128,7 @@ export class ProdElectronLoader extends ElectronLoader {
 
   public sendReplayEventFlow(
     event: ServerEventFinder<GameEventIdentifiers>,
-    otherInfo: Omit<ReplayDataType, "events">
+    otherInfo: Omit<ReplayDataType, 'events'>,
   ): void {
     this.ipcRenderer.send(GAME_EVENT_FLOW, { event, otherInfo });
   }
@@ -137,17 +137,12 @@ export class ProdElectronLoader extends ElectronLoader {
     this.ipcRenderer.send(SAVE_REPLAY);
   }
 
-  public async readReplay(
-    version: string
-  ): Promise<ReplayDataType | undefined> {
-    return new Promise<ReplayDataType | undefined>((resovle) => {
+  public async readReplay(version: string): Promise<ReplayDataType | undefined> {
+    return new Promise<ReplayDataType | undefined>(resovle => {
       this.ipcRenderer.send(READ_REPLAY, version);
-      this.ipcRenderer.on(
-        READ_REPLAY,
-        (saveData: ReplayDataType | undefined) => {
-          resovle(saveData);
-        }
-      );
+      this.ipcRenderer.on(READ_REPLAY, (saveData: ReplayDataType | undefined) => {
+        resovle(saveData);
+      });
     });
   }
 

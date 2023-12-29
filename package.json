@@ -10,24 +10,25 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@tauri-apps/api": "^1.5.1",
+    "@tauri-apps/api": "^1.5.3",
     "chalk": "^5.3.0",
-    "classnames": "^2.3.2",
+    "classnames": "^2.5.0",
     "history": "^5.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.1",
+    "react-router-dom": "^6.21.1",
+    "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1.5.7",
-    "@types/node": "^20.10.2",
-    "@types/react": "^18.2.40",
-    "@types/react-dom": "^18.2.17",
-    "@vitejs/plugin-react": "^4.2.0",
+    "@tauri-apps/cli": "^1.5.9",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^4.2.1",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "markdown-it": "^13.0.2",
-    "typescript": "^5.3.2",
-    "vite": "^4.5.0"
+    "typescript": "^5.3.3",
+    "vite": "^4.5.1"
   }
 }

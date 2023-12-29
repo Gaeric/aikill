@@ -73,7 +73,8 @@ export class JueYong extends TriggerSkill {
           triggeredBySkills: [this.Name],
         });
 
-        const jueyongMapper = room.getFlag<JueYongMapper>(fromId, this.Name) || {};
+        // todo: check!
+        const jueyongMapper = room.getFlag<JueYongMapper>(fromId, this.Name);
         jueyongMapper[aimEvent.byCardId] = aimEvent.fromId;
         room.getPlayerById(fromId).setFlag<JueYongMapper>(this.Name, jueyongMapper);
       }

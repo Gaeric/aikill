@@ -1,18 +1,16 @@
-import {
-  ClientEventFinder,
-  GameEventIdentifiers,
-  ServerEventFinder,
-  WorkPlace,
-} from "src/core/event/event";
-import { Socket } from "src/core/network/socket";
-import IOSocketClient, { Manager } from "socket.io-client";
+import { ClientEventFinder, GameEventIdentifiers, ServerEventFinder, WorkPlace } from 'src/core/event/event';
+import { Socket } from 'src/core/network/socket';
+import IOSocketClient, { Manager } from 'socket.io-client';
 
 export class ClientSocket extends Socket<WorkPlace.Client> {
   private socketIO: SocketIOClient.Socket;
   private reconnecting: boolean = false;
   private manager: SocketIOClient.Manager;
 
-  constructor(endpoint: string, protected roomId: string) {
+  constructor(
+    endpoint: string,
+    protected roomId: string,
+  ) {
     super();
     this.init(endpoint);
   }
@@ -25,24 +23,18 @@ export class ClientSocket extends Socket<WorkPlace.Client> {
       timeout: 60000,
       autoConnect: true,
     });
-    this.socketIO.on("reconnect", () => {
+    this.socketIO.on('reconnect', () => {
       this.reconnecting = true;
     });
   }
 
-  public notify<I extends GameEventIdentifiers>(
-    type: I,
-    content: ClientEventFinder<I>
-  ) {
-    console.log("socket client notify");
+  public notify<I extends GameEventIdentifiers>(type: I, content: ClientEventFinder<I>) {
+    console.log('socket client notify');
     console.log(content);
     this.socketIO.emit(type.toString(), content);
   }
 
-  public on<T extends GameEventIdentifiers>(
-    type: T,
-    receiver: (event: ServerEventFinder<T>) => void
-  ): ClientSocket {
+  public on<T extends GameEventIdentifiers>(type: T, receiver: (event: ServerEventFinder<T>) => void): ClientSocket {
     this.socketIO.on(type.toString(), receiver);
 
     return this;
@@ -59,7 +51,7 @@ export class ClientSocket extends Socket<WorkPlace.Client> {
   }
 
   public onReconnected(callback: () => void) {
-    this.socketIO.on("connect", () => {
+    this.socketIO.on('connect', () => {
       if (this.reconnecting) {
         this.reconnecting = false;
         callback();

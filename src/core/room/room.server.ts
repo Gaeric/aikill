@@ -70,7 +70,7 @@ export class ServerRoom extends Room<WorkPlace.Server> {
 
   private drawStack: CardId[] = [];
   private dropStack: CardId[] = [];
-  private numOfCards: number;
+  private numOfCards: number = 0;
 
   constructor(
     protected roomId: RoomId,
@@ -90,7 +90,7 @@ export class ServerRoom extends Room<WorkPlace.Server> {
     this.init();
   }
 
-  private onClosedCallback: () => void;
+  private onClosedCallback: () => void = () => {};
   private roomClosed = false;
 
   protected init() {
@@ -342,10 +342,7 @@ export class ServerRoom extends Room<WorkPlace.Server> {
     return canTriggerSkills;
   }
 
-  public async trigger<T = unknown>(
-    content: T extends unknown ? ServerEventFinder<GameEventIdentifiers> : T,
-    stage?: AllStage,
-  ) {
+  public async trigger(content: ServerEventFinder<GameEventIdentifiers>, stage?: AllStage) {
     if (!this.CurrentPlayer || !this.isPlaying()) {
       this.logger.debug('Do Not Need to Trigger Skill Because GameEnd Or Not CurrentPlayer');
       return;
@@ -820,7 +817,8 @@ export class ServerRoom extends Room<WorkPlace.Server> {
         fromId: playerId,
         droppedCards: [],
       };
-      if (event.cardAmount <= 0) {
+
+      if (typeof event.cardAmount === 'number' && event.cardAmount <= 0) {
         return autoResponse;
       }
 
@@ -932,7 +930,7 @@ export class ServerRoom extends Room<WorkPlace.Server> {
 
   public async askForCardUse(event: ServerEventFinder<GameEventIdentifiers.AskForCardUseEvent>, to: PlayerId) {
     EventPacker.createIdentifierEvent(GameEventIdentifiers.AskForCardUseEvent, event);
-    await this.trigger<typeof event>(event);
+    await this.trigger(event);
     if (event.responsedEvent) {
       EventPacker.terminate(event);
       return event.responsedEvent;
@@ -975,7 +973,7 @@ export class ServerRoom extends Room<WorkPlace.Server> {
     to: PlayerId,
   ) {
     EventPacker.createIdentifierEvent(GameEventIdentifiers.AskForCardResponseEvent, event);
-    await this.trigger<typeof event>(event);
+    await this.trigger(event);
     if (event.responsedEvent) {
       EventPacker.terminate(event);
       return event.responsedEvent;

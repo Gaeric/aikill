@@ -109,7 +109,7 @@ export class ZengDaoBuff extends TriggerSkill implements OnDefineReleaseTiming {
       true,
     );
 
-    response.selectedCards = response.selectedCards || dao[0];
+    response.selectedCards = response.selectedCards || [dao[0]];
 
     await room.moveCards({
       movingCards: [{ card: response.selectedCards[0], fromArea: CardMoveArea.OutsideArea }],

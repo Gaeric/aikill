@@ -120,7 +120,7 @@ export class FeiJun extends ActiveSkill {
         );
 
         const wholeCards = target.getPlayerCards();
-        response.selectedCards = response.selectedCards || wholeCards[Math.floor(Math.random() * wholeCards.length)];
+        response.selectedCards = response.selectedCards || [wholeCards[Math.floor(Math.random() * wholeCards.length)]];
 
         await room.moveCards({
           movingCards: [{ card: response.selectedCards[0], fromArea: target.cardFrom(response.selectedCards[0]) }],
